@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
 
                   // Manager view Button
                   ElevatedButton(
-                    onPressed: () { 
+                    onPressed: () {
                       Navigator.push(
                         context, 
                         MaterialPageRoute(
