@@ -11,7 +11,6 @@ class VolunteerView extends StatefulWidget {
 }
 
 class _VolunteerViewState extends State<VolunteerView> {
-
   final _pageController = PageController(initialPage: 1);
 
   int maxCount = 3;
@@ -37,14 +36,12 @@ class _VolunteerViewState extends State<VolunteerView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(),
-
       body: PageView(
-      controller: _pageController,
-      physics: const NeverScrollableScrollPhysics(),
-      children: List.generate(
-        bottomBarPages.length, (index) => bottomBarPages[index]),
+        controller: _pageController,
+        physics: const NeverScrollableScrollPhysics(),
+        children: List.generate(
+            bottomBarPages.length, (index) => bottomBarPages[index]),
       ),
       extendBody: true,
       bottomNavigationBar: (bottomBarPages.length <= maxCount)
@@ -76,7 +73,6 @@ class _VolunteerViewState extends State<VolunteerView> {
                   ),
                   itemLabel: 'Dashboard',
                 ),
-
                 BottomBarItem(
                   inActiveItem: Icon(
                     Icons.account_circle,
@@ -88,7 +84,6 @@ class _VolunteerViewState extends State<VolunteerView> {
                   ),
                   itemLabel: 'Profile',
                 ),
-                
               ],
               onTap: (index) {
                 /// control your animation using page controller
@@ -138,7 +133,11 @@ class _DashboardPageState extends State<DashboardPage> {
         child: SearchableList<Actor>(
           initialList: actors,
           builder: (Actor user) => ActorItem(actor: user),
-          filter: (value) => actors.where((element) => element.name.toLowerCase().contains(value),).toList(),
+          filter: (value) => actors
+              .where(
+                (element) => element.name.toLowerCase().contains(value),
+              )
+              .toList(),
           emptyWidget: const EmptyView(),
           inputDecoration: InputDecoration(
             labelText: "Search Actor",
@@ -151,11 +150,9 @@ class _DashboardPageState extends State<DashboardPage> {
               borderRadius: BorderRadius.circular(10.0),
             ),
           ),
-        )
-    );
+        ));
   }
 }
-
 
 class ActorItem extends StatelessWidget {
   final Actor actor;
