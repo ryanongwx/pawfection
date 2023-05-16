@@ -82,7 +82,7 @@ class _VolunteerViewState extends State<VolunteerView> {
                   ),
                   activeItem: Icon(
                     Icons.person,
-                    color: Colors.redAccent,
+                    color: Colors.blueAccent,
                   ),
                   itemLabel: 'Profile',
                 ),
