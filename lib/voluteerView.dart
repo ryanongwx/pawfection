@@ -14,11 +14,10 @@ class _VolunteerViewState extends State<VolunteerView> {
 
   final _pageController = PageController(initialPage: 1);
 
-  int maxCount = 3;
+  int maxCount = 2;
 
   /// widget list
   final List<Widget> bottomBarPages = [
-    const TaskPage(),
     const DashboardPage(),
     const ProfilePage(),
   ];
@@ -56,17 +55,6 @@ class _VolunteerViewState extends State<VolunteerView> {
               bottomBarItems: const [
                 BottomBarItem(
                   inActiveItem: Icon(
-                    Icons.task,
-                    color: Colors.blueGrey,
-                  ),
-                  activeItem: Icon(
-                    Icons.task,
-                    color: Colors.blueAccent,
-                  ),
-                  itemLabel: 'Tasks',
-                ),
-                BottomBarItem(
-                  inActiveItem: Icon(
                     Icons.dashboard,
                     color: Colors.blueGrey,
                   ),
@@ -101,16 +89,6 @@ class _VolunteerViewState extends State<VolunteerView> {
             )
           : null,
     );
-  }
-}
-
-class TaskPage extends StatelessWidget {
-  const TaskPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        color: Colors.white, child: const Center(child: Text('Request Tasks')));
   }
 }
 
