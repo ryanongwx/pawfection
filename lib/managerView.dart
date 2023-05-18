@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
+import 'package:flutter_advanced_segment/flutter_advanced_segment.dart';
+import 'package:searchable_listview/searchable_listview.dart';
+
+import 'package:pawfection/Manager%20Screens/mdashboardScreen.dart';
+import 'package:pawfection/Manager%20Screens/mpetScreen.dart';
+import 'package:pawfection/Manager%20Screens/mtaskScreen.dart';
 
 class ManagerView extends StatefulWidget {
   const ManagerView({super.key});
@@ -9,16 +15,15 @@ class ManagerView extends StatefulWidget {
 }
 
 class _ManagerViewState extends State<ManagerView> {
-
   final _pageController = PageController(initialPage: 1);
 
   int maxCount = 3;
 
   /// widget list
   final List<Widget> bottomBarPages = [
-    const PetPage(),
-    const DashboardPage(),
-    const TaskPage(),
+    const MPetScreen(),
+    const MDashboardScreen(),
+    const MTaskScreen(),
   ];
 
   @override
@@ -35,14 +40,12 @@ class _ManagerViewState extends State<ManagerView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(),
-
       body: PageView(
-      controller: _pageController,
-      physics: const NeverScrollableScrollPhysics(),
-      children: List.generate(
-        bottomBarPages.length, (index) => bottomBarPages[index]),
+        controller: _pageController,
+        physics: const NeverScrollableScrollPhysics(),
+        children: List.generate(
+            bottomBarPages.length, (index) => bottomBarPages[index]),
       ),
       extendBody: true,
       bottomNavigationBar: (bottomBarPages.length <= maxCount)
@@ -74,7 +77,6 @@ class _ManagerViewState extends State<ManagerView> {
                   ),
                   itemLabel: 'Dashboard',
                 ),
-
                 BottomBarItem(
                   inActiveItem: Icon(
                     Icons.task,
@@ -82,11 +84,10 @@ class _ManagerViewState extends State<ManagerView> {
                   ),
                   activeItem: Icon(
                     Icons.task,
-                    color: Colors.redAccent,
+                    color: Colors.blueAccent,
                   ),
                   itemLabel: 'Tasks',
                 ),
-                
               ],
               onTap: (index) {
                 /// control your animation using page controller
@@ -99,35 +100,5 @@ class _ManagerViewState extends State<ManagerView> {
             )
           : null,
     );
-  }
-}
-
-class PetPage extends StatelessWidget {
-  const PetPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        color: Colors.white, child: const Center(child: Text('View All Pets and Create New Pets')));
-  }
-}
-
-class DashboardPage extends StatelessWidget {
-  const DashboardPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        color: Colors.white, child: const Center(child: Text('All-in-one Dashboard')));
-  }
-}
-
-class TaskPage extends StatelessWidget {
-  const TaskPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        color: Colors.white, child: const Center(child: Text('Create New Tasks')));
   }
 }
