@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
-import 'package:pawfection/Volunteer%20Screens/mprofileScreen.dart';
-import 'package:pawfection/Volunteer%20Screens/vdashboardScreen.dart';
+import 'package:pawfection/volunteersreens/v_profile_screen.dart';
+import 'package:pawfection/volunteersreens/v_dashboard_screen.dart';
 
 import 'package:searchable_listview/searchable_listview.dart';
 
