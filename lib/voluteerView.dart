@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
-import 'package:flutter_advanced_segment/flutter_advanced_segment.dart';
 import 'package:pawfection/Volunteer%20Screens/mprofileScreen.dart';
 import 'package:pawfection/Volunteer%20Screens/vdashboardScreen.dart';
 
@@ -16,11 +15,10 @@ class VolunteerView extends StatefulWidget {
 class _VolunteerViewState extends State<VolunteerView> {
   final _pageController = PageController(initialPage: 1);
 
-  int maxCount = 3;
+  int maxCount = 2;
 
   /// widget list
   final List<Widget> bottomBarPages = [
-    const VProfileScreen(),
     const VDashboardScreen(),
     const VProfileScreen(),
   ];
@@ -54,17 +52,6 @@ class _VolunteerViewState extends State<VolunteerView> {
               showLabel: false,
               notchColor: Colors.black87,
               bottomBarItems: const [
-                BottomBarItem(
-                  inActiveItem: Icon(
-                    Icons.task,
-                    color: Colors.blueGrey,
-                  ),
-                  activeItem: Icon(
-                    Icons.task,
-                    color: Colors.blueAccent,
-                  ),
-                  itemLabel: 'Tasks',
-                ),
                 BottomBarItem(
                   inActiveItem: Icon(
                     Icons.dashboard,
