@@ -4,12 +4,15 @@ import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:card_settings/card_settings.dart';
 
-class VProfileScreen extends StatelessWidget {
-  const VProfileScreen({super.key});
+class VProfileUpdateScreen extends StatelessWidget {
+  const VProfileUpdateScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return FormExample();
+    return Scaffold(
+        appBar: AppBar(),
+        body: FormExample()
+    );
   }
 }
 
@@ -23,10 +26,7 @@ class FormExample extends StatefulWidget {
 class _FormExampleState extends State<FormExample> {
   String name = "Test";
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GlobalKey<FormState> _dateKey = GlobalKey<FormState>();
-  List<DateTime?> _date = [
-    DateTime.now()
-  ];
+
   final tasks = [
     "walking", "washing", "playing"
   ];
@@ -59,26 +59,19 @@ class _FormExampleState extends State<FormExample> {
                     onSaved: (value) => name = value!,
                   ),
                   CardSettingsCheckboxPicker(
-                    key: _dateKey,
-                    label: 'Hobbies',
-                    initialItems: tasks,
-                    items: tasks,
-                    onSaved: (value) => tasksSelected = value
+                      key: _formKey,
+                      label: 'Hobbies',
+                      initialItems: tasks,
+                      items: tasks,
+                      onSaved: (value) => tasksSelected = value
                   )
                 ],
               ),
             ],
           ),
           CardSettingsHeader(
-            label: "Available Dates"
-          ),
-          CalendarDatePicker2(
-            config: CalendarDatePicker2Config(
-              calendarType: CalendarDatePicker2Type.multi,
-            ),
-            value: _date,
-            onValueChanged: (dates) => _date = dates,
-          ),
+              label: "Available Dates"
+          )
         ],
       ),
     );

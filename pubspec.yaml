@@ -40,7 +40,11 @@ dependencies:
   flutter_advanced_segment: ^3.0.2
   card_settings: ^3.3.0
   calendar_date_picker2: ^0.5.2
-  flutter_profile_picture: ^2.0.0
+  image_picker: ^0.8.7+5
+  image: ^4.0.17
+  image_cropper: ^4.0.1
+  animated_theme_switcher: ^2.0.8
+  flutter_plugin_android_lifecycle: ^2.0.15
 
 dev_dependencies:
   flutter_test:

@@ -3,9 +3,9 @@ import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_not
 import 'package:flutter_advanced_segment/flutter_advanced_segment.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 
-import 'package:pawfection/Manager%20Screens/mdashboardScreen.dart';
-import 'package:pawfection/Manager%20Screens/mpetScreen.dart';
-import 'package:pawfection/Manager%20Screens/mtaskScreen.dart';
+import 'package:pawfection/managerscreens/m_dashboard_screen.dart';
+import 'package:pawfection/managerscreens/m_pet_screen.dart';
+import 'package:pawfection/managerscreens/m_task_screen.dart';
 
 class ManagerView extends StatefulWidget {
   const ManagerView({super.key});
