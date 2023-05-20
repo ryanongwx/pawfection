@@ -1,5 +1,4 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pawfection/volunteersreens/models/user.dart';
 import 'package:pawfection/volunteersreens/profile_picture_update_screen.dart';
@@ -10,6 +9,7 @@ import 'package:pawfection/volunteersreens/utils/user_accounts.dart';
 import 'package:pawfection/volunteersreens/widgets/numbers_widget.dart';
 import 'package:pawfection/volunteersreens/widgets/profile_widget.dart';
 import 'package:pawfection/volunteersreens/widgets/textfield_widget.dart';
+import 'package:pawfection/volunteersreens/profile_update_screen.dart';
 
 class VProfileScreen extends StatefulWidget {
   VProfileScreen({Key? key, this.imagePath = 'assets/images/user_profile.png'})
@@ -26,7 +26,7 @@ class _VProfileScreenState extends State<VProfileScreen> {
   Widget build(BuildContext context) {
     final user = UserPreferences.myUser;
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(title: const Text("My Profile")),
         body: Padding(
           padding: EdgeInsets.only(top: 20),
           child: Column(
@@ -101,11 +101,6 @@ class _VProfileScreenState extends State<VProfileScreen> {
             style: TextStyle(color: Colors.grey),
           ),
         ],
-      );
-
-  Widget buildUpgradeButton() => ButtonWidget(
-        text: 'hehehe',
-        onClicked: () {},
       );
 
   Widget buildAbout(User user) => Container(
