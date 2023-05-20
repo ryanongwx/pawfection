@@ -39,10 +39,12 @@ dependencies:
   flutter_login: ^4.1.1
   flutter_advanced_segment: ^3.0.2
   card_settings: ^3.3.0
+  calendar_date_picker2: ^0.5.2
   image_picker: ^0.8.7+5
   image: ^4.0.17
   image_cropper: ^4.0.1
   animated_theme_switcher: ^2.0.8
+  flutter_plugin_android_lifecycle: ^2.0.15
 
 dev_dependencies:
   flutter_test:
@@ -68,7 +70,6 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/logo.png
-    - assets/images/profile.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

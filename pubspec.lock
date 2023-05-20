@@ -73,6 +73,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  calendar_date_picker2:
+    dependency: "direct main"
+    description:
+      name: calendar_date_picker2
+      sha256: f7ecd632260f2af6cfb72f6b7878f847b0a61821d50f26df9bd00b0a336d0cac
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.2"
   card_settings:
     dependency: "direct main"
     description:
@@ -231,7 +239,7 @@ packages:
     source: hosted
     version: "2.11.0"
   flutter_plugin_android_lifecycle:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_plugin_android_lifecycle
       sha256: "950e77c2bbe1692bc0874fc7fb491b96a4dc340457f4ea1641443d0a6c1ea360"

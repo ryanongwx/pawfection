@@ -23,6 +23,7 @@ class _VDashboardScreenState extends State<VDashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text("Task Dashboard")),
         body: Stack(children: [
       Padding(
           padding: EdgeInsets.all(20.0),
