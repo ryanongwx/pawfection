@@ -1,59 +1,101 @@
+import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:card_settings/card_settings.dart';
+import 'package:pawfection/volunteersreens/models/user.dart';
+import 'package:pawfection/volunteersreens/profile_picture_update_screen.dart';
+import 'package:pawfection/volunteersreens/widgets/button_widget.dart';
+import 'package:pawfection/volunteersreens/utils/user_accounts.dart';
+import 'package:pawfection/volunteersreens/widgets/numbers_widget.dart';
+import 'package:pawfection/volunteersreens/widgets/profile_widget.dart';
+import 'package:pawfection/volunteersreens/widgets/textfield_widget.dart';
 
-class VProfileScreen extends StatelessWidget {
-  const VProfileScreen({super.key});
+class VProfileScreen extends StatefulWidget {
+  const VProfileScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Form Sample')),
-        body: const FormExample(),
-      ),
-    );
+  State<VProfileScreen> createState() => _VProfileScreenState();
+}
+
+class _VProfileScreenState extends State<VProfileScreen> {
+  @override
+  void initState() {
+    super.initState();
   }
-}
-
-class FormExample extends StatefulWidget {
-  const FormExample({super.key});
-
-  @override
-  State<FormExample> createState() => _FormExampleState();
-}
-
-class _FormExampleState extends State<FormExample> {
-  String title = "Spheria";
-  String author = "Cody Leet";
-
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: CardSettings(
-        children: <CardSettingsSection>[
-          CardSettingsSection(
-          header: CardSettingsHeader(
-            label: 'Favorite Book',
-          ),
-          children: <CardSettingsWidget>[
-            CardSettingsText(
-              label: 'Title',
-              initialValue: title,
-              validator: (value) {
-                if (value == null || value.isEmpty) return 'Title is required.';
-              },
-              onSaved: (value) => title = value!,
+    final user = UserPreferences.myUser;
+    return Scaffold(
+        body: Padding(
+      padding: EdgeInsets.only(top: 20),
+      child: Column(
+        children: [
+          Builder(
+            builder: (context) => Expanded(
+              // Wrap ListView with Expanded widget
+              child: ListView(
+                physics: BouncingScrollPhysics(),
+                children: [
+                  ProfileWidget(
+                    imagePath: user.imagePath,
+                    onClicked: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => ProfilePictureUpdateScreen()),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  buildName(user),
+                  const SizedBox(height: 24),
+                  Center(child: buildUpgradeButton()),
+                  const SizedBox(height: 24),
+                  NumbersWidget(),
+                  const SizedBox(height: 48),
+                  buildAbout(user),
+                ],
+              ),
             ),
-            CardSettingsDateTimePicker(
-
-            )
-          ],
           ),
         ],
       ),
-    );
+    ));
   }
+
+  Widget buildName(User user) => Column(
+        children: [
+          Text(
+            user.name,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            user.email,
+            style: TextStyle(color: Colors.grey),
+          ),
+        ],
+      );
+
+  Widget buildUpgradeButton() => ButtonWidget(
+        text: 'hehehe',
+        onClicked: () {},
+      );
+
+  Widget buildAbout(User user) => Container(
+        padding: EdgeInsets.symmetric(horizontal: 48),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'About',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              user.about,
+              style: TextStyle(fontSize: 16, height: 1.4),
+            ),
+          ],
+        ),
+      );
 }
