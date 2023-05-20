@@ -27,41 +27,43 @@ class _VProfileScreenState extends State<VProfileScreen> {
   Widget build(BuildContext context) {
     final user = UserPreferences.myUser;
     return Scaffold(
+        appBar: AppBar(title: const Text("My Profile")),
         body: Padding(
-      padding: EdgeInsets.only(top: 20),
-      child: Column(
-        children: [
-          Builder(
-            builder: (context) => Expanded(
-              // Wrap ListView with Expanded widget
-              child: ListView(
-                physics: BouncingScrollPhysics(),
-                children: [
-                  ProfileWidget(
-                    imagePath: user.imagePath,
-                    onClicked: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => ProfilePictureUpdateScreen()),
-                      );
-                    },
+          padding: EdgeInsets.only(top: 20),
+          child: Column(
+            children: [
+              Builder(
+                builder: (context) => Expanded(
+                  // Wrap ListView with Expanded widget
+                  child: ListView(
+                    physics: BouncingScrollPhysics(),
+                    children: [
+                      ProfileWidget(
+                        imagePath: user.imagePath,
+                        onClicked: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ProfilePictureUpdateScreen()),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 24),
+                      buildName(user),
+                      const SizedBox(height: 24),
+                      Center(child: buildUpgradeButton1()),
+                      Center(child: buildUpgradeButton2()),
+                      const SizedBox(height: 24),
+                      NumbersWidget(),
+                      const SizedBox(height: 48),
+                      buildAbout(user),
+                    ],
                   ),
-                  const SizedBox(height: 24),
-                  buildName(user),
-                  const SizedBox(height: 24),
-                  Center(child: buildUpgradeButton1()),
-                  Center(child: buildUpgradeButton2()),
-                  const SizedBox(height: 24),
-                  NumbersWidget(),
-                  const SizedBox(height: 48),
-                  buildAbout(user),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
-    ));
+        ));
   }
 
   Widget buildName(User user) => Column(
@@ -88,19 +90,19 @@ class _VProfileScreenState extends State<VProfileScreen> {
             ),
           );
         },
-  );
+      );
 
   Widget buildUpgradeButton2() => ButtonWidget(
-    text: 'Update Availability',
-    onClicked: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const UpdateAvailability(),
-        ),
+        text: 'Update Availability',
+        onClicked: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const UpdateAvailability(),
+            ),
+          );
+        },
       );
-    },
-  );
 
   Widget buildAbout(User user) => Container(
         padding: EdgeInsets.symmetric(horizontal: 48),

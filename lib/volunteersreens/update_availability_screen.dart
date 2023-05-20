@@ -1,4 +1,5 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+import 'package:card_settings/widgets/information_fields/card_settings_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -11,23 +12,20 @@ class UpdateAvailability extends StatefulWidget {
 
 class _UpdateAvailabilityState extends State<UpdateAvailability> {
   final GlobalKey<FormState> _dateKey = GlobalKey<FormState>();
-  List<DateTime?> _date = [
-    DateTime.now()
-  ];
+  List<DateTime?> _date = [DateTime.now()];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+        appBar: AppBar(title: const Text("Available Dates")),
         body: Material(
-            child: CalendarDatePicker2(
+          child: CalendarDatePicker2(
             config: CalendarDatePicker2Config(
-            calendarType: CalendarDatePicker2Type.multi,
+              calendarType: CalendarDatePicker2Type.multi,
             ),
             value: _date,
             onValueChanged: (dates) => _date = dates,
-            )
-        )
-    );
+          ),
+        ));
   }
 }

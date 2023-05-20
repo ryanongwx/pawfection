@@ -39,7 +39,6 @@ class _VolunteerViewState extends State<VolunteerView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       body: PageView(
         controller: _pageController,
         physics: const NeverScrollableScrollPhysics(),
