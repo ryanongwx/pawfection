@@ -5,6 +5,8 @@ import 'package:pawfection/volunteersreens/v_dashboard_screen.dart';
 
 import 'package:searchable_listview/searchable_listview.dart';
 
+import 'volunteersreens/profile_picture_update_screen.dart';
+
 class VolunteerView extends StatefulWidget {
   const VolunteerView({super.key});
 
