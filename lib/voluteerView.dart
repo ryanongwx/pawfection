@@ -8,7 +8,10 @@ import 'package:searchable_listview/searchable_listview.dart';
 import 'volunteersreens/profile_picture_update_screen.dart';
 
 class VolunteerView extends StatefulWidget {
-  const VolunteerView({super.key});
+  const VolunteerView({Key? key, this.image = 'assets/images/profile.png'})
+      : super(key: key);
+
+  final String image;
 
   @override
   State<VolunteerView> createState() => _VolunteerViewState();
@@ -16,14 +19,8 @@ class VolunteerView extends StatefulWidget {
 
 class _VolunteerViewState extends State<VolunteerView> {
   final _pageController = PageController(initialPage: 1);
-
+  late List<Widget> bottomBarPages;
   int maxCount = 2;
-
-  /// widget list
-  final List<Widget> bottomBarPages = [
-    const VDashboardScreen(),
-    const VProfileScreen(),
-  ];
 
   @override
   void dispose() {
@@ -34,6 +31,14 @@ class _VolunteerViewState extends State<VolunteerView> {
   @override
   void initState() {
     super.initState();
+
+    /// widget list
+    bottomBarPages = [
+      const VDashboardScreen(),
+      VProfileScreen(
+        imagePath: widget.image,
+      ),
+    ];
   }
 
   @override

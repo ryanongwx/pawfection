@@ -9,18 +9,11 @@ import 'package:pawfection/volunteersreens/widgets/numbers_widget.dart';
 import 'package:pawfection/volunteersreens/widgets/profile_widget.dart';
 import 'package:pawfection/volunteersreens/widgets/textfield_widget.dart';
 
-class VProfileScreen extends StatefulWidget {
-  const VProfileScreen({Key? key}) : super(key: key);
+class VProfileScreen extends StatelessWidget {
+  VProfileScreen({Key? key, this.imagePath = 'assets/images/profile.png'})
+      : super(key: key);
 
-  @override
-  State<VProfileScreen> createState() => _VProfileScreenState();
-}
-
-class _VProfileScreenState extends State<VProfileScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
+  String imagePath;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +30,7 @@ class _VProfileScreenState extends State<VProfileScreen> {
                 physics: BouncingScrollPhysics(),
                 children: [
                   ProfileWidget(
-                    imagePath: user.imagePath,
+                    imagePath: imagePath,
                     onClicked: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
