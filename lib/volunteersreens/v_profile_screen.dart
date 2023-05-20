@@ -19,40 +19,42 @@ class VProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = UserPreferences.myUser;
     return Scaffold(
+        appBar: AppBar(),
         body: Padding(
-      padding: EdgeInsets.only(top: 20),
-      child: Column(
-        children: [
-          Builder(
-            builder: (context) => Expanded(
-              // Wrap ListView with Expanded widget
-              child: ListView(
-                physics: BouncingScrollPhysics(),
-                children: [
-                  ProfileWidget(
-                    imagePath: imagePath,
-                    onClicked: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => ProfilePictureUpdateScreen()),
-                      );
-                    },
+          padding: EdgeInsets.only(top: 20),
+          child: Column(
+            children: [
+              Builder(
+                builder: (context) => Expanded(
+                  // Wrap ListView with Expanded widget
+                  child: ListView(
+                    physics: BouncingScrollPhysics(),
+                    children: [
+                      ProfileWidget(
+                        imagePath: imagePath,
+                        onClicked: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ProfilePictureUpdateScreen()),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 24),
+                      buildName(user),
+                      const SizedBox(height: 24),
+                      Center(child: buildUpgradeButton()),
+                      const SizedBox(height: 24),
+                      NumbersWidget(),
+                      const SizedBox(height: 48),
+                      buildAbout(user),
+                    ],
                   ),
-                  const SizedBox(height: 24),
-                  buildName(user),
-                  const SizedBox(height: 24),
-                  Center(child: buildUpgradeButton()),
-                  const SizedBox(height: 24),
-                  NumbersWidget(),
-                  const SizedBox(height: 48),
-                  buildAbout(user),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
-    ));
+        ));
   }
 
   Widget buildName(User user) => Column(

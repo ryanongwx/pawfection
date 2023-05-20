@@ -3,6 +3,8 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:image/image.dart' as img;
 import 'package:image_cropper/image_cropper.dart';
+import 'package:pawfection/volunteersreens/v_profile_screen.dart';
+import 'package:pawfection/voluteerView.dart';
 
 class ProfilePictureUpdateScreen extends StatefulWidget {
   @override
@@ -86,7 +88,11 @@ class _ProfilePictureUpdateScreenState
 
   @override
   Widget build(BuildContext context) {
+    bool filecheck = false;
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Update Profile Picture '),
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -108,6 +114,7 @@ class _ProfilePictureUpdateScreenState
                   valueListenable: _croppedImageNotifier,
                   builder: (context, file, child) {
                     if (file != null) {
+                      filecheck = true;
                       return CircleAvatar(
                         backgroundImage: FileImage(file),
                         radius: 150,
@@ -118,38 +125,72 @@ class _ProfilePictureUpdateScreenState
                   },
                 ),
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  ElevatedButton(
-                    onPressed: () => pickImage(ImageSource.gallery),
-                    child: Padding(
-                      padding: EdgeInsets.all(15.0),
-                      child: Text('Upload Image'),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(32.0),
+              Container(
+                height: 200,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    ElevatedButton(
+                      onPressed: () => pickImage(ImageSource.gallery),
+                      child: Padding(
+                        padding: EdgeInsets.all(15.0),
+                        child: Text('Upload Image'),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(32.0),
+                        ),
                       ),
                     ),
-                  ),
-                  ElevatedButton(
-                    onPressed: null,
-                    child: Padding(
-                      padding: EdgeInsets.all(15.0),
-                      child: Text('Update Profile Picture'),
+                    ValueListenableBuilder<File?>(
+                      valueListenable: _croppedImageNotifier,
+                      builder: (context, file, child) {
+                        if (file != null) {
+                          filecheck = true;
+                          return ElevatedButton(
+                            onPressed: filecheck
+                                ? () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              VolunteerView(image: file.path)),
+                                    );
+                                  }
+                                : null,
+                            child: Padding(
+                              padding: EdgeInsets.all(15.0),
+                              child: Text('Update Profile Picture'),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(32.0),
+                              ),
+                            ),
+                          );
+                        } else {
+                          return ElevatedButton(
+                            onPressed: null,
+                            child: Padding(
+                              padding: EdgeInsets.all(15.0),
+                              child: Text('Update Profile Picture'),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(32.0),
+                              ),
+                            ),
+                          );
+                        }
+                      },
                     ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(32.0),
-                      ),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),
