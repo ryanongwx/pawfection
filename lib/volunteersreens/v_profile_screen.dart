@@ -3,18 +3,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pawfection/volunteersreens/models/user.dart';
 import 'package:pawfection/volunteersreens/profile_picture_update_screen.dart';
+import 'package:pawfection/volunteersreens/profile_update_screen.dart';
+import 'package:pawfection/volunteersreens/update_availability_screen.dart';
 import 'package:pawfection/volunteersreens/widgets/button_widget.dart';
 import 'package:pawfection/volunteersreens/utils/user_accounts.dart';
 import 'package:pawfection/volunteersreens/widgets/numbers_widget.dart';
 import 'package:pawfection/volunteersreens/widgets/profile_widget.dart';
 import 'package:pawfection/volunteersreens/widgets/textfield_widget.dart';
 
-class VProfileScreen extends StatelessWidget {
-  VProfileScreen({Key? key, this.imagePath = 'assets/images/profile.png'})
+class VProfileScreen extends StatefulWidget {
+  VProfileScreen({Key? key, this.imagePath = 'assets/images/user_profile.png'})
       : super(key: key);
 
   String imagePath;
 
+  @override
+  State<VProfileScreen> createState() => _VProfileScreenState();
+}
+
+class _VProfileScreenState extends State<VProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final user = UserPreferences.myUser;
@@ -31,7 +38,7 @@ class VProfileScreen extends StatelessWidget {
                     physics: BouncingScrollPhysics(),
                     children: [
                       ProfileWidget(
-                        imagePath: imagePath,
+                        imagePath: widget.imagePath,
                         onClicked: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
@@ -43,7 +50,8 @@ class VProfileScreen extends StatelessWidget {
                       const SizedBox(height: 24),
                       buildName(user),
                       const SizedBox(height: 24),
-                      Center(child: buildUpgradeButton()),
+                      Center(child: buildUpgradeButton1()),
+                      Center(child: buildUpgradeButton2()),
                       const SizedBox(height: 24),
                       NumbersWidget(),
                       const SizedBox(height: 48),
@@ -56,6 +64,30 @@ class VProfileScreen extends StatelessWidget {
           ),
         ));
   }
+
+  Widget buildUpgradeButton1() => ButtonWidget(
+        text: 'Update Profile',
+        onClicked: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const VProfileUpdateScreen(),
+            ),
+          );
+        },
+      );
+
+  Widget buildUpgradeButton2() => ButtonWidget(
+        text: 'Update Availability',
+        onClicked: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const UpdateAvailability(),
+            ),
+          );
+        },
+      );
 
   Widget buildName(User user) => Column(
         children: [

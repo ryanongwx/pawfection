@@ -8,7 +8,7 @@ import 'package:searchable_listview/searchable_listview.dart';
 import 'volunteersreens/profile_picture_update_screen.dart';
 
 class VolunteerView extends StatefulWidget {
-  const VolunteerView({Key? key, this.image = 'assets/images/profile.png'})
+  const VolunteerView({Key? key, this.image = 'assets/images/user_profile.png'})
       : super(key: key);
 
   final String image;
