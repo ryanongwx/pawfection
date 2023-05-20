@@ -39,6 +39,8 @@ dependencies:
   flutter_login: ^4.1.1
   flutter_advanced_segment: ^3.0.2
   card_settings: ^3.3.0
+  calendar_date_picker2: ^0.5.2
+  flutter_profile_picture: ^2.0.0
 
 dev_dependencies:
   flutter_test:
