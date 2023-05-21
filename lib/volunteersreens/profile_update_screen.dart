@@ -1,6 +1,4 @@
 import 'dart:core';
-
-import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:card_settings/card_settings.dart';
 
@@ -13,10 +11,10 @@ class VProfileUpdateScreen extends StatefulWidget {
 
 class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
   String name = "Test";
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
 
   final tasks = ["walking", "washing", "playing"];
-  List<String>? tasksSelected = [];
+  List<String> tasksSelected = [];
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +23,9 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
           title: const Text("Update Profile")
         ),
         body: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              CardSettings(
+          key: _profileKey,
+          child:
+            CardSettings(
                 children: <CardSettingsSection>[
                   CardSettingsSection(
                     children: <CardSettingsWidget>[
@@ -53,17 +50,15 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
                         onSaved: (value) => name = value!,
                       ),
                       CardSettingsCheckboxPicker(
-                          key: _formKey,
                           label: 'Task Preference',
-                          initialItems: tasks,
+                          initialItems: tasksSelected,
                           items: tasks,
-                          onSaved: (value) => tasksSelected = value)
+                          onSaved: (value) => tasksSelected = value!)
                     ],
                   ),
                 ],
               )
-            ],
-          ),
-        ));
+          )
+        );
   }
 }
