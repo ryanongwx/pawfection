@@ -11,47 +11,51 @@ class VProfileUpdateScreen extends StatefulWidget {
 class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
   String name = "Test";
   final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
+
   final tasks = ["walking", "washing", "playing"];
-  List<String>? tasksSelected = [];
+  List<String> tasksSelected = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: const Text("Update Profile")),
         body: Form(
-            key: _profileKey,
-            child: CardSettings(
-              children: <CardSettingsSection>[
-                CardSettingsSection(
-                  children: <CardSettingsWidget>[
-                    CardSettingsText(
-                      label: 'Name',
-                      initialValue: name,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Title is required.';
-                        }
-                      },
-                      onSaved: (value) => name = value!,
-                    ),
-                    CardSettingsText(
-                      label: 'Experience',
-                      initialValue: name,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Title is required.';
-                        }
-                      },
-                      onSaved: (value) => name = value!,
-                    ),
-                    CardSettingsCheckboxPicker(
-                      label: 'Task Preference',
-                      initialItems: tasksSelected,
-                      items: tasks,
-                      onSaved: (value) => tasksSelected = value,
-                    )
-                  ],
-                ),
-              ],
-            )));
+          key: _profileKey,
+          child:
+            CardSettings(
+                children: <CardSettingsSection>[
+                  CardSettingsSection(
+                    children: <CardSettingsWidget>[
+                      CardSettingsText(
+                        label: 'Name',
+                        initialValue: name,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Title is required.';
+                          }
+                        },
+                        onSaved: (value) => name = value!,
+                      ),
+                      CardSettingsText(
+                        label: 'Experience',
+                        initialValue: name,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Title is required.';
+                          }
+                        },
+                        onSaved: (value) => name = value!,
+                      ),
+                      CardSettingsCheckboxPicker(
+                          label: 'Task Preference',
+                          initialItems: tasksSelected,
+                          items: tasks,
+                          onSaved: (value) => tasksSelected = value!)
+                    ],
+                  ),
+                ],
+              )
+          )
+        );
   }
 }
