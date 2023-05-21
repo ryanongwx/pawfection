@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
+import 'package:pawfection/volunteersreens/v_dashboard_screen.dart';
 import 'package:pawfection/voluteerView.dart';
 
 const users = const {
-  'dribbble@gmail.com': '12345',
-  'hunter@gmail.com': 'hunter',
+  'soo@gmail.com': 'soo',
+  'ryan@gmail.com': 'ryan',
 };
 
 class LoginView extends StatelessWidget {
@@ -15,10 +16,10 @@ class LoginView extends StatelessWidget {
     debugPrint('Name: ${data.name}, Password: ${data.password}');
     return Future.delayed(loginTime).then((_) {
       if (!users.containsKey(data.name)) {
-        return 'User not exists';
+        return 'User does not exist';
       }
       if (users[data.name] != data.password) {
-        return 'Password does not match';
+        return 'Passwords do not match';
       }
       return null;
     });
@@ -35,7 +36,7 @@ class LoginView extends StatelessWidget {
     debugPrint('Name: $name');
     return Future.delayed(loginTime).then((_) {
       if (!users.containsKey(name)) {
-        return 'User not exists';
+        return 'User does not exist';
       }
       return null;
     });
@@ -46,6 +47,15 @@ class LoginView extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(),
         body: FlutterLogin(
-            onLogin: _authUser, onRecoverPassword: _recoverPassword));
+          logo: AssetImage('assets/images/logo.png'),
+          onLogin: _authUser,
+          onSignup: _signupUser,
+          onRecoverPassword: _recoverPassword,
+          onSubmitAnimationCompleted: () {
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (context) => VDashboardScreen(),
+            ));
+          },
+        ));
   }
 }
