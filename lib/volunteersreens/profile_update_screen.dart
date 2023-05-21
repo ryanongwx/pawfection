@@ -44,10 +44,11 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
                       onSaved: (value) => name = value!,
                     ),
                     CardSettingsCheckboxPicker(
-                        label: 'Task Preference',
-                        initialItems: tasks,
-                        items: tasks,
-                        onSaved: (value) => tasksSelected = value)
+                      label: 'Task Preference',
+                      initialItems: tasksSelected,
+                      items: tasks,
+                      onSaved: (value) => tasksSelected = value,
+                    )
                   ],
                 ),
               ],
