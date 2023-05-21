@@ -4,7 +4,6 @@ import 'package:card_settings/card_settings.dart';
 
 class VProfileUpdateScreen extends StatefulWidget {
   const VProfileUpdateScreen({super.key});
-
   @override
   State<VProfileUpdateScreen> createState() => _VProfileUpdateScreenState();
 }
@@ -19,9 +18,7 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("Update Profile")
-        ),
+        appBar: AppBar(title: const Text("Update Profile")),
         body: Form(
           key: _profileKey,
           child:

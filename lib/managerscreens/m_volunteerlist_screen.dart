@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_advanced_segment/flutter_advanced_segment.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 
-class MPetScreen extends StatefulWidget {
-  const MPetScreen({super.key});
+class MVolunteerListScreen extends StatefulWidget {
+  const MVolunteerListScreen({super.key});
 
   @override
-  State<MPetScreen> createState() => _MPetScreenState();
+  State<MVolunteerListScreen> createState() => _MVolunteerListScreenState();
 }
 
 final _selectedSegment_04 = ValueNotifier('Pending');
@@ -19,11 +19,11 @@ final List<Actor> actors = [
   Actor(age: 49, name: 'Ben', lastName: 'Affleck', status: 'Open'),
 ];
 
-class _MPetScreenState extends State<MPetScreen> {
+class _MVolunteerListScreenState extends State<MVolunteerListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Pets')),
+        appBar: AppBar(title: Text('Volunteers')),
         body: Stack(children: [
           Padding(
             padding: EdgeInsets.only(top: 20.0, left: 20, right: 20),

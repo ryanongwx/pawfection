@@ -5,7 +5,7 @@ import 'package:searchable_listview/searchable_listview.dart';
 
 import 'package:pawfection/managerscreens/m_dashboard_screen.dart';
 import 'package:pawfection/managerscreens/m_pet_screen.dart';
-import 'package:pawfection/managerscreens/m_task_screen.dart';
+import 'package:pawfection/managerscreens/m_volunteerlist_screen.dart';
 
 class ManagerView extends StatefulWidget {
   const ManagerView({super.key});
@@ -23,7 +23,7 @@ class _ManagerViewState extends State<ManagerView> {
   final List<Widget> bottomBarPages = [
     const MPetScreen(),
     const MDashboardScreen(),
-    const MTaskScreen(),
+    const MVolunteerListScreen(),
   ];
 
   @override
@@ -40,7 +40,6 @@ class _ManagerViewState extends State<ManagerView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       body: PageView(
         controller: _pageController,
         physics: const NeverScrollableScrollPhysics(),

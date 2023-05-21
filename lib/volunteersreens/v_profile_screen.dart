@@ -2,6 +2,7 @@ import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:pawfection/volunteersreens/models/user.dart';
 import 'package:pawfection/volunteersreens/profile_picture_update_screen.dart';
+import 'package:pawfection/volunteersreens/profile_update_screen.dart';
 import 'package:pawfection/volunteersreens/update_availability_screen.dart';
 import 'package:pawfection/volunteersreens/widgets/button_widget.dart';
 import 'package:pawfection/volunteersreens/utils/user_accounts.dart';
@@ -11,18 +12,16 @@ import 'package:pawfection/volunteersreens/widgets/textfield_widget.dart';
 import 'package:pawfection/volunteersreens/profile_update_screen.dart';
 
 class VProfileScreen extends StatefulWidget {
-  const VProfileScreen({Key? key}) : super(key: key);
+  VProfileScreen({Key? key, this.imagePath = 'assets/images/user_profile.png'})
+      : super(key: key);
+
+  String imagePath;
 
   @override
   State<VProfileScreen> createState() => _VProfileScreenState();
 }
 
 class _VProfileScreenState extends State<VProfileScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     final user = UserPreferences.myUser;
@@ -39,7 +38,7 @@ class _VProfileScreenState extends State<VProfileScreen> {
                     physics: BouncingScrollPhysics(),
                     children: [
                       ProfileWidget(
-                        imagePath: user.imagePath,
+                        imagePath: widget.imagePath,
                         onClicked: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
@@ -66,20 +65,6 @@ class _VProfileScreenState extends State<VProfileScreen> {
         ));
   }
 
-  Widget buildName(User user) => Column(
-        children: [
-          Text(
-            user.name,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            user.email,
-            style: TextStyle(color: Colors.grey),
-          ),
-        ],
-      );
-
   Widget buildUpgradeButton1() => ButtonWidget(
         text: 'Update Profile',
         onClicked: () {
@@ -102,6 +87,20 @@ class _VProfileScreenState extends State<VProfileScreen> {
             ),
           );
         },
+      );
+
+  Widget buildName(User user) => Column(
+        children: [
+          Text(
+            user.name,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            user.email,
+            style: TextStyle(color: Colors.grey),
+          ),
+        ],
       );
 
   Widget buildAbout(User user) => Container(
