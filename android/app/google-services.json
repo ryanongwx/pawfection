@@ -29,13 +29,6 @@
             {
               "client_id": "521732512335-0fbjb8iec9lr3mvka5iq4t9f12s6e358.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "521732512335-gv30q6f1j1vc0sljq1tucihn5v86ftvg.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.pawfection"
-              }
             }
           ]
         }
