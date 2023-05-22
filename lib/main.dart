@@ -2,8 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:pawfection/managerview.dart';
 import 'package:pawfection/voluteerView.dart';
 import 'package:pawfection/loginview.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MaterialApp(
     title: 'Pawfection',
     home: MyApp(),
@@ -61,7 +67,7 @@ class MyApp extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const LoginView(),
+                        builder: (context) => LoginView(),
                       ),
                     );
                   },
