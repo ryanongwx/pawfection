@@ -46,3 +46,4 @@ app.*.map.json
 # Keys
 google-services.json
 GoogleService-Info.plist
+api-keys.json
