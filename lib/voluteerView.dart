@@ -18,7 +18,7 @@ class VolunteerView extends StatefulWidget {
 }
 
 class _VolunteerViewState extends State<VolunteerView> {
-  final _pageController = PageController(initialPage: 1);
+  final _pageController = PageController(initialPage: 0);
   late List<Widget> bottomBarPages;
   int maxCount = 2;
 
