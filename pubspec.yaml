@@ -45,6 +45,7 @@ dependencies:
   image_cropper: ^4.0.1
   animated_theme_switcher: ^2.0.8
   flutter_plugin_android_lifecycle: ^2.0.15
+  firebase_core: ^2.13.0
 
 dev_dependencies:
   flutter_test:
