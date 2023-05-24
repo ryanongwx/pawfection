@@ -17,18 +17,17 @@ final DataRepository repository = DataRepository();
 
 List<User> userList = [];
 
-Future<void> fetchUserList() async {
-  Future<List<User>> userListFuture = repository.getUserList();
-  userList = await userListFuture;
-}
-
 class _MVolunteerListScreenState extends State<MVolunteerListScreen> {
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    Future<void> fetchUserList() async {
+      Future<List<User>> userListFuture = repository.getUserList();
+      userList = await userListFuture;
+    }
+
     fetchUserList();
-    debugPrint(userList.toString());
   }
 
   @override
@@ -126,7 +125,7 @@ class EmptyView extends StatelessWidget {
           Icons.error,
           color: Colors.red,
         ),
-        Text('No Pet is found with this name'),
+        Text('No User with this name is found'),
       ],
     );
   }

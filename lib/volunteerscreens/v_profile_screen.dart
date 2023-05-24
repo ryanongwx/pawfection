@@ -1,15 +1,15 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/material.dart';
-import 'package:pawfection/volunteersreens/models/user.dart';
-import 'package:pawfection/volunteersreens/profile_picture_update_screen.dart';
-import 'package:pawfection/volunteersreens/profile_update_screen.dart';
-import 'package:pawfection/volunteersreens/update_availability_screen.dart';
-import 'package:pawfection/volunteersreens/widgets/button_widget.dart';
-import 'package:pawfection/volunteersreens/utils/user_accounts.dart';
-import 'package:pawfection/volunteersreens/widgets/numbers_widget.dart';
-import 'package:pawfection/volunteersreens/widgets/profile_widget.dart';
-import 'package:pawfection/volunteersreens/widgets/textfield_widget.dart';
-import 'package:pawfection/volunteersreens/profile_update_screen.dart';
+import 'package:pawfection/volunteerscreens/models/user.dart';
+import 'package:pawfection/volunteerscreens/profile_picture_update_screen.dart';
+import 'package:pawfection/volunteerscreens/profile_update_screen.dart';
+import 'package:pawfection/volunteerscreens/update_availability_screen.dart';
+import 'package:pawfection/volunteerscreens/widgets/button_widget.dart';
+import 'package:pawfection/volunteerscreens/utils/user_accounts.dart';
+import 'package:pawfection/volunteerscreens/widgets/numbers_widget.dart';
+import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
+import 'package:pawfection/volunteerscreens/widgets/textfield_widget.dart';
+import 'package:pawfection/volunteerscreens/profile_update_screen.dart';
 
 class VProfileScreen extends StatefulWidget {
   VProfileScreen({Key? key, this.imagePath = 'assets/images/user_profile.png'})

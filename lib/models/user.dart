@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 class User {
   String? referenceId;
   String username;
   String email;
   String role;
-  List<Timestamp>? availabledates;
-  List<String>? preferences;
-  List<String>? experiences;
+  List<Timestamp?> availabledates;
+  List<String?> preferences;
+  List<String?> experiences;
   String profilepicture;
   String contactnumber;
 
@@ -15,14 +16,15 @@ class User {
       {this.referenceId,
       required this.username,
       required this.role,
-      this.availabledates,
-      this.preferences,
-      this.experiences,
+      required this.availabledates,
+      required this.preferences,
+      required this.experiences,
       required this.profilepicture,
       required this.contactnumber});
 
   factory User.fromSnapshot(DocumentSnapshot snapshot) {
     final newUser = User.fromJson(snapshot.data() as Map<String, dynamic>);
+    debugPrint('1' + snapshot.data().toString());
     newUser.referenceId = snapshot.reference.id;
     return newUser;
   }
@@ -41,15 +43,16 @@ User _userFromJson(Map<String, dynamic> json) {
   return User(json['email'] as String,
       username: json['username'] as String,
       role: json['role'] as String,
-      availabledates: json['availabledates'] as List<Timestamp>?,
-      preferences: json['preferences'] as List<String>?,
-      experiences: json['experiences'] as List<String>?,
+      availabledates:
+          json['availabledates'].cast<Timestamp?>() as List<Timestamp?>,
+      preferences: json['preferences'].cast<String?>() as List<String?>,
+      experiences: json['experiences'].cast<String?>() as List<String?>,
       profilepicture: json['profilepicture'] as String,
       contactnumber: json['contactnumber'] as String);
 }
 
 Map<String, dynamic> _userToJson(User instance) => <String, dynamic>{
-      'username': instance.username,
+      'username': instance.username.toLowerCase(),
       'email': instance.email,
       'role': instance.role,
       'availabledates': instance.availabledates,

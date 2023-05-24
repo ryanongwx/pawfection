@@ -1,4 +1,4 @@
-import 'package:pawfection/volunteersreens/models/user.dart';
+import 'package:pawfection/volunteerscreens/models/user.dart';
 
 class UserPreferences {
   static const myUser = User(

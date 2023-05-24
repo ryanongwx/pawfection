@@ -40,7 +40,7 @@ Pet _petFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _petToJson(Pet instance) => <String, dynamic>{
-      'name': instance.name,
+      'name': instance.name.toLowerCase(),
       'breed': instance.breed,
       'description': instance.description,
       'thingstonote': instance.thingstonote,

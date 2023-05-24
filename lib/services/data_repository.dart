@@ -18,7 +18,8 @@ class DataRepository {
     QuerySnapshot snapshot = await petcollection.get();
     return snapshot.docs
         .map((doc) => Pet.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
+        .toList()
+        .cast();
   }
 
   Future<DocumentReference> addPet(Pet pet) {
@@ -39,7 +40,8 @@ class DataRepository {
     QuerySnapshot snapshot = await taskcollection.get();
     return snapshot.docs
         .map((doc) => Task.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
+        .toList()
+        .cast();
   }
 
   Future<DocumentReference> addTask(Task task) {
@@ -60,7 +62,8 @@ class DataRepository {
     QuerySnapshot snapshot = await usercollection.get();
     return snapshot.docs
         .map((doc) => User.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
+        .toList()
+        .cast();
   }
 
   Future<DocumentReference> addUser(User user) {

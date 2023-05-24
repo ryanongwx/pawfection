@@ -29,30 +29,7 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
-    repository.addTask(Task('Walk the dog',
-        createdby: User('ryanongwx@gmail.com',
-            username: 'ryanongwx',
-            role: 'Manager',
-            profilepicture: 'assets/images/profile.png',
-            contactnumber: '97277230'),
-        assignedto: User('ryanongwx@gmail.com',
-            username: 'ryanongwx',
-            role: 'Manager',
-            profilepicture: 'assets/images/profile.png',
-            contactnumber: '97277230'),
-        description: 'Walk the dog',
-        status: 'Pending',
-        contactperson: User('ryanongwx@gmail.com',
-            username: 'ryanongwx',
-            role: 'Manager',
-            profilepicture: 'assets/images/profile.png',
-            contactnumber: '97277230'),
-        contactpersonnumber: '90000000',
-        deadline: [Timestamp.now()],
-        pet: Pet('Truffle', profilepicture: 'trufflepicture.png')));
     fetchTaskList();
-    debugPrint(taskList.toString());
   }
 
   @override

@@ -3,7 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:image/image.dart' as img;
 import 'package:image_cropper/image_cropper.dart';
-import 'package:pawfection/volunteersreens/v_profile_screen.dart';
+import 'package:pawfection/volunteerscreens/v_profile_screen.dart';
 import 'package:pawfection/voluteerView.dart';
 
 class ProfilePictureUpdateScreen extends StatefulWidget {

@@ -1,5 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_segment/flutter_advanced_segment.dart';
+import 'package:pawfection/models/pet.dart';
+import 'package:pawfection/models/task.dart';
+import 'package:pawfection/models/user.dart';
+import 'package:pawfection/services/data_repository.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 
 class VDashboardScreen extends StatefulWidget {
@@ -10,16 +15,23 @@ class VDashboardScreen extends StatefulWidget {
 }
 
 final _selectedSegment_04 = ValueNotifier('Pending');
-final List<Actor> actors = [
-  Actor(age: 47, name: 'Leonardo', lastName: 'DiCaprio', status: 'Pending'),
-  Actor(age: 58, name: 'Johnny', lastName: 'Depp', status: 'Completed'),
-  Actor(age: 78, name: 'Robert', lastName: 'De Niro', status: 'Pending'),
-  Actor(age: 44, name: 'Tom', lastName: 'Hardy', status: 'Open'),
-  Actor(age: 66, name: 'Denzel', lastName: 'Washington', status: 'Completed'),
-  Actor(age: 49, name: 'Ben', lastName: 'Affleck', status: 'Open'),
-];
+
+final DataRepository repository = DataRepository();
+
+List<Task> taskList = [];
+
+Future<void> fetchTaskList() async {
+  Future<List<Task>> taskListFuture = repository.getTaskList();
+  taskList = await taskListFuture;
+}
 
 class _VDashboardScreenState extends State<VDashboardScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    fetchTaskList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,14 +75,14 @@ class _VDashboardScreenState extends State<VDashboardScreen> {
             builder: (context, value, child) {
               return Padding(
                 padding: EdgeInsets.only(top: 75.0, left: 20, right: 20),
-                child: SearchableList<Actor>(
+                child: SearchableList<Task>(
                   autoFocusOnSearch: false,
-                  initialList: actors
+                  initialList: taskList
                       .where((element) =>
                           element.status.contains(_selectedSegment_04.value))
                       .toList(),
-                  builder: (Actor user) => ActorItem(actor: user),
-                  filter: (value) => actors
+                  builder: (Task task) => TaskItem(task: task),
+                  filter: (value) => taskList
                       .where(
                         (element) => element.name.toLowerCase().contains(value),
                       )
@@ -79,7 +91,7 @@ class _VDashboardScreenState extends State<VDashboardScreen> {
                       .toList(),
                   emptyWidget: const EmptyView(),
                   inputDecoration: InputDecoration(
-                    labelText: "Search Actor",
+                    labelText: "Search Task",
                     fillColor: Colors.white,
                     focusedBorder: OutlineInputBorder(
                       borderSide: const BorderSide(
@@ -98,26 +110,12 @@ class _VDashboardScreenState extends State<VDashboardScreen> {
   }
 }
 
-class Actor {
-  int age;
-  String name;
-  String lastName;
-  String status;
+class TaskItem extends StatelessWidget {
+  final Task task;
 
-  Actor({
-    required this.age,
-    required this.name,
-    required this.lastName,
-    required this.status,
-  });
-}
-
-class ActorItem extends StatelessWidget {
-  final Actor actor;
-
-  const ActorItem({
+  const TaskItem({
     Key? key,
-    required this.actor,
+    required this.task,
   }) : super(key: key);
 
   @override
@@ -136,8 +134,8 @@ class ActorItem extends StatelessWidget {
               width: 10,
             ),
             Icon(
-              Icons.star,
-              color: Colors.yellow[700],
+              Icons.account_circle,
+              color: Colors.black,
             ),
             const SizedBox(
               width: 10,
@@ -147,23 +145,10 @@ class ActorItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Firstname: ${actor.name}',
+                  '${task.name}',
                   style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Lastname: ${actor.lastName}',
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Age: ${actor.age}',
-                  style: const TextStyle(
-                    color: Colors.black,
                   ),
                 ),
               ],
@@ -187,7 +172,7 @@ class EmptyView extends StatelessWidget {
           Icons.error,
           color: Colors.red,
         ),
-        Text('no actor is found with this name'),
+        Text('No Task with this name is found'),
       ],
     );
   }
