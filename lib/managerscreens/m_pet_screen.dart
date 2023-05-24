@@ -33,7 +33,7 @@ class _MPetScreenState extends State<MPetScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Volunteers')),
+        appBar: AppBar(title: Text('Pets')),
         body: Stack(children: [
           Padding(
             padding: EdgeInsets.only(top: 20.0, left: 20, right: 20),
@@ -46,7 +46,7 @@ class _MPetScreenState extends State<MPetScreen> {
               builder: (Pet pet) => PetItem(pet: pet),
               emptyWidget: const EmptyView(),
               inputDecoration: InputDecoration(
-                labelText: "Search Actor",
+                labelText: "Search Pet",
                 fillColor: Colors.white,
                 focusedBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
