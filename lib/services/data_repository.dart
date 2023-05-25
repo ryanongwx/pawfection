@@ -23,7 +23,7 @@ class DataRepository {
 
   List<Pet> snapshotToPetList(AsyncSnapshot<QuerySnapshot> snapshot) {
     if (snapshot.data == null) {
-      throw Exception("Data is empty");
+      return [];
     } else {
       return snapshot.data!.docs.map((DocumentSnapshot document) {
         Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
@@ -62,7 +62,7 @@ class DataRepository {
 
   List<Task> snapshotToTaskList(AsyncSnapshot<QuerySnapshot> snapshot) {
     if (snapshot.data == null) {
-      throw Exception("Data is empty");
+      return [];
     } else {
       return snapshot.data!.docs.map((DocumentSnapshot document) {
         Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
@@ -110,7 +110,7 @@ class DataRepository {
 
   List<User> snapshotToUserList(AsyncSnapshot<QuerySnapshot> snapshot) {
     if (snapshot.data == null) {
-      throw Exception("Data is empty");
+      return [];
     } else {
       return snapshot.data!.docs.map((DocumentSnapshot document) {
         Map<String, dynamic> data = document.data()! as Map<String, dynamic>;

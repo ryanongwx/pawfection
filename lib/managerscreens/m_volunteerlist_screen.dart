@@ -32,7 +32,7 @@ class _MVolunteerListScreenState extends State<MVolunteerListScreen> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: DataRepository().pets,
+      stream: DataRepository().users,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         // Convert to List
         List<User> userList = DataRepository().snapshotToUserList(snapshot);
