@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_segment/flutter_advanced_segment.dart';
 import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/services/data_repository.dart';
 import 'package:searchable_listview/searchable_listview.dart';
+import 'package:pawfection/services/data_repository.dart';
+import 'package:pawfection/models/pet.dart';
 
 class MPetScreen extends StatefulWidget {
   const MPetScreen({super.key});
@@ -11,55 +14,68 @@ class MPetScreen extends StatefulWidget {
   State<MPetScreen> createState() => _MPetScreenState();
 }
 
-final _selectedSegment_04 = ValueNotifier('Pending');
-
 final DataRepository repository = DataRepository();
 
-List<Pet> petList = [];
+// List<Pet> petList = [];
 
-Future<void> fetchPetList() async {
-  Future<List<Pet>> petListFuture = repository.getPetList();
-  petList = await petListFuture;
-}
+// Future<void> fetchPetList() async {
+//   Future<List<Pet>> petListFuture = repository.getPetList();
+//   petList = await petListFuture;
+// }
 
 class _MPetScreenState extends State<MPetScreen> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    fetchPetList();
-  }
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   fetchPetList();
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(title: Text('Pets')),
-        body: Stack(children: [
-          Padding(
-            padding: EdgeInsets.only(top: 20.0, left: 20, right: 20),
-            child: SearchableList<Pet>(
-              autoFocusOnSearch: false,
-              initialList: petList,
-              filter: (value) => petList
-                  .where((element) => element.name.contains(value))
-                  .toList(),
-              builder: (Pet pet) => PetItem(pet: pet),
-              emptyWidget: const EmptyView(),
-              inputDecoration: InputDecoration(
-                labelText: "Search Pet",
-                fillColor: Colors.white,
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Colors.blue,
-                    width: 1.0,
+    return StreamBuilder<QuerySnapshot>(
+      stream: DataRepository().pets,
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        // Convert to List
+        List<Pet> petList = DataRepository().snapshotToPetList(snapshot);
+
+        if (snapshot.hasError) {
+          return const Text('Something went wrong');
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Text("Loading");
+        }
+        
+        return Scaffold(
+            appBar: AppBar(title: const Text('Pets')),
+            body: Stack(children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 20.0, left: 20, right: 20),
+                child: SearchableList<Pet>(
+                  autoFocusOnSearch: false,
+                  initialList: petList,
+                  filter: (value) => petList
+                      .where((element) => element.name.contains(value))
+                      .toList(),
+                  builder: (Pet pet) => PetItem(pet: pet),
+                  emptyWidget: const EmptyView(),
+                  inputDecoration: InputDecoration(
+                    labelText: "Search Pet",
+                    fillColor: Colors.white,
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.blue,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
                   ),
-                  borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
-            ),
-          ),
-        ]));
-    ;
+            ]));
+      },
+    );
   }
 }
 
@@ -86,7 +102,7 @@ class PetItem extends StatelessWidget {
             const SizedBox(
               width: 10,
             ),
-            Icon(
+            const Icon(
               Icons.account_circle,
               color: Colors.black,
             ),
@@ -118,9 +134,9 @@ class EmptyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
+      children: [
         Icon(
           Icons.error,
           color: Colors.red,

@@ -18,95 +18,119 @@ final _selectedSegment_04 = ValueNotifier('Pending');
 
 final DataRepository repository = DataRepository();
 
-List<Task> taskList = [];
+// List<Task> taskList = [];
 
-Future<void> fetchTaskList() async {
-  Future<List<Task>> taskListFuture = repository.getTaskList();
-  taskList = await taskListFuture;
-}
+// Future<void> fetchTaskList() async {
+//   Future<List<Task>> taskListFuture = repository.getTaskList();
+//   taskList = await taskListFuture;
+// }
 
 class _VDashboardScreenState extends State<VDashboardScreen> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    fetchTaskList();
-  }
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   fetchTaskList();
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(title: Text('Dashboard')),
-        body: Stack(children: [
-          Padding(
-              padding: EdgeInsets.all(20.0),
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: AdvancedSegment(
-                  controller: _selectedSegment_04,
-                  segments: const {
-                    'Pending': 'Pending',
-                    'Completed': 'Completed',
-                    'Open': 'Open',
-                  },
-                  activeStyle: const TextStyle(
-                    // TextStyle
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  inactiveStyle: const TextStyle(
-                    // TextStyle
-                    color: Colors.white54,
-                  ),
-                  backgroundColor: Colors.black26, // Color
-                  sliderColor: Colors.white, // Color
-                  sliderOffset: 2.0, // Double
-                  borderRadius: const BorderRadius.all(
-                      Radius.circular(8.0)), // BorderRadius
-                  itemPadding: const EdgeInsets.symmetric(
-                    // EdgeInsets
-                    horizontal: 15,
-                    vertical: 10,
-                  ),
-                  animationDuration: Duration(milliseconds: 250), // Duration
-                ),
-              )),
-          ValueListenableBuilder(
-            valueListenable: _selectedSegment_04,
-            builder: (context, value, child) {
-              return Padding(
-                padding: EdgeInsets.only(top: 75.0, left: 20, right: 20),
-                child: SearchableList<Task>(
-                  autoFocusOnSearch: false,
-                  initialList: taskList
-                      .where((element) =>
-                          element.status.contains(_selectedSegment_04.value))
-                      .toList(),
-                  builder: (Task task) => TaskItem(task: task),
-                  filter: (value) => taskList
-                      .where(
-                        (element) => element.name.toLowerCase().contains(value),
-                      )
-                      .where((element) =>
-                          element.status.contains(_selectedSegment_04.value))
-                      .toList(),
-                  emptyWidget: const EmptyView(),
-                  inputDecoration: InputDecoration(
-                    labelText: "Search Task",
-                    fillColor: Colors.white,
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Colors.blue,
-                        width: 1.0,
+    return StreamBuilder<QuerySnapshot>(
+        stream: DataRepository().tasks,
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          // Convert to List
+          List<Task> taskList = DataRepository().snapshotToTaskList(snapshot);
+
+          if (snapshot.hasError) {
+            return const Text('Something went wrong');
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Text("Loading");
+          }
+
+          return Scaffold(
+              appBar: AppBar(title: const Text('Dashboard')),
+              body: Stack(children: [
+                Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: AdvancedSegment(
+                        controller: _selectedSegment_04,
+                        segments: const {
+                          'Pending': 'Pending',
+                          'Completed': 'Completed',
+                          'Open': 'Open',
+                        },
+                        activeStyle: const TextStyle(
+                          // TextStyle
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        inactiveStyle: const TextStyle(
+                          // TextStyle
+                          color: Colors.white54,
+                        ),
+                        backgroundColor: Colors.black26,
+                        // Color
+                        sliderColor: Colors.white,
+                        // Color
+                        sliderOffset: 2.0,
+                        // Double
+                        borderRadius: const BorderRadius.all(
+                            Radius.circular(8.0)),
+                        // BorderRadius
+                        itemPadding: const EdgeInsets.symmetric(
+                          // EdgeInsets
+                          horizontal: 15,
+                          vertical: 10,
+                        ),
+                        animationDuration: const Duration(
+                            milliseconds: 250), // Duration
                       ),
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
+                    )),
+                ValueListenableBuilder(
+                  valueListenable: _selectedSegment_04,
+                  builder: (context, value, child) {
+                    return Padding(
+                      padding: const EdgeInsets.only(
+                          top: 75.0, left: 20, right: 20),
+                      child: SearchableList<Task>(
+                        autoFocusOnSearch: false,
+                        initialList: taskList
+                            .where((element) =>
+                            element.status.contains(_selectedSegment_04.value))
+                            .toList(),
+                        builder: (Task task) => TaskItem(task: task),
+                        filter: (value) =>
+                            taskList
+                                .where(
+                                  (element) =>
+                                  element.name.toLowerCase().contains(value),
+                            )
+                                .where((element) =>
+                                element.status.contains(
+                                    _selectedSegment_04.value))
+                                .toList(),
+                        emptyWidget: const EmptyView(),
+                        inputDecoration: InputDecoration(
+                          labelText: "Search Task",
+                          fillColor: Colors.white,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.blue,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
-        ]));
-    ;
+              ]));
+        }
+    );
   }
 }
 
@@ -133,7 +157,7 @@ class TaskItem extends StatelessWidget {
             const SizedBox(
               width: 10,
             ),
-            Icon(
+            const Icon(
               Icons.account_circle,
               color: Colors.black,
             ),
@@ -165,9 +189,9 @@ class EmptyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
+      children: [
         Icon(
           Icons.error,
           color: Colors.red,

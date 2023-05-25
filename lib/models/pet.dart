@@ -15,11 +15,11 @@ class Pet {
       this.thingstonote,
       required this.profilepicture});
 
-  factory Pet.fromSnapshot(DocumentSnapshot snapshot) {
-    final newPet = Pet.fromJson(snapshot.data() as Map<String, dynamic>);
-    newPet.referenceId = snapshot.reference.id;
-    return newPet;
-  }
+  // factory Pet.fromSnapshot(DocumentSnapshot snapshot) {
+  //   final newPet = Pet.fromJson(snapshot.data() as Map<String, dynamic>);
+  //   newPet.referenceId = snapshot.reference.id;
+  //   return newPet;
+  // }
 
   factory Pet.fromJson(Map<String, dynamic> json) => _petFromJson(json);
 
