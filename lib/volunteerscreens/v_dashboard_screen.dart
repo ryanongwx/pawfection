@@ -6,14 +6,12 @@ import 'package:pawfection/models/task.dart';
 import 'package:pawfection/models/user.dart';
 import 'package:pawfection/services/data_repository.dart';
 import 'package:searchable_listview/searchable_listview.dart';
-import 'package:pawfection/managerscreens/m_create_task_screen.dart';
-import '../volunteerscreens/v_dashboard_screen.dart';
 
-class MDashboardScreen extends StatefulWidget {
-  const MDashboardScreen({super.key});
+class VDashboardScreen extends StatefulWidget {
+  const VDashboardScreen({super.key});
 
   @override
-  State<MDashboardScreen> createState() => _MDashboardScreenState();
+  State<VDashboardScreen> createState() => _VDashboardScreenState();
 }
 
 final _selectedSegment_04 = ValueNotifier('Pending');
@@ -27,7 +25,7 @@ final DataRepository repository = DataRepository();
 //   taskList = await taskListFuture;
 // }
 
-class _MDashboardScreenState extends State<MDashboardScreen> {
+class _VDashboardScreenState extends State<VDashboardScreen> {
   // @override
   // void initState() {
   //   // TODO: implement initState
@@ -53,68 +51,67 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
           return Scaffold(
               appBar: AppBar(title: const Text('Dashboard')),
               body: Stack(children: [
-                SizedBox(
-                  height: 550,
-                  child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Align(
-                        alignment: Alignment.topCenter,
-                        child: AdvancedSegment(
-                          controller: _selectedSegment_04,
-                          segments: const {
-                            'Pending': 'Pending',
-                            'Completed': 'Completed',
-                            'Open': 'Open',
-                          },
-                          activeStyle: const TextStyle(
-                            // TextStyle
-                            color: Colors.black,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          inactiveStyle: const TextStyle(
-                            // TextStyle
-                            color: Colors.white54,
-                          ),
-                          backgroundColor: Colors.black26,
-                          // Color
-                          sliderColor: Colors.white,
-                          // Color
-                          sliderOffset: 2.0,
-                          // Double
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(8.0)),
-                          // BorderRadius
-                          itemPadding: const EdgeInsets.symmetric(
-                            // EdgeInsets
-                            horizontal: 15,
-                            vertical: 10,
-                          ),
-                          animationDuration:
-                              const Duration(milliseconds: 250), // Duration
+                Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: AdvancedSegment(
+                        controller: _selectedSegment_04,
+                        segments: const {
+                          'Pending': 'Pending',
+                          'Completed': 'Completed',
+                          'Open': 'Open',
+                        },
+                        activeStyle: const TextStyle(
+                          // TextStyle
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
                         ),
-                      )),
-                ),
+                        inactiveStyle: const TextStyle(
+                          // TextStyle
+                          color: Colors.white54,
+                        ),
+                        backgroundColor: Colors.black26,
+                        // Color
+                        sliderColor: Colors.white,
+                        // Color
+                        sliderOffset: 2.0,
+                        // Double
+                        borderRadius: const BorderRadius.all(
+                            Radius.circular(8.0)),
+                        // BorderRadius
+                        itemPadding: const EdgeInsets.symmetric(
+                          // EdgeInsets
+                          horizontal: 15,
+                          vertical: 10,
+                        ),
+                        animationDuration: const Duration(
+                            milliseconds: 250), // Duration
+                      ),
+                    )),
                 ValueListenableBuilder(
                   valueListenable: _selectedSegment_04,
                   builder: (context, value, child) {
                     return Padding(
-                      padding:
-                          const EdgeInsets.only(top: 75.0, left: 20, right: 20),
+                      padding: const EdgeInsets.only(
+                          top: 75.0, left: 20, right: 20),
                       child: SearchableList<Task>(
                         autoFocusOnSearch: false,
                         initialList: taskList
-                            .where((element) => element.status
-                                .contains(_selectedSegment_04.value))
+                            .where((element) =>
+                            element.status.contains(_selectedSegment_04.value))
                             .toList(),
                         builder: (Task task) => TaskItem(task: task),
-                        filter: (value) => taskList
-                            .where(
-                              (element) =>
+                        filter: (value) =>
+                            taskList
+                                .where(
+                                  (element) =>
                                   element.name.toLowerCase().contains(value),
                             )
-                            .where((element) => element.status
-                                .contains(_selectedSegment_04.value))
-                            .toList(),
+                                .where((element) =>
+                                element.status.contains(
+                                    _selectedSegment_04.value))
+                                .toList(),
                         emptyWidget: const EmptyView(),
                         inputDecoration: InputDecoration(
                           labelText: "Search Task",
@@ -131,22 +128,9 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
                     );
                   },
                 ),
-                Padding(
-                    padding: EdgeInsets.only(bottom: 100),
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MCreateTaskScreen()),
-                            );
-                          },
-                          child: Text('Create Pet')),
-                    )),
               ]));
-        });
+        }
+    );
   }
 }
 
@@ -185,7 +169,7 @@ class TaskItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  task.name,
+                  '${task.name}',
                   style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,

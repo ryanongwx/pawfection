@@ -47,6 +47,8 @@ dependencies:
   flutter_plugin_android_lifecycle: ^2.0.15
   firebase_auth: ^4.6.1
   firebase_core: ^2.13.0
+  cloud_firestore: ^4.7.1
+  flutter_fast_forms: ^11.0.0
 
 dev_dependencies:
   flutter_test:

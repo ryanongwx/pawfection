@@ -1,6 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_segment/flutter_advanced_segment.dart';
+import 'package:pawfection/managerscreens/m_create_pet_screen.dart';
+import 'package:pawfection/models/pet.dart';
+import 'package:pawfection/services/data_repository.dart';
 import 'package:searchable_listview/searchable_listview.dart';
+import 'package:pawfection/services/data_repository.dart';
+import 'package:pawfection/models/pet.dart';
 
 class MPetScreen extends StatefulWidget {
   const MPetScreen({super.key});
@@ -9,77 +15,95 @@ class MPetScreen extends StatefulWidget {
   State<MPetScreen> createState() => _MPetScreenState();
 }
 
-final _selectedSegment_04 = ValueNotifier('Pending');
-final List<Actor> actors = [
-  Actor(age: 47, name: 'Leonardo', lastName: 'DiCaprio', status: 'Pending'),
-  Actor(age: 58, name: 'Johnny', lastName: 'Depp', status: 'Completed'),
-  Actor(age: 78, name: 'Robert', lastName: 'De Niro', status: 'Pending'),
-  Actor(age: 44, name: 'Tom', lastName: 'Hardy', status: 'Open'),
-  Actor(age: 66, name: 'Denzel', lastName: 'Washington', status: 'Completed'),
-  Actor(age: 49, name: 'Ben', lastName: 'Affleck', status: 'Open'),
-];
+final DataRepository repository = DataRepository();
+
+// List<Pet> petList = [];
+
+// Future<void> fetchPetList() async {
+//   Future<List<Pet>> petListFuture = repository.getPetList();
+//   petList = await petListFuture;
+// }
 
 class _MPetScreenState extends State<MPetScreen> {
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   fetchPetList();
+  // }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(title: Text('Pets')),
-        body: Stack(children: [
-          Padding(
-            padding: EdgeInsets.only(top: 20.0, left: 20, right: 20),
-            child: SearchableList<Actor>(
-              autoFocusOnSearch: false,
-              initialList: actors
-                  .where((element) =>
-                      element.status.contains(_selectedSegment_04.value))
-                  .toList(),
-              builder: (Actor user) => ActorItem(actor: user),
-              filter: (value) => actors
-                  .where(
-                    (element) => element.name.toLowerCase().contains(value),
-                  )
-                  .where((element) =>
-                      element.status.contains(_selectedSegment_04.value))
-                  .toList(),
-              emptyWidget: const EmptyView(),
-              inputDecoration: InputDecoration(
-                labelText: "Search Actor",
-                fillColor: Colors.white,
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Colors.blue,
-                    width: 1.0,
+    return StreamBuilder<QuerySnapshot>(
+      stream: DataRepository().pets,
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        // Convert to List
+        List<Pet> petList = DataRepository().snapshotToPetList(snapshot);
+
+        if (snapshot.hasError) {
+          return const Text('Something went wrong');
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Text("Loading");
+        }
+
+        return Scaffold(
+            appBar: AppBar(title: const Text('Pets')),
+            body: Stack(children: [
+              SizedBox(
+                height: 550,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.only(top: 20.0, left: 20, right: 20),
+                  child: SearchableList<Pet>(
+                    autoFocusOnSearch: false,
+                    initialList: petList,
+                    filter: (value) => petList
+                        .where((element) => element.name.contains(value))
+                        .toList(),
+                    builder: (Pet pet) => PetItem(pet: pet),
+                    emptyWidget: const EmptyView(),
+                    inputDecoration: InputDecoration(
+                      labelText: "Search Pet",
+                      fillColor: Colors.white,
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.blue,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
                   ),
-                  borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
-            ),
-          ),
-        ]));
-    ;
+              Padding(
+                  padding: EdgeInsets.only(bottom: 100),
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MCreatePetScreen()),
+                          );
+                        },
+                        child: Text('Create Pet')),
+                  )),
+            ]));
+      },
+    );
   }
 }
 
-class Actor {
-  int age;
-  String name;
-  String lastName;
-  String status;
+class PetItem extends StatelessWidget {
+  final Pet pet;
 
-  Actor({
-    required this.age,
-    required this.name,
-    required this.lastName,
-    required this.status,
-  });
-}
-
-class ActorItem extends StatelessWidget {
-  final Actor actor;
-
-  const ActorItem({
+  const PetItem({
     Key? key,
-    required this.actor,
+    required this.pet,
   }) : super(key: key);
 
   @override
@@ -97,7 +121,7 @@ class ActorItem extends StatelessWidget {
             const SizedBox(
               width: 10,
             ),
-            Icon(
+            const Icon(
               Icons.account_circle,
               color: Colors.black,
             ),
@@ -109,23 +133,10 @@ class ActorItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Firstname: ${actor.name}',
+                  '${pet.name}',
                   style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Lastname: ${actor.lastName}',
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Age: ${actor.age}',
-                  style: const TextStyle(
-                    color: Colors.black,
                   ),
                 ),
               ],
@@ -142,14 +153,14 @@ class EmptyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
+      children: [
         Icon(
           Icons.error,
           color: Colors.red,
         ),
-        Text('no actor is found with this name'),
+        Text('No Pet with this name is found'),
       ],
     );
   }
