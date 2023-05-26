@@ -3,10 +3,17 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:image/image.dart' as img;
 import 'package:image_cropper/image_cropper.dart';
+import 'package:pawfection/managerscreens/m_create_pet_screen.dart';
+import 'package:pawfection/managerscreens/m_create_user_screen.dart';
 import 'package:pawfection/volunteerscreens/v_profile_screen.dart';
 import 'package:pawfection/voluteerView.dart';
 
 class ProfilePictureUpdateScreen extends StatefulWidget {
+  ProfilePictureUpdateScreen(
+      {super.key, this.routetext = 'assets/images/user_profile.png'});
+
+  String routetext;
+
   @override
   _ProfilePictureUpdateScreenState createState() =>
       _ProfilePictureUpdateScreenState();
@@ -152,11 +159,27 @@ class _ProfilePictureUpdateScreenState
                           return ElevatedButton(
                             onPressed: filecheck
                                 ? () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              VolunteerView(image: file.path)),
-                                    );
+                                    if (widget.routetext == 'profile') {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) => VolunteerView(
+                                                image: file.path)),
+                                      );
+                                    } else if (widget.routetext == 'pet') {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                MCreatePetScreen(
+                                                    imagePath: file.path)),
+                                      );
+                                    } else if (widget.routetext == 'user') {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                MCreateUserScreen(
+                                                    imagePath: file.path)),
+                                      );
+                                    }
                                   }
                                 : null,
                             child: Padding(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_segment/flutter_advanced_segment.dart';
+import 'package:pawfection/managerscreens/m_create_pet_screen.dart';
 import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/services/data_repository.dart';
 import 'package:searchable_listview/searchable_listview.dart';
@@ -35,29 +36,48 @@ class _MPetScreenState extends State<MPetScreen> {
     return Scaffold(
         appBar: AppBar(title: Text('Pets')),
         body: Stack(children: [
-          Padding(
-            padding: EdgeInsets.only(top: 20.0, left: 20, right: 20),
-            child: SearchableList<Pet>(
-              autoFocusOnSearch: false,
-              initialList: petList,
-              filter: (value) => petList
-                  .where((element) => element.name.contains(value))
-                  .toList(),
-              builder: (Pet pet) => PetItem(pet: pet),
-              emptyWidget: const EmptyView(),
-              inputDecoration: InputDecoration(
-                labelText: "Search Pet",
-                fillColor: Colors.white,
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Colors.blue,
-                    width: 1.0,
+          Container(
+              alignment: Alignment.topCenter,
+              child: SizedBox(
+                height: 550,
+                child: Padding(
+                  padding: EdgeInsets.only(top: 20.0, left: 20, right: 20),
+                  child: SearchableList<Pet>(
+                    autoFocusOnSearch: false,
+                    initialList: petList,
+                    filter: (value) => petList
+                        .where((element) => element.name.contains(value))
+                        .toList(),
+                    builder: (Pet pet) => PetItem(pet: pet),
+                    emptyWidget: const EmptyView(),
+                    inputDecoration: InputDecoration(
+                      labelText: "Search Pet",
+                      fillColor: Colors.white,
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.blue,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
                   ),
-                  borderRadius: BorderRadius.circular(10.0),
                 ),
-              ),
-            ),
-          ),
+              )),
+          Padding(
+              padding: EdgeInsets.only(bottom: 100),
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MCreatePetScreen()),
+                      );
+                    },
+                    child: Text('Create Pet')),
+              )),
         ]));
     ;
   }
