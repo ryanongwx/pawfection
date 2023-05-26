@@ -106,9 +106,10 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                           deadline: [
                             _form['deadlinestart'],
                             _form['deadlineend']
-                          ]));
+                          ],
+                          pet: 'Truffle'));
                       setState(() {
-                        alertmessage = 'Task has been created';
+                        alertmessage = 'Task has successfully been created';
                       });
                     } catch (e) {
                       setState(() {
@@ -178,13 +179,14 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                           status: 'Pending',
                           resources: [_form['resources']],
                           contactperson: _form['contactperson'],
-                          contactpersonnumber: _form['contactpersonnumber'],
+                          contactpersonnumber: _form['contactnumber'],
                           deadline: [
                             _form['deadlinestart'],
                             _form['deadlineend']
-                          ]));
+                          ],
+                          pet: 'Truffle'));
                       setState(() {
-                        alertmessage = 'Task has been created';
+                        alertmessage = 'Task has successfully been created';
                       });
                     } catch (e) {
                       debugPrint(e.toString());

@@ -73,11 +73,57 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
                 ElevatedButton(
                   child: const Text('Create'),
                   onPressed: () {
-                    repository.addPet(Pet(_form['name'],
-                        profilepicture: widget.imagePath,
-                        breed: _form['breed'],
-                        description: _form['description'],
-                        thingstonote: _form['thingstonote']));
+                    try {
+                      if (widget.imagePath !=
+                          'assets/images/user_profile.png') {
+                        repository.addPet(Pet(_form['name'],
+                            profilepicture: widget.imagePath,
+                            breed: _form['breed'],
+                            description: _form['description'],
+                            thingstonote: _form['thingstonote']));
+                        setState(() {
+                          alertmessage = 'Pet has successfully been created';
+                        });
+                      } else if (widget.imagePath ==
+                          'assets/images/user_profile.png') {
+                        setState(() {
+                          alertmessage =
+                              'Please change the profile picture of the pet';
+                        });
+                      }
+                    } catch (e) {
+                      setState(() {
+                        alertmessage = 'Please ensure all fields are filled in';
+                      });
+                    } finally {
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: const Text('Create Pet'),
+                          content: Text(alertmessage),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, 'Cancel'),
+                              child: const Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () => {
+                                Navigator.pop(context, 'OK'),
+                                if (alertmessage ==
+                                    'Pet has successfully been created')
+                                  {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (context) => ManagerView()),
+                                    )
+                                  }
+                              },
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
                   },
                 ),
               ],
@@ -114,7 +160,7 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
                             description: _form['description'],
                             thingstonote: _form['thingstonote']));
                         setState(() {
-                          alertmessage = 'Pet has been created';
+                          alertmessage = 'Pet has successfully been created';
                         });
                       } else if (widget.imagePath ==
                           'assets/images/user_profile.png') {

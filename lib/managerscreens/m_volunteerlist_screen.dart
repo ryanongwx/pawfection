@@ -18,7 +18,6 @@ final DataRepository repository = DataRepository();
 List<User> userList = [];
 
 class _MVolunteerListScreenState extends State<MVolunteerListScreen> {
-
   // @override
   // void initState() {
   // // TODO: implement initState
@@ -32,7 +31,6 @@ class _MVolunteerListScreenState extends State<MVolunteerListScreen> {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
     return StreamBuilder<QuerySnapshot>(
       stream: DataRepository().users,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -50,43 +48,11 @@ class _MVolunteerListScreenState extends State<MVolunteerListScreen> {
         return Scaffold(
             appBar: AppBar(title: const Text('Pets')),
             body: Stack(children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 20.0, left: 20, right: 20),
-                child: SearchableList<User>(
-                  autoFocusOnSearch: false,
-                  initialList: userList,
-                  filter: (value) =>
-                      userList
-                          .where((element) => element.username.contains(value))
-                          .toList(),
-                  builder: (User user) => UserItem(user: user),
-                  emptyWidget: const EmptyView(),
-                  inputDecoration: InputDecoration(
-                    labelText: "Search Volunteer",
-                    fillColor: Colors.white,
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Colors.blue,
-                        width: 1.0,
-                      ),
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                ),
-              ),
-            ]));
-      },
-    );
-=======
-    return Scaffold(
-        appBar: AppBar(title: Text('Volunteers')),
-        body: Stack(children: [
-          Container(
-              alignment: Alignment.topCenter,
-              child: SizedBox(
+              SizedBox(
                 height: 550,
                 child: Padding(
-                  padding: EdgeInsets.only(top: 20.0, left: 20, right: 20),
+                  padding:
+                      const EdgeInsets.only(top: 20.0, left: 20, right: 20),
                   child: SearchableList<User>(
                     autoFocusOnSearch: false,
                     initialList: userList,
@@ -108,24 +74,24 @@ class _MVolunteerListScreenState extends State<MVolunteerListScreen> {
                     ),
                   ),
                 ),
-              )),
-          Padding(
-              padding: EdgeInsets.only(bottom: 100),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MCreateUserScreen()),
-                      );
-                    },
-                    child: Text('Create Volunteer')),
-              )),
-        ]));
-    ;
->>>>>>> firestore
+              ),
+              Padding(
+                  padding: EdgeInsets.only(bottom: 100),
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MCreateUserScreen()),
+                          );
+                        },
+                        child: Text('Create Volunteer')),
+                  )),
+            ]));
+      },
+    );
   }
 }
 

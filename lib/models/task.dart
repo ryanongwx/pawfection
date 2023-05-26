@@ -14,8 +14,8 @@ class Task {
   String contactperson;
   String contactpersonnumber;
   String? feedback;
-  List<Timestamp?> deadline;
-  Pet? pet;
+  List<DateTime?> deadline;
+  String pet;
 
   Task(
     this.name, {
@@ -29,7 +29,7 @@ class Task {
     required this.contactpersonnumber,
     this.feedback,
     required this.deadline,
-    this.pet,
+    required this.pet,
   });
 
   factory Task.fromSnapshot(DocumentSnapshot snapshot) {
@@ -58,8 +58,8 @@ Task _taskFromJson(Map<String, dynamic> json) {
       contactperson: json['contactperson'] as String,
       contactpersonnumber: json['contactpersonnumber'] as String,
       feedback: json['feedback'] as String?,
-      deadline: json['deadline'].cast<Timestamp?>() as List<Timestamp?>,
-      pet: json['pet'] as Pet?);
+      deadline: json['deadline'].cast<DateTime?>() as List<DateTime?>,
+      pet: json['pet'] as String);
 }
 
 Map<String, dynamic> _taskToJson(Task instance) => <String, dynamic>{

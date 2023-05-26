@@ -53,44 +53,47 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
           return Scaffold(
               appBar: AppBar(title: const Text('Dashboard')),
               body: Stack(children: [
-                Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Align(
-                      alignment: Alignment.topCenter,
-                      child: AdvancedSegment(
-                        controller: _selectedSegment_04,
-                        segments: const {
-                          'Pending': 'Pending',
-                          'Completed': 'Completed',
-                          'Open': 'Open',
-                        },
-                        activeStyle: const TextStyle(
-                          // TextStyle
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
+                SizedBox(
+                  height: 550,
+                  child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        child: AdvancedSegment(
+                          controller: _selectedSegment_04,
+                          segments: const {
+                            'Pending': 'Pending',
+                            'Completed': 'Completed',
+                            'Open': 'Open',
+                          },
+                          activeStyle: const TextStyle(
+                            // TextStyle
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          inactiveStyle: const TextStyle(
+                            // TextStyle
+                            color: Colors.white54,
+                          ),
+                          backgroundColor: Colors.black26,
+                          // Color
+                          sliderColor: Colors.white,
+                          // Color
+                          sliderOffset: 2.0,
+                          // Double
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8.0)),
+                          // BorderRadius
+                          itemPadding: const EdgeInsets.symmetric(
+                            // EdgeInsets
+                            horizontal: 15,
+                            vertical: 10,
+                          ),
+                          animationDuration:
+                              const Duration(milliseconds: 250), // Duration
                         ),
-                        inactiveStyle: const TextStyle(
-                          // TextStyle
-                          color: Colors.white54,
-                        ),
-                        backgroundColor: Colors.black26,
-                        // Color
-                        sliderColor: Colors.white,
-                        // Color
-                        sliderOffset: 2.0,
-                        // Double
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(8.0)),
-                        // BorderRadius
-                        itemPadding: const EdgeInsets.symmetric(
-                          // EdgeInsets
-                          horizontal: 15,
-                          vertical: 10,
-                        ),
-                        animationDuration:
-                            const Duration(milliseconds: 250), // Duration
-                      ),
-                    )),
+                      )),
+                ),
                 ValueListenableBuilder(
                   valueListenable: _selectedSegment_04,
                   builder: (context, value, child) {

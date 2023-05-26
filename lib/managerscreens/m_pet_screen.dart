@@ -34,7 +34,6 @@ class _MPetScreenState extends State<MPetScreen> {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
     return StreamBuilder<QuerySnapshot>(
       stream: DataRepository().pets,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -48,46 +47,15 @@ class _MPetScreenState extends State<MPetScreen> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Text("Loading");
         }
-        
+
         return Scaffold(
             appBar: AppBar(title: const Text('Pets')),
             body: Stack(children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 20.0, left: 20, right: 20),
-                child: SearchableList<Pet>(
-                  autoFocusOnSearch: false,
-                  initialList: petList,
-                  filter: (value) => petList
-                      .where((element) => element.name.contains(value))
-                      .toList(),
-                  builder: (Pet pet) => PetItem(pet: pet),
-                  emptyWidget: const EmptyView(),
-                  inputDecoration: InputDecoration(
-                    labelText: "Search Pet",
-                    fillColor: Colors.white,
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Colors.blue,
-                        width: 1.0,
-                      ),
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                ),
-              ),
-            ]));
-      },
-    );
-=======
-    return Scaffold(
-        appBar: AppBar(title: Text('Pets')),
-        body: Stack(children: [
-          Container(
-              alignment: Alignment.topCenter,
-              child: SizedBox(
+              SizedBox(
                 height: 550,
                 child: Padding(
-                  padding: EdgeInsets.only(top: 20.0, left: 20, right: 20),
+                  padding:
+                      const EdgeInsets.only(top: 20.0, left: 20, right: 20),
                   child: SearchableList<Pet>(
                     autoFocusOnSearch: false,
                     initialList: petList,
@@ -109,24 +77,24 @@ class _MPetScreenState extends State<MPetScreen> {
                     ),
                   ),
                 ),
-              )),
-          Padding(
-              padding: EdgeInsets.only(bottom: 100),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MCreatePetScreen()),
-                      );
-                    },
-                    child: Text('Create Pet')),
-              )),
-        ]));
-    ;
->>>>>>> firestore
+              ),
+              Padding(
+                  padding: EdgeInsets.only(bottom: 100),
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MCreatePetScreen()),
+                          );
+                        },
+                        child: Text('Create Pet')),
+                  )),
+            ]));
+      },
+    );
   }
 }
 
