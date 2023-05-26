@@ -24,7 +24,6 @@ class User {
 
   factory User.fromSnapshot(DocumentSnapshot snapshot) {
     final newUser = User.fromJson(snapshot.data() as Map<String, dynamic>);
-    debugPrint('1' + snapshot.data().toString());
     newUser.referenceId = snapshot.reference.id;
     return newUser;
   }
