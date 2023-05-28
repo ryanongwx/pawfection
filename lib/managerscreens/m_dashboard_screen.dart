@@ -110,7 +110,10 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
                         filter: (value) => taskList
                             .where(
                               (element) =>
-                                  element.name.toLowerCase().contains(value),
+                                  element
+                                      .name
+                                      .toLowerCase()
+                                      .contains(value.toLowerCase())
                             )
                             .where((element) => element.status
                                 .contains(_selectedSegment_04.value))
