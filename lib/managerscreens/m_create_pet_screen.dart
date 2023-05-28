@@ -114,7 +114,9 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
                                   {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
-                                          builder: (context) => ManagerView()),
+                                          builder: (context) => ManagerView(
+                                                tab: 1,
+                                              )),
                                     )
                                   }
                               },
@@ -192,7 +194,9 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
                                   {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
-                                          builder: (context) => ManagerView()),
+                                          builder: (context) => ManagerView(
+                                                tab: 0,
+                                              )),
                                     )
                                   }
                               },
@@ -228,7 +232,7 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
         header: const Padding(
           padding: EdgeInsets.all(12.0),
           child: Text(
-            'Form Example Section',
+            'Pet Details',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
           ),
         ),
