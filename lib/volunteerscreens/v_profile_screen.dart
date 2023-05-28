@@ -24,11 +24,11 @@ class VProfileScreen extends StatefulWidget {
 class _VProfileScreenState extends State<VProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    final user = UserPreferences.myUser;
+    const user = UserPreferences.myUser;
     return Scaffold(
         appBar: AppBar(title: const Text("My Profile")),
         body: Padding(
-          padding: EdgeInsets.only(top: 20),
+          padding: const EdgeInsets.only(top: 20),
           child: Column(
             children: [
               Builder(
@@ -53,8 +53,6 @@ class _VProfileScreenState extends State<VProfileScreen> {
                       const SizedBox(height: 24),
                       Center(child: buildUpgradeButton1()),
                       Center(child: buildUpgradeButton2()),
-                      const SizedBox(height: 24),
-                      NumbersWidget(),
                       const SizedBox(height: 48),
                       buildAbout(user),
                     ],
@@ -106,16 +104,16 @@ class _VProfileScreenState extends State<VProfileScreen> {
 
   Widget buildAbout(User user) => Container(
         padding: EdgeInsets.symmetric(horizontal: 48),
-        child: Column(
+        child: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'About',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Text(
-              user.about,
+              "This is about me.",
               style: TextStyle(fontSize: 16, height: 1.4),
             ),
           ],
