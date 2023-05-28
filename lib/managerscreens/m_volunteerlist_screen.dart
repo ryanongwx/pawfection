@@ -48,23 +48,23 @@ class _MVolunteerListScreenState extends State<MVolunteerListScreen> {
         return Scaffold(
             appBar: AppBar(
               title: const Text('Volunteers'),
-              actions: <Widget>[
-                Padding(
-                    padding: EdgeInsets.only(right: 20.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MCreateUserScreen()),
-                        );
-                      },
-                      child: Icon(
-                        Icons.add,
-                        size: 26.0,
-                      ),
-                    )),
-              ],
+              // actions: <Widget>[
+              //   Padding(
+              //       padding: EdgeInsets.only(right: 20.0),
+              //       child: GestureDetector(
+              //         onTap: () {
+              //           Navigator.push(
+              //             context,
+              //             MaterialPageRoute(
+              //                 builder: (context) => MCreateUserScreen()),
+              //           );
+              //         },
+              //         child: Icon(
+              //           Icons.add,
+              //           size: 26.0,
+              //         ),
+              //       )),
+              // ],
             ),
             body: Stack(children: [
               SizedBox(
@@ -77,7 +77,7 @@ class _MVolunteerListScreenState extends State<MVolunteerListScreen> {
                     initialList: userList,
                     filter: (value) => userList
                         .where((element) =>
-                          element.username.contains(value.toLowerCase()))
+                            element.username.contains(value.toLowerCase()))
                         .toList(),
                     builder: (User user) => UserItem(user: user),
                     emptyWidget: const EmptyView(),
