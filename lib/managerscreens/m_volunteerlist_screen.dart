@@ -46,7 +46,26 @@ class _MVolunteerListScreenState extends State<MVolunteerListScreen> {
         }
 
         return Scaffold(
-            appBar: AppBar(title: const Text('Pets')),
+            appBar: AppBar(
+              title: const Text('Volunteers'),
+              actions: <Widget>[
+                Padding(
+                    padding: EdgeInsets.only(right: 20.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MCreateUserScreen()),
+                        );
+                      },
+                      child: Icon(
+                        Icons.add,
+                        size: 26.0,
+                      ),
+                    )),
+              ],
+            ),
             body: Stack(children: [
               SizedBox(
                 height: 550,
@@ -75,20 +94,20 @@ class _MVolunteerListScreenState extends State<MVolunteerListScreen> {
                   ),
                 ),
               ),
-              Padding(
-                  padding: EdgeInsets.only(bottom: 100),
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MCreateUserScreen()),
-                          );
-                        },
-                        child: Text('Create Volunteer')),
-                  )),
+              // Padding(
+              //     padding: EdgeInsets.only(bottom: 100),
+              //     child: Align(
+              //       alignment: Alignment.bottomCenter,
+              //       child: ElevatedButton(
+              //           onPressed: () {
+              //             Navigator.push(
+              //               context,
+              //               MaterialPageRoute(
+              //                   builder: (context) => MCreateUserScreen()),
+              //             );
+              //           },
+              //           child: Text('Create Volunteer')),
+              //     )),
             ]));
       },
     );
