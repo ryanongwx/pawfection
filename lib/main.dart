@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const ManagerView(),
+                        builder: (context) => const ManagerView(tab: 1),
                       ),
                     );
                   },
