@@ -134,7 +134,9 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                                   {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
-                                          builder: (context) => ManagerView()),
+                                          builder: (context) => ManagerView(
+                                                tab: 1,
+                                              )),
                                     )
                                   }
                               },
@@ -212,7 +214,9 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                                   {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
-                                          builder: (context) => ManagerView()),
+                                          builder: (context) => ManagerView(
+                                                tab: 1,
+                                              )),
                                     )
                                   }
                               },
@@ -240,7 +244,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
         header: const Padding(
           padding: EdgeInsets.all(12.0),
           child: Text(
-            'Enter Volunteer Details',
+            'Task Details',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
           ),
         ),

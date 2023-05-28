@@ -134,7 +134,9 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
                                   {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
-                                          builder: (context) => ManagerView()),
+                                          builder: (context) => ManagerView(
+                                                tab: 2,
+                                              )),
                                     )
                                   }
                               },
@@ -206,7 +208,9 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
                                   {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
-                                          builder: (context) => ManagerView()),
+                                          builder: (context) => ManagerView(
+                                                tab: 2,
+                                              )),
                                     )
                                   }
                               },
@@ -245,7 +249,7 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
         header: const Padding(
           padding: EdgeInsets.all(12.0),
           child: Text(
-            'Enter Volunteer Details',
+            'Volunteer Details',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
           ),
         ),
