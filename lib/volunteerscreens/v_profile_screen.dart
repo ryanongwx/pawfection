@@ -43,7 +43,8 @@ class _VProfileScreenState extends State<VProfileScreen> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    ProfilePictureUpdateScreen()),
+                                    ProfilePictureUpdateScreen(
+                                        routetext: 'profile')),
                           );
                         },
                       ),

@@ -1,16 +1,39 @@
-# pawfection
+# Pawfection
 
-A new Flutter project.
+Pawfection is an all-in-one task management application aimed to address the poor coordination in the assignment of tasks by managers with volunteers and the lack of proper dissemination and retrieval of information for volunteers within animal care centres.
 
-## Getting Started
+Setup
 
-This project is a starting point for a Flutter application.
+Android (Debug)
+- Clone the github repo at https://github.com/ryanongwx/pawfection
+- Open Terminal in project directory
+- Run flutter pub get
+- Open device emulator in Android studio
+- Run flutter run
 
-A few resources to get you started if this is your first Flutter project:
+Android (Release)
+- Download the android apk located at build/app/outputs/flutter-apk/app-release.apk
+- Install and run it on android device
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+IOS (Debug and Release)
+- Clone the github repo at https://github.com/ryanongwx/pawfection
+- Open Terminal in project directory
+- Run flutter pub get
+- Navigate into the ios directory
+- Run pod install
+- Open xcode simulator
+- Run flutter run
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Disclaimer: While testing, kindly refrain from sending in multiple queries to the database by limiting the number of times you click on the create user/pet/task as well as the signup functionality.
+
+
+Features
+- Login
+- Volunteer Task Dashboard
+- Volunteer Profile
+- Manager Task Dashboard
+- Manager Pet Dashboard
+- Manager Manager Dashboard
+- Create Pet Interface
+- Create User Interface
+- Create Task Interface

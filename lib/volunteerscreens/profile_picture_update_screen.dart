@@ -9,8 +9,7 @@ import 'package:pawfection/volunteerscreens/v_profile_screen.dart';
 import 'package:pawfection/voluteerView.dart';
 
 class ProfilePictureUpdateScreen extends StatefulWidget {
-  ProfilePictureUpdateScreen(
-      {super.key, this.routetext = 'assets/images/user_profile.png'});
+  ProfilePictureUpdateScreen({super.key, required this.routetext});
 
   String routetext;
 
@@ -159,11 +158,14 @@ class _ProfilePictureUpdateScreenState
                           return ElevatedButton(
                             onPressed: filecheck
                                 ? () {
+                                    debugPrint(widget.routetext);
                                     if (widget.routetext == 'profile') {
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (context) => VolunteerView(
-                                                image: file.path)),
+                                                  image: file.path,
+                                                  tab: 1,
+                                                )),
                                       );
                                     } else if (widget.routetext == 'pet') {
                                       Navigator.of(context).push(
@@ -199,7 +201,7 @@ class _ProfilePictureUpdateScreenState
                             onPressed: null,
                             child: Padding(
                               padding: EdgeInsets.all(15.0),
-                              child: Text('Update Profile Picture'),
+                              child: Text('Update Profile Picture!'),
                             ),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.blue,

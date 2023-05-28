@@ -55,7 +55,9 @@ class MyApp extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const VolunteerView(),
+                        builder: (context) => const VolunteerView(
+                          tab: 0,
+                        ),
                       ),
                     );
                   },
