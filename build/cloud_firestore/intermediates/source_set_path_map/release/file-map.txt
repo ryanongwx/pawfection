@@ -1,0 +1,16 @@
+io.flutter.plugins.firebase.firestore.cloud_firestore-jetified-window-1.0.0-beta04-0 /Users/ryanongwx/.gradle/caches/transforms-3/003a22a5515e1f77f89701a46efbc2ec/transformed/jetified-window-1.0.0-beta04/res
+io.flutter.plugins.firebase.firestore.cloud_firestore-jetified-firebase-common-20.3.2-1 /Users/ryanongwx/.gradle/caches/transforms-3/284fd5eeca4a29a0814ba444369e2acf/transformed/jetified-firebase-common-20.3.2/res
+io.flutter.plugins.firebase.firestore.cloud_firestore-jetified-window-java-1.0.0-beta04-2 /Users/ryanongwx/.gradle/caches/transforms-3/3c0e35d493ccd3f2bb8b07f96b013b9c/transformed/jetified-window-java-1.0.0-beta04/res
+io.flutter.plugins.firebase.firestore.cloud_firestore-jetified-play-services-basement-18.1.0-3 /Users/ryanongwx/.gradle/caches/transforms-3/5eaba1f028ac62aaabee71faac8d9308/transformed/jetified-play-services-basement-18.1.0/res
+io.flutter.plugins.firebase.firestore.cloud_firestore-jetified-annotation-experimental-1.1.0-4 /Users/ryanongwx/.gradle/caches/transforms-3/717758e51a3aff0b90b2556f8994e808/transformed/jetified-annotation-experimental-1.1.0/res
+io.flutter.plugins.firebase.firestore.cloud_firestore-core-1.6.0-5 /Users/ryanongwx/.gradle/caches/transforms-3/cf72013d765e0f69e97cd3b9cbb09800/transformed/core-1.6.0/res
+io.flutter.plugins.firebase.firestore.cloud_firestore-jetified-play-services-base-18.0.1-6 /Users/ryanongwx/.gradle/caches/transforms-3/f253648b0be692c533908993735bbd2e/transformed/jetified-play-services-base-18.0.1/res
+io.flutter.plugins.firebase.firestore.cloud_firestore-main-7 /Users/ryanongwx/.pub-cache/hosted/pub.dev/cloud_firestore-4.7.1/android/src/main/res
+io.flutter.plugins.firebase.firestore.cloud_firestore-release-8 /Users/ryanongwx/.pub-cache/hosted/pub.dev/cloud_firestore-4.7.1/android/src/release/res
+io.flutter.plugins.firebase.firestore.cloud_firestore-pngs-9 /Users/ryanongwx/Desktop/Pawfection/pawfection/build/cloud_firestore/generated/res/pngs/release
+io.flutter.plugins.firebase.firestore.cloud_firestore-resValues-10 /Users/ryanongwx/Desktop/Pawfection/pawfection/build/cloud_firestore/generated/res/resValues/release
+io.flutter.plugins.firebase.firestore.cloud_firestore-rs-11 /Users/ryanongwx/Desktop/Pawfection/pawfection/build/cloud_firestore/generated/res/rs/release
+io.flutter.plugins.firebase.firestore.cloud_firestore-mergeReleaseResources-12 /Users/ryanongwx/Desktop/Pawfection/pawfection/build/cloud_firestore/intermediates/incremental/release/mergeReleaseResources/merged.dir
+io.flutter.plugins.firebase.firestore.cloud_firestore-mergeReleaseResources-13 /Users/ryanongwx/Desktop/Pawfection/pawfection/build/cloud_firestore/intermediates/incremental/release/mergeReleaseResources/stripped.dir
+io.flutter.plugins.firebase.firestore.cloud_firestore-merged_res-14 /Users/ryanongwx/Desktop/Pawfection/pawfection/build/cloud_firestore/intermediates/merged_res/release
+io.flutter.plugins.firebase.firestore.cloud_firestore-packaged_res-15 /Users/ryanongwx/Desktop/Pawfection/pawfection/build/firebase_core/intermediates/packaged_res/release

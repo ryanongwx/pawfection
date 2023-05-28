@@ -1,0 +1,27 @@
+version: "Apple Swift version 5.8 (swiftlang-5.8.0.124.2 clang-1403.0.22.11.100)"
+options: "aa6b4ec0307176c97b6c4f698698357f641ce28e2814fc1706dfd358e6da29a9"
+build_start_time: [1685087288, 931563000]
+build_end_time: [1685087288, 982642000]
+inputs:
+  ? "/Users/ryanongwx/Desktop/Pawfection/pawfection/macos/Pods/FirebaseCoreInternal/FirebaseCore/Internal/Sources/HeartbeatLogging/Heartbeat.swift"
+  : !private [1685087265, 107439097]
+  ? "/Users/ryanongwx/Desktop/Pawfection/pawfection/macos/Pods/FirebaseCoreInternal/FirebaseCore/Internal/Sources/HeartbeatLogging/HeartbeatController.swift"
+  : !private [1685087265, 108161768]
+  ? "/Users/ryanongwx/Desktop/Pawfection/pawfection/macos/Pods/FirebaseCoreInternal/FirebaseCore/Internal/Sources/HeartbeatLogging/HeartbeatStorage.swift"
+  : !private [1685087265, 108664438]
+  ? "/Users/ryanongwx/Desktop/Pawfection/pawfection/macos/Pods/FirebaseCoreInternal/FirebaseCore/Internal/Sources/HeartbeatLogging/HeartbeatsBundle.swift"
+  : !private [1685087265, 108948148]
+  ? "/Users/ryanongwx/Desktop/Pawfection/pawfection/macos/Pods/FirebaseCoreInternal/FirebaseCore/Internal/Sources/HeartbeatLogging/HeartbeatsPayload.swift"
+  : !private [1685087265, 109348234]
+  ? "/Users/ryanongwx/Desktop/Pawfection/pawfection/macos/Pods/FirebaseCoreInternal/FirebaseCore/Internal/Sources/HeartbeatLogging/RingBuffer.swift"
+  : !private [1685087265, 107703682]
+  ? "/Users/ryanongwx/Desktop/Pawfection/pawfection/macos/Pods/FirebaseCoreInternal/FirebaseCore/Internal/Sources/HeartbeatLogging/Storage.swift"
+  : !private [1685087265, 107111595]
+  ? "/Users/ryanongwx/Desktop/Pawfection/pawfection/macos/Pods/FirebaseCoreInternal/FirebaseCore/Internal/Sources/HeartbeatLogging/StorageFactory.swift"
+  : !private [1685087265, 109562902]
+  ? "/Users/ryanongwx/Desktop/Pawfection/pawfection/macos/Pods/FirebaseCoreInternal/FirebaseCore/Internal/Sources/HeartbeatLogging/WeakContainer.swift"
+  : !private [1685087265, 109130941]
+  ? "/Users/ryanongwx/Desktop/Pawfection/pawfection/macos/Pods/FirebaseCoreInternal/FirebaseCore/Internal/Sources/HeartbeatLogging/_ObjC_HeartbeatController.swift"
+  : !private [1685087265, 107931267]
+  ? "/Users/ryanongwx/Desktop/Pawfection/pawfection/macos/Pods/FirebaseCoreInternal/FirebaseCore/Internal/Sources/HeartbeatLogging/_ObjC_HeartbeatsPayload.swift"
+  : !private [1685087265, 108362561]

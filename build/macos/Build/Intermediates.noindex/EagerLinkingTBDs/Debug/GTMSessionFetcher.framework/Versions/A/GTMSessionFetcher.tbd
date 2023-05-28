@@ -1,0 +1,26 @@
+--- !tapi-tbd
+tbd-version:     4
+targets:         [ arm64-macos ]
+flags:           [ not_app_extension_safe ]
+install-name:    '@rpath/GTMSessionFetcher.framework/Versions/A/GTMSessionFetcher'
+exports:
+  - targets:         [ arm64-macos ]
+    symbols:         [ _GTMDataFromInputStream, _GTMFetcherApplicationIdentifier, 
+                       _GTMFetcherCleanedUserAgentString, _GTMFetcherStandardUserAgentString, 
+                       _GTMFetcherSystemVersionString, _GTMSessionFetcherAssertValidSelector, 
+                       _GTMSessionFetcherVersionNumber, _GTMSessionFetcherVersionString, 
+                       _kGTMSessionFetcherCompletionDataKey, _kGTMSessionFetcherCompletionErrorKey, 
+                       _kGTMSessionFetcherCompletionInvokedNotification, _kGTMSessionFetcherElapsedIntervalWithRetriesKey, 
+                       _kGTMSessionFetcherErrorDomain, _kGTMSessionFetcherNumberOfRetriesDoneKey, 
+                       _kGTMSessionFetcherRetryDelayStartedNotification, _kGTMSessionFetcherRetryDelayStoppedNotification, 
+                       _kGTMSessionFetcherServiceSessionBecameInvalidNotification, 
+                       _kGTMSessionFetcherServiceSessionKey, _kGTMSessionFetcherStartedNotification, 
+                       _kGTMSessionFetcherStatusDataContentTypeKey, _kGTMSessionFetcherStatusDataKey, 
+                       _kGTMSessionFetcherStatusDomain, _kGTMSessionFetcherStoppedNotification, 
+                       _kGTMSessionFetcherUploadInitialBackoffStartedNotification, 
+                       _kGTMSessionFetcherUploadLocationObtainedNotification, _kGTMSessionUploadFetcherMaximumDemandBufferSize, 
+                       _kGTMSessionUploadFetcherStandardChunkSize, _kGTMSessionUploadFetcherUnknownFileSize ]
+    objc-classes:    [ GTMSessionCookieStorage, GTMSessionFetcher, GTMSessionFetcherService, 
+                       GTMSessionFetcherSessionDelegateDispatcher, GTMSessionSyncMonitorInternal, 
+                       GTMSessionUploadFetcher, PodsDummy_GTMSessionFetcher ]
+...

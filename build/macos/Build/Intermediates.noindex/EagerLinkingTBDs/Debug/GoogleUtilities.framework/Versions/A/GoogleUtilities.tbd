@@ -1,0 +1,32 @@
+--- !tapi-tbd
+tbd-version:     4
+targets:         [ arm64-macos ]
+flags:           [ not_app_extension_safe ]
+install-name:    '@rpath/GoogleUtilities.framework/Versions/A/GoogleUtilities'
+exports:
+  - targets:         [ arm64-macos ]
+    symbols:         [ _GULIsLoggableLevel, _GULLogBasic, _GULLogDebug, _GULLogError, 
+                       _GULLogInfo, _GULLogNotice, _GULLogWarning, _GULLoggerEnableSTDERR, 
+                       _GULLoggerForceDebug, _GULLoggerInitializeASL, _GULLoggerRegisterVersion, 
+                       _GULNSDataZlibErrorDomain, _GULNSDataZlibErrorKey, _GULNSDataZlibRemainingBytesKey, 
+                       _GULReachabilityStatusString, _GULResetLogger, _GULSetLoggerLevel, 
+                       _GoogleUtilitiesVersionNumber, _GoogleUtilitiesVersionString, 
+                       _getGULClientQueue, _getGULLoggerClient, _getGULLoggerDebugMode, 
+                       _kGULHeartbeatStorageDirectory, _kGULKeychainUtilsErrorDomain, 
+                       _kGULLoggerASLClientFacilityName, _kGULLoggerNetwork, _kGULNetworkApplicationSupportSubdirectory, 
+                       _kGULNetworkBackgroundSessionConfigIDPrefix, _kGULNetworkErrorContext, 
+                       _kGULNetworkErrorDomain, _kGULNetworkHTTPStatusCodeCannotAcceptTraffic, 
+                       _kGULNetworkHTTPStatusCodeFound, _kGULNetworkHTTPStatusCodeMovedPermanently, 
+                       _kGULNetworkHTTPStatusCodeMovedTemporarily, _kGULNetworkHTTPStatusCodeMultipleChoices, 
+                       _kGULNetworkHTTPStatusCodeNotFound, _kGULNetworkHTTPStatusCodeNotModified, 
+                       _kGULNetworkHTTPStatusCodeUnavailable, _kGULNetworkHTTPStatusNoContent, 
+                       _kGULNetworkHTTPStatusOK, _kGULNetworkReachabilityHost, _kGULNetworkTempDirectoryName, 
+                       _kGULNetworkTempFolderExpireTime, _kGULNetworkTimeOutInterval, 
+                       _kGULSecureCodingError ]
+    objc-classes:    [ GULAppDelegateObserver, GULAppDelegateSwizzler, GULAppEnvironmentUtil, 
+                       GULHeartbeatDateStorage, GULHeartbeatDateStorageUserDefaults, 
+                       GULKeychainStorage, GULKeychainUtils, GULLoggerWrapper, GULMutableDictionary, 
+                       GULNetwork, GULNetworkInfo, GULNetworkURLSession, GULReachabilityChecker, 
+                       GULSceneDelegateSwizzler, GULSceneZeroingWeakContainer, GULSecureCoding, 
+                       GULURLSessionDataResponse, GULZeroingWeakContainer, PodsDummy_GoogleUtilities ]
+...

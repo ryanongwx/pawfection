@@ -1,0 +1,35 @@
+--- !tapi-tbd
+tbd-version:     4
+targets:         [ arm64-macos ]
+flags:           [ not_app_extension_safe ]
+install-name:    '@rpath/FirebaseCore.framework/Versions/A/FirebaseCore'
+exports:
+  - targets:         [ arm64-macos ]
+    symbols:         [ _FIRAuthStateDidChangeInternalNotification, _FIRAuthStateDidChangeInternalNotificationAppKey, 
+                       _FIRAuthStateDidChangeInternalNotificationTokenKey, _FIRAuthStateDidChangeInternalNotificationUIDKey, 
+                       _FIRFirebaseVersion, _FIRHeaderValueFromHeartbeatsPayload, 
+                       _FIRIsLoggableLevel, _FIRLogBasic, _FIRLogDebug, _FIRLogError, 
+                       _FIRLogInfo, _FIRLogNotice, _FIRLogWarning, _FIRLoggerInitializeASL, 
+                       _FIRResetLogger, _FIRSetAnalyticsDebugMode, _FIRSetLoggerLevel, 
+                       _FIRSetLoggerUserDefaults, _FirebaseCoreVersionNumber, _FirebaseCoreVersionString, 
+                       _kFIRAPIKey, _kFIRAndroidClientID, _kFIRAppDeleteNotification, 
+                       _kFIRAppDiagnosticsApplePlatformPrefix, _kFIRAppDiagnosticsConfigurationTypeKey, 
+                       _kFIRAppDiagnosticsErrorKey, _kFIRAppDiagnosticsFIRAppKey, 
+                       _kFIRAppDiagnosticsSDKNameKey, _kFIRAppDiagnosticsSDKVersionKey, 
+                       _kFIRAppIsDefaultAppKey, _kFIRAppNameKey, _kFIRAppReadyToConfigureSDKNotification, 
+                       _kFIRBundleID, _kFIRClientID, _kFIRDatabaseURL, _kFIRDefaultAppName, 
+                       _kFIRDisableDebugModeApplicationArgument, _kFIREnableDebugModeApplicationArgument, 
+                       _kFIRExceptionBadModification, _kFIRGCMSenderID, _kFIRGlobalAppDataCollectionEnabledDefaultsKeyFormat, 
+                       _kFIRGlobalAppDataCollectionEnabledPlistKey, _kFIRGoogleAppID, 
+                       _kFIRGoogleAppIDKey, _kFIRIsAnalyticsCollectionDeactivated, 
+                       _kFIRIsAnalyticsCollectionEnabled, _kFIRIsMeasurementEnabled, 
+                       _kFIRLibraryVersionID, _kFIRLoggerAnalytics, _kFIRLoggerCore, 
+                       _kFIRLoggerCrash, _kFIRLoggerForceSDTERRApplicationArgument, 
+                       _kFIRLoggerRemoteConfig, _kFIRPersistedDebugModeKey, _kFIRProjectID, 
+                       _kFIRStorageBucket, _kFIRTrackingID, _kFirebaseCoreDefaultsSuiteName, 
+                       _kFirebaseCoreErrorDomain, _kServiceInfoFileName, _kServiceInfoFileType ]
+    objc-classes:    [ FIRAnalyticsConfiguration, FIRApp, FIRBundleUtil, FIRComponent, 
+                       FIRComponentContainer, FIRComponentType, FIRConfiguration, 
+                       FIRDependency, FIRFirebaseUserAgent, FIRHeartbeatLogger, FIRLoggerWrapper, 
+                       FIROptions, PodsDummy_FirebaseCore ]
+...

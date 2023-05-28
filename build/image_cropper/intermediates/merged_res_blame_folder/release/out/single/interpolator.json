@@ -1,0 +1,30 @@
+[
+    {
+        "merged": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-merged_res-18:/interpolator/btn_radio_to_off_mtrl_animation_interpolator_0.xml",
+        "source": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-appcompat-1.3.0-6:/interpolator/btn_radio_to_off_mtrl_animation_interpolator_0.xml"
+    },
+    {
+        "merged": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-merged_res-18:/interpolator/fast_out_slow_in.xml",
+        "source": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-appcompat-1.3.0-6:/interpolator/fast_out_slow_in.xml"
+    },
+    {
+        "merged": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-merged_res-18:/interpolator/btn_radio_to_on_mtrl_animation_interpolator_0.xml",
+        "source": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-appcompat-1.3.0-6:/interpolator/btn_radio_to_on_mtrl_animation_interpolator_0.xml"
+    },
+    {
+        "merged": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-merged_res-18:/interpolator/btn_checkbox_checked_mtrl_animation_interpolator_0.xml",
+        "source": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-appcompat-1.3.0-6:/interpolator/btn_checkbox_checked_mtrl_animation_interpolator_0.xml"
+    },
+    {
+        "merged": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-merged_res-18:/interpolator/btn_checkbox_unchecked_mtrl_animation_interpolator_0.xml",
+        "source": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-appcompat-1.3.0-6:/interpolator/btn_checkbox_unchecked_mtrl_animation_interpolator_0.xml"
+    },
+    {
+        "merged": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-merged_res-18:/interpolator/btn_checkbox_checked_mtrl_animation_interpolator_1.xml",
+        "source": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-appcompat-1.3.0-6:/interpolator/btn_checkbox_checked_mtrl_animation_interpolator_1.xml"
+    },
+    {
+        "merged": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-merged_res-18:/interpolator/btn_checkbox_unchecked_mtrl_animation_interpolator_1.xml",
+        "source": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-appcompat-1.3.0-6:/interpolator/btn_checkbox_unchecked_mtrl_animation_interpolator_1.xml"
+    }
+]

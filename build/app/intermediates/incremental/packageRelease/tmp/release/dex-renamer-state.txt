@@ -1,0 +1,4 @@
+#Sat May 27 22:58:46 SGT 2023
+base.0=/Users/ryanongwx/Desktop/Pawfection/pawfection/build/app/intermediates/dex/release/minifyReleaseWithR8/classes.dex
+path.0=classes.dex
+renamed.0=classes.dex

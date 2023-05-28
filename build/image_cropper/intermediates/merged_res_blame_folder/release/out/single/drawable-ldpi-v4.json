@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-merged_res-18:/drawable-ldpi-v4/ucrop_ic_angle.png",
+        "source": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-jetified-ucrop-2.2.8-8:/drawable-ldpi-v4/ucrop_ic_angle.png"
+    },
+    {
+        "merged": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-merged_res-18:/drawable-ldpi-v4/ucrop_ic_done.png",
+        "source": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-jetified-ucrop-2.2.8-8:/drawable-ldpi-v4/ucrop_ic_done.png"
+    }
+]
