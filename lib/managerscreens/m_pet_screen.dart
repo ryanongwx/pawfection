@@ -49,7 +49,26 @@ class _MPetScreenState extends State<MPetScreen> {
         }
 
         return Scaffold(
-            appBar: AppBar(title: const Text('Pets')),
+            appBar: AppBar(
+              title: const Text('Pets'),
+              actions: <Widget>[
+                Padding(
+                    padding: EdgeInsets.only(right: 20.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MCreatePetScreen()),
+                        );
+                      },
+                      child: Icon(
+                        Icons.add,
+                        size: 26.0,
+                      ),
+                    )),
+              ],
+            ),
             body: Stack(children: [
               SizedBox(
                 height: 550,
@@ -79,20 +98,20 @@ class _MPetScreenState extends State<MPetScreen> {
                   ),
                 ),
               ),
-              Padding(
-                  padding: EdgeInsets.only(bottom: 100),
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MCreatePetScreen()),
-                          );
-                        },
-                        child: Text('Create Pet')),
-                  )),
+              // Padding(
+              //     padding: EdgeInsets.only(bottom: 100),
+              //     child: Align(
+              //       alignment: Alignment.bottomCenter,
+              //       child: ElevatedButton(
+              //           onPressed: () {
+              //             Navigator.push(
+              //               context,
+              //               MaterialPageRoute(
+              //                   builder: (context) => MCreatePetScreen()),
+              //             );
+              //           },
+              //           child: Text('Create Pet')),
+              //     )),
             ]));
       },
     );

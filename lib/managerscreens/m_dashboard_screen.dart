@@ -51,7 +51,26 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
           }
 
           return Scaffold(
-              appBar: AppBar(title: const Text('Tasks')),
+              appBar: AppBar(
+                title: const Text('Tasks'),
+                actions: <Widget>[
+                  Padding(
+                      padding: EdgeInsets.only(right: 20.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MCreateTaskScreen()),
+                          );
+                        },
+                        child: Icon(
+                          Icons.add,
+                          size: 26.0,
+                        ),
+                      )),
+                ],
+              ),
               body: Stack(children: [
                 SizedBox(
                   height: 550,
@@ -134,20 +153,20 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
                     );
                   },
                 ),
-                Padding(
-                    padding: EdgeInsets.only(bottom: 100),
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MCreateTaskScreen()),
-                            );
-                          },
-                          child: Text('Create Pet')),
-                    )),
+                // Padding(
+                //     padding: EdgeInsets.only(bottom: 100),
+                //     child: Align(
+                //       alignment: Alignment.bottomCenter,
+                //       child: ElevatedButton(
+                //           onPressed: () {
+                //             Navigator.push(
+                //               context,
+                //               MaterialPageRoute(
+                //                   builder: (context) => MCreateTaskScreen()),
+                //             );
+                //           },
+                //           child: Text('Create Tasks')),
+                //     )),
               ]));
         });
   }
