@@ -1,0 +1,12 @@
+--- !tapi-tbd
+tbd-version:     4
+targets:         [ arm64-macos ]
+flags:           [ not_app_extension_safe ]
+install-name:    '@rpath/FBLPromises.framework/Versions/A/FBLPromises'
+exports:
+  - targets:         [ arm64-macos ]
+    symbols:         [ _FBLPromiseAwait, _FBLPromiseErrorDomain, _FBLPromiseRetryDefaultAttemptsCount, 
+                       _FBLPromiseRetryDefaultDelayInterval, _FBLPromisesVersionNumber, 
+                       _FBLPromisesVersionString, _FBLWaitForPromisesWithTimeout ]
+    objc-classes:    [ FBLPromise, PodsDummy_PromisesObjC ]
+...

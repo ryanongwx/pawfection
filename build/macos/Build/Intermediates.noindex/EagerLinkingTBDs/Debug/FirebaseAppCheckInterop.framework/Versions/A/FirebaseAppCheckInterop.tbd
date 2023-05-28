@@ -1,0 +1,10 @@
+--- !tapi-tbd
+tbd-version:     4
+targets:         [ arm64-macos ]
+flags:           [ not_app_extension_safe ]
+install-name:    '@rpath/FirebaseAppCheckInterop.framework/Versions/A/FirebaseAppCheckInterop'
+exports:
+  - targets:         [ arm64-macos ]
+    symbols:         [ _FirebaseAppCheckInteropVersionNumber, _FirebaseAppCheckInteropVersionString ]
+    objc-classes:    [ PodsDummy_FirebaseAppCheckInterop ]
+...
