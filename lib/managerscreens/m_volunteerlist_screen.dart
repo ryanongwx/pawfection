@@ -57,7 +57,8 @@ class _MVolunteerListScreenState extends State<MVolunteerListScreen> {
                     autoFocusOnSearch: false,
                     initialList: userList,
                     filter: (value) => userList
-                        .where((element) => element.username.contains(value))
+                        .where((element) =>
+                          element.username.contains(value.toLowerCase()))
                         .toList(),
                     builder: (User user) => UserItem(user: user),
                     emptyWidget: const EmptyView(),

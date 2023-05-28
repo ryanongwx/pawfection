@@ -77,41 +77,38 @@ class _VDashboardScreenState extends State<VDashboardScreen> {
                         // Color
                         sliderOffset: 2.0,
                         // Double
-                        borderRadius: const BorderRadius.all(
-                            Radius.circular(8.0)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(8.0)),
                         // BorderRadius
                         itemPadding: const EdgeInsets.symmetric(
                           // EdgeInsets
                           horizontal: 15,
                           vertical: 10,
                         ),
-                        animationDuration: const Duration(
-                            milliseconds: 250), // Duration
+                        animationDuration:
+                            const Duration(milliseconds: 250), // Duration
                       ),
                     )),
                 ValueListenableBuilder(
                   valueListenable: _selectedSegment_04,
                   builder: (context, value, child) {
                     return Padding(
-                      padding: const EdgeInsets.only(
-                          top: 75.0, left: 20, right: 20),
+                      padding:
+                          const EdgeInsets.only(top: 75.0, left: 20, right: 20),
                       child: SearchableList<Task>(
                         autoFocusOnSearch: false,
                         initialList: taskList
-                            .where((element) =>
-                            element.status.contains(_selectedSegment_04.value))
+                            .where((element) => element.status
+                                .contains(_selectedSegment_04.value))
                             .toList(),
                         builder: (Task task) => TaskItem(task: task),
-                        filter: (value) =>
-                            taskList
-                                .where(
-                                  (element) =>
-                                  element.name.toLowerCase().contains(value),
-                            )
-                                .where((element) =>
-                                element.status.contains(
-                                    _selectedSegment_04.value))
-                                .toList(),
+                        filter: (value) => taskList
+                            .where((element) => element.name
+                                .toLowerCase()
+                                .contains(value.toLowerCase()))
+                            .where((element) => element.status
+                                .contains(_selectedSegment_04.value))
+                            .toList(),
                         emptyWidget: const EmptyView(),
                         inputDecoration: InputDecoration(
                           labelText: "Search Task",
@@ -129,8 +126,7 @@ class _VDashboardScreenState extends State<VDashboardScreen> {
                   },
                 ),
               ]));
-        }
-    );
+        });
   }
 }
 

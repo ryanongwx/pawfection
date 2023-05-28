@@ -60,7 +60,8 @@ class _MPetScreenState extends State<MPetScreen> {
                     autoFocusOnSearch: false,
                     initialList: petList,
                     filter: (value) => petList
-                        .where((element) => element.name.contains(value))
+                        .where((element) =>
+                            element.name.contains(value.toLowerCase()))
                         .toList(),
                     builder: (Pet pet) => PetItem(pet: pet),
                     emptyWidget: const EmptyView(),
