@@ -77,7 +77,9 @@ class LoginView extends StatelessWidget {
                   'An email will be sent to your email addess for password reset.'),
           onSubmitAnimationCompleted: () {
             Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (context) => VolunteerView(),
+              builder: (context) => VolunteerView(
+                tab: 0,
+              ),
             ));
           },
         ));

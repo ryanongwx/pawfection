@@ -153,7 +153,7 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
       );
     } else if (Platform.isIOS) {
       return CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(middle: Text('Create Pet')),
+        navigationBar: CupertinoNavigationBar(middle: Text('Create User')),
         child: SafeArea(
           child: SingleChildScrollView(
             child: Column(

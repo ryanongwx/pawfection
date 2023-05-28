@@ -51,7 +51,7 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
           }
 
           return Scaffold(
-              appBar: AppBar(title: const Text('Dashboard')),
+              appBar: AppBar(title: const Text('Tasks')),
               body: Stack(children: [
                 SizedBox(
                   height: 550,
