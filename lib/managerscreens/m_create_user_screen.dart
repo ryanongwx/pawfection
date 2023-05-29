@@ -96,58 +96,58 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
                     if (_form['walking']) {}
                   },
                 ),
-                ElevatedButton(
-                  child: const Text('Create'),
-                  onPressed: () {
-                    try {
-                      repository.addUser(User(_form['email'],
-                          username: _form['username'],
-                          role: _form['role'],
-                          availabledates: [],
-                          preferences: [],
-                          experiences: [],
-                          profilepicture: widget.imagePath,
-                          contactnumber: _form['contactnumber']));
-                      setState(() {
-                        alertmessage = 'User has successfully been created';
-                      });
-                    } catch (e) {
-                      setState(() {
-                        alertmessage = 'Please ensure all fields are filled in';
-                      });
-                    } finally {
-                      showDialog<String>(
-                        context: context,
-                        builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Create User'),
-                          content: Text(alertmessage),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, 'Cancel'),
-                              child: const Text('Cancel'),
-                            ),
-                            TextButton(
-                              onPressed: () => {
-                                Navigator.pop(context, 'OK'),
-                                if (alertmessage ==
-                                    'User has successfully been created')
-                                  {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (context) => ManagerView(
-                                                tab: 2,
-                                              )),
-                                    )
-                                  }
-                              },
-                              child: const Text('OK'),
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                  },
-                ),
+                // ElevatedButton(
+                //   child: const Text('Create'),
+                //   onPressed: () {
+                //     try {
+                //       repository.addUser(User(_form['email'],
+                //           username: _form['username'],
+                //           role: _form['role'],
+                //           availabledates: [],
+                //           preferences: [],
+                //           experiences: [],
+                //           profilepicture: widget.imagePath,
+                //           contactnumber: _form['contactnumber']));
+                //       setState(() {
+                //         alertmessage = 'User has successfully been created';
+                //       });
+                //     } catch (e) {
+                //       setState(() {
+                //         alertmessage = 'Please ensure all fields are filled in';
+                //       });
+                //     } finally {
+                //       showDialog<String>(
+                //         context: context,
+                //         builder: (BuildContext context) => AlertDialog(
+                //           title: const Text('Create User'),
+                //           content: Text(alertmessage),
+                //           actions: <Widget>[
+                //             TextButton(
+                //               onPressed: () => Navigator.pop(context, 'Cancel'),
+                //               child: const Text('Cancel'),
+                //             ),
+                //             TextButton(
+                //               onPressed: () => {
+                //                 Navigator.pop(context, 'OK'),
+                //                 if (alertmessage ==
+                //                     'User has successfully been created')
+                //                   {
+                //                     Navigator.of(context).push(
+                //                       MaterialPageRoute(
+                //                           builder: (context) => ManagerView(
+                //                                 tab: 2,
+                //                               )),
+                //                     )
+                //                   }
+                //               },
+                //               child: const Text('OK'),
+                //             ),
+                //           ],
+                //         ),
+                //       );
+                //     }
+                //   },
+                // ),
               ],
             ),
           ),
@@ -170,58 +170,58 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
                     _form = value;
                   },
                 ),
-                CupertinoButton(
-                  child: const Text('Create'),
-                  onPressed: () {
-                    try {
-                      repository.addUser(User(_form['email'],
-                          username: _form['username'],
-                          role: _form['role'],
-                          availabledates: [],
-                          preferences: [],
-                          experiences: [],
-                          profilepicture: widget.imagePath,
-                          contactnumber: _form['contactnumber']));
-                      setState(() {
-                        alertmessage = 'User has successfully been created';
-                      });
-                    } catch (e) {
-                      setState(() {
-                        alertmessage = 'Please ensure all fields are filled in';
-                      });
-                    } finally {
-                      showDialog<String>(
-                        context: context,
-                        builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Create User'),
-                          content: Text(alertmessage),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, 'Cancel'),
-                              child: const Text('Cancel'),
-                            ),
-                            TextButton(
-                              onPressed: () => {
-                                Navigator.pop(context, 'OK'),
-                                if (alertmessage ==
-                                    'User has successfully been created')
-                                  {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (context) => ManagerView(
-                                                tab: 2,
-                                              )),
-                                    )
-                                  }
-                              },
-                              child: const Text('OK'),
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                  },
-                ),
+                // CupertinoButton(
+                //   child: const Text('Create'),
+                //   onPressed: () {
+                //     try {
+                //       repository.addUser(User(_form['email'],
+                //           username: _form['username'],
+                //           role: _form['role'],
+                //           availabledates: [],
+                //           preferences: [],
+                //           experiences: [],
+                //           profilepicture: widget.imagePath,
+                //           contactnumber: _form['contactnumber']));
+                //       setState(() {
+                //         alertmessage = 'User has successfully been created';
+                //       });
+                //     } catch (e) {
+                //       setState(() {
+                //         alertmessage = 'Please ensure all fields are filled in';
+                //       });
+                //     } finally {
+                //       showDialog<String>(
+                //         context: context,
+                //         builder: (BuildContext context) => AlertDialog(
+                //           title: const Text('Create User'),
+                //           content: Text(alertmessage),
+                //           actions: <Widget>[
+                //             TextButton(
+                //               onPressed: () => Navigator.pop(context, 'Cancel'),
+                //               child: const Text('Cancel'),
+                //             ),
+                //             TextButton(
+                //               onPressed: () => {
+                //                 Navigator.pop(context, 'OK'),
+                //                 if (alertmessage ==
+                //                     'User has successfully been created')
+                //                   {
+                //                     Navigator.of(context).push(
+                //                       MaterialPageRoute(
+                //                           builder: (context) => ManagerView(
+                //                                 tab: 2,
+                //                               )),
+                //                     )
+                //                   }
+                //               },
+                //               child: const Text('OK'),
+                //             ),
+                //           ],
+                //         ),
+                //       );
+                //     }
+                //   },
+                // ),
               ],
             ),
           ),
