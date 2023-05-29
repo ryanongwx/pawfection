@@ -24,6 +24,8 @@ IOS (Debug and Release)
 - Open xcode simulator
 - Run flutter run
 
+App Login Details can be found in the MS1 submission.
+
 Disclaimer: While testing, kindly refrain from sending in multiple queries to the database by limiting the number of times you click on the create user/pet/task as well as the signup functionality.
 
 
