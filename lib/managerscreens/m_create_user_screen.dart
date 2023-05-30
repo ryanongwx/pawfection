@@ -132,7 +132,7 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
                 //                 if (alertmessage ==
                 //                     'User has successfully been created')
                 //                   {
-                //                     Navigator.of(context).push(
+                //                     Navigator.of(context).pushReplacement(
                 //                       MaterialPageRoute(
                 //                           builder: (context) => ManagerView(
                 //                                 tab: 2,
@@ -206,7 +206,7 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
                 //                 if (alertmessage ==
                 //                     'User has successfully been created')
                 //                   {
-                //                     Navigator.of(context).push(
+                //                     Navigator.of(context).pushReplacement(
                 //                       MaterialPageRoute(
                 //                           builder: (context) => ManagerView(
                 //                                 tab: 2,

@@ -24,7 +24,6 @@ class VProfileScreen extends StatefulWidget {
 }
 
 class _VProfileScreenState extends State<VProfileScreen> {
-  User? user;
   final DataRepository repository = DataRepository();
   FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
   late FirebaseAuth.User currentUser;
@@ -83,7 +82,7 @@ class _VProfileScreenState extends State<VProfileScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const VProfileUpdateScreen(),
+              builder: (context) => VProfileUpdateScreen(),
             ),
           );
         },
@@ -141,7 +140,7 @@ class _VProfileScreenState extends State<VProfileScreen> {
                 ? const Text('User not logged in')
                 : Container(
                     padding: EdgeInsets.symmetric(horizontal: 48),
-                    child: const Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
@@ -151,7 +150,7 @@ class _VProfileScreenState extends State<VProfileScreen> {
                         ),
                         SizedBox(height: 16),
                         Text(
-                          "This is about me.",
+                          "${user.bio}",
                           style: TextStyle(fontSize: 16, height: 1.4),
                         ),
                       ],

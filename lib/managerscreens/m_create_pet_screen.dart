@@ -112,7 +112,7 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
                                 if (alertmessage ==
                                     'Pet has successfully been created')
                                   {
-                                    Navigator.of(context).push(
+                                    Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
                                           builder: (context) => ManagerView(
                                                 tab: 1,
@@ -192,7 +192,7 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
                                 if (alertmessage ==
                                     'Pet has successfully been created')
                                   {
-                                    Navigator.of(context).push(
+                                    Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
                                           builder: (context) => ManagerView(
                                                 tab: 0,

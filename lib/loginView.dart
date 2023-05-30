@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
+import 'package:pawfection/managerview.dart';
 import 'package:pawfection/services/data_repository.dart';
 import 'package:pawfection/volunteerscreens/v_dashboard_screen.dart';
 import 'package:pawfection/voluteerView.dart';
@@ -11,6 +12,7 @@ class LoginView extends StatelessWidget {
   LoginView({super.key});
   Duration get loginTime => Duration(milliseconds: 2250);
   final FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
+  final DataRepository repository = DataRepository();
 
   Future<String?> _authUser(LoginData data) async {
     debugPrint('Name: ${data.name}, Password: ${data.password}');
@@ -45,7 +47,6 @@ class LoginView extends StatelessWidget {
                       .authStateChanges()
                       .listen((FirebaseAuth.User? user) async {
                     if (user != null) {
-                      final DataRepository repository = DataRepository();
                       repository.addUser(User(user.email!,
                           username: user.email!,
                           bio: '',
@@ -94,12 +95,26 @@ class LoginView extends StatelessWidget {
               recoverPasswordIntro: 'Enter your recovery email here',
               recoverPasswordDescription:
                   'An email will be sent to your email addess for password reset.'),
-          onSubmitAnimationCompleted: () {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (context) => VolunteerView(
-                tab: 0,
-              ),
-            ));
+          onSubmitAnimationCompleted: () async {
+            FirebaseAuth.User currentUser = _auth.currentUser!;
+            User? user = await repository.findUserByUUID(currentUser.uid);
+            if (user != null) {
+              if (user.role == 'Manager') {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => ManagerView(
+                    tab: 1,
+                  ),
+                ));
+              } else {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => VolunteerView(
+                    tab: 0,
+                  ),
+                ));
+              }
+            } else {
+              null;
+            }
           },
         ));
   }
