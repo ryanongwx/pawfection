@@ -10,12 +10,16 @@ import 'package:pawfection/services/data_repository.dart';
 import 'package:pawfection/volunteerscreens/profile_picture_update_screen.dart';
 import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
+import 'package:pawfection/voluteerView.dart';
 
 class VProfileUpdateScreen extends StatefulWidget {
   VProfileUpdateScreen(
-      {super.key, this.imagePath = 'assets/images/user_profile.png'});
+      {super.key,
+      this.imagePath = 'assets/images/user_profile.png',
+      required this.user});
 
   String imagePath;
+  User user;
 
   @override
   State<VProfileUpdateScreen> createState() => _VProfileUpdateScreenState();
@@ -28,8 +32,6 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
   final FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
   late var _form;
   late var alertmessage;
-  late User? user;
-  late FirebaseAuth.User currentUser;
 
   var _experiences = [];
   var preferences = [];
@@ -60,12 +62,6 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
   @override
   void initState() {
     super.initState();
-    initializeUser();
-  }
-
-  Future<void> initializeUser() async {
-    currentUser = _auth.currentUser!;
-    user = await repository.findUserByUUID(currentUser.uid);
   }
 
   @override
@@ -73,7 +69,7 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
     if (Platform.isAndroid) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Create Volunteer'),
+          title: Text('Update Volunteer Profile'),
           elevation: 4.0,
         ),
         body: SafeArea(
@@ -115,15 +111,15 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
                   child: const Text('Update'),
                   onPressed: () {
                     try {
-                      repository.addUser(User(_form['email'],
-                          referenceId: currentUser.uid,
+                      repository.updateUser(User(_form['email'],
+                          referenceId: widget.user.referenceId,
                           username: _form['username'],
-                          role: _form['role'],
+                          role: widget.user.role,
                           bio: _form['bio'],
-                          availabledates: [],
+                          availabledates: widget.user.availabledates,
                           preferences: _form['preferences'],
                           experiences: _form['experiences'],
-                          profilepicture: widget.imagePath,
+                          profilepicture: widget.user.profilepicture,
                           contactnumber: _form['contactnumber']));
                       setState(() {
                         alertmessage = 'User has successfully been updated';
@@ -151,8 +147,8 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => ManagerView(
-                                                tab: 2,
+                                          builder: (context) => VolunteerView(
+                                                tab: 1,
                                               )),
                                     )
                                   }
@@ -172,7 +168,8 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
       );
     } else if (Platform.isIOS) {
       return CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(middle: Text('Create User')),
+        navigationBar:
+            CupertinoNavigationBar(middle: Text('Update Volunteer Profile')),
         child: SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -191,22 +188,49 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
                   child: const Text('Update'),
                   onPressed: () {
                     try {
-                      repository.addUser(User(_form['email'],
-                          referenceId: currentUser.uid,
+                      List<String> preferences = [];
+                      if (_form['p_walking']) {
+                        preferences.add('walking');
+                      }
+                      if (_form['p_running']) {
+                        preferences.add('walking');
+                      }
+                      if (_form['p_feeding']) {
+                        preferences.add('walking');
+                      }
+                      if (_form['p_training']) {
+                        preferences.add('training');
+                      }
+
+                      List<String> experiences = [];
+                      if (_form['e_walking']) {
+                        experiences.add('walking');
+                      }
+                      if (_form['e_running']) {
+                        experiences.add('walking');
+                      }
+                      if (_form['e_feeding']) {
+                        experiences.add('walking');
+                      }
+                      if (_form['e_training']) {
+                        experiences.add('training');
+                      }
+                      repository.updateUser(User(_form['email'],
+                          referenceId: widget.user.referenceId,
                           username: _form['username'],
-                          role: _form['role'],
+                          role: widget.user.role,
                           bio: _form['bio'],
-                          availabledates: [],
-                          preferences: _form['preferences'],
-                          experiences: _form['experiences'],
-                          profilepicture: widget.imagePath,
+                          availabledates: widget.user.availabledates,
+                          preferences: preferences,
+                          experiences: experiences,
+                          profilepicture: widget.user.profilepicture,
                           contactnumber: _form['contactnumber']));
                       setState(() {
-                        alertmessage = 'User has successfully been created';
+                        alertmessage = 'User has successfully been updated';
                       });
                     } catch (e) {
                       setState(() {
-                        alertmessage = 'Please ensure all fields are filled in';
+                        alertmessage = '$e';
                       });
                     } finally {
                       showDialog<String>(
@@ -227,8 +251,8 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => ManagerView(
-                                                tab: 2,
+                                          builder: (context) => VolunteerView(
+                                                tab: 1,
                                               )),
                                     )
                                   }
@@ -252,17 +276,6 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
 
   List<Widget> _buildForm(BuildContext context) {
     return [
-      SizedBox(
-        height: 200,
-        child: ProfileWidget(
-          imagePath: widget.imagePath,
-          onClicked: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>
-                    ProfilePictureUpdateScreen(routetext: 'user')));
-          },
-        ),
-      ),
       FastFormSection(
         padding: const EdgeInsets.all(16.0),
         header: const Padding(
@@ -276,6 +289,7 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
           FastTextField(
             name: 'username',
             labelText: 'Username',
+            placeholder: widget.user.username,
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
             ]),
@@ -283,6 +297,8 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
           FastTextField(
             name: 'email',
             labelText: 'Email',
+            keyboardType: TextInputType.emailAddress,
+            placeholder: widget.user.email,
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
             ]),
@@ -290,59 +306,68 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
           FastTextField(
             name: 'contactnumber',
             labelText: 'Contact Number',
+            keyboardType: TextInputType.phone,
+            placeholder: widget.user.contactnumber,
             validator: Validators.compose([
-              Validators.required((value) => 'Field is required'),
+              Validators.required((value) {
+                if (value == null) {
+                  return 'Field is required';
+                } else if (value.length != 8) {
+                  return 'Phone number has to be 8 digits long';
+                }
+              }),
             ]),
           ),
           FastTextField(
             name: 'bio',
             labelText: 'Bio',
+            placeholder: widget.user.bio,
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
             ]),
           ),
-          // FastChoiceChips(
-          //   name: 'preferences',
-          //   labelText: 'Preferences',
-          //   alignment: WrapAlignment.center,
-          //   chipPadding: const EdgeInsets.all(8.0),
-          //   chips: [
-          //     FastChoiceChip(
-          //       selected: true,
-          //       value: 'Walking',
-          //     ),
-          //     FastChoiceChip(
-          //       value: 'Runnning',
-          //     ),
-          //     FastChoiceChip(
-          //       value: 'Feeding',
-          //     ),
-          //   ],
-          //   validator: (value) => value == null || value.isEmpty
-          //       ? 'Please select at least one chip'
-          //       : null,
-          // ),
-          // FastChoiceChips(
-          //   name: 'experiences',
-          //   labelText: 'Experiences',
-          //   alignment: WrapAlignment.center,
-          //   chipPadding: const EdgeInsets.all(8.0),
-          //   chips: [
-          //     FastChoiceChip(
-          //       selected: true,
-          //       value: 'Walking',
-          //     ),
-          //     FastChoiceChip(
-          //       value: 'Runnning',
-          //     ),
-          //     FastChoiceChip(
-          //       value: 'Feeding',
-          //     ),
-          //   ],
-          //   validator: (value) => value == null || value.isEmpty
-          //       ? 'Please select at least one chip'
-          //       : null,
-          // ),
+          FastChoiceChips(
+            name: 'preferences',
+            labelText: 'Preferences',
+            alignment: WrapAlignment.center,
+            chipPadding: const EdgeInsets.all(8.0),
+            chips: [
+              FastChoiceChip(
+                selected: true,
+                value: 'Walking',
+              ),
+              FastChoiceChip(
+                value: 'Runnning',
+              ),
+              FastChoiceChip(
+                value: 'Feeding',
+              ),
+            ],
+            validator: (value) => value == null || value.isEmpty
+                ? 'Please select at least one chip'
+                : null,
+          ),
+          FastChoiceChips(
+            name: 'experiences',
+            labelText: 'Experiences',
+            alignment: WrapAlignment.center,
+            chipPadding: const EdgeInsets.all(8.0),
+            chips: [
+              FastChoiceChip(
+                selected: true,
+                value: 'Walking',
+              ),
+              FastChoiceChip(
+                value: 'Runnning',
+              ),
+              FastChoiceChip(
+                value: 'Feeding',
+              ),
+            ],
+            validator: (value) => value == null || value.isEmpty
+                ? 'Please select at least one chip'
+                : null,
+          ),
         ],
       ),
     ];
@@ -350,17 +375,6 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
 
   List<Widget> _buildCupertinoForm(BuildContext context) {
     return [
-      SizedBox(
-        height: 200,
-        child: ProfileWidget(
-          imagePath: widget.imagePath,
-          onClicked: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>
-                    ProfilePictureUpdateScreen(routetext: 'user')));
-          },
-        ),
-      ),
       FastFormSection(
         adaptive: true,
         insetGrouped: true,
@@ -370,7 +384,7 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
           FastTextField(
             name: 'username',
             labelText: 'Username',
-            placeholder: user!.username,
+            placeholder: widget.user.username,
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
             ]),
@@ -378,7 +392,8 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
           FastTextField(
             name: 'email',
             labelText: 'Email',
-            placeholder: user!.email,
+            keyboardType: TextInputType.emailAddress,
+            placeholder: widget.user.email,
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
             ]),
@@ -386,7 +401,8 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
           FastTextField(
             name: 'contactnumber',
             labelText: 'Contact Number',
-            placeholder: user!.contactnumber,
+            keyboardType: TextInputType.phone,
+            placeholder: widget.user.contactnumber,
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
             ]),
@@ -394,7 +410,7 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
           FastTextField(
             name: 'bio',
             labelText: 'Bio',
-            placeholder: user!.bio,
+            placeholder: widget.user.bio,
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
             ]),
@@ -408,19 +424,19 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
           header: Text('Experience'),
           children: [
             FastCheckbox(
-              name: 'walking',
+              name: 'e_walking',
               labelText: 'Walking pets',
             ),
             FastCheckbox(
-              name: 'running',
+              name: 'e_running',
               labelText: 'Running with pets',
             ),
             FastCheckbox(
-              name: 'training',
+              name: 'e_training',
               labelText: 'Training pets',
             ),
             FastCheckbox(
-              name: 'feeding',
+              name: 'e_feeding',
               labelText: 'Feeding pets',
             ),
           ]),
@@ -431,19 +447,19 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
           header: Text('Preferences'),
           children: [
             FastCheckbox(
-              name: 'walking',
+              name: 'p_walking',
               labelText: 'Walking pets',
             ),
             FastCheckbox(
-              name: 'running',
+              name: 'p_running',
               labelText: 'Running with pets',
             ),
             FastCheckbox(
-              name: 'training',
+              name: 'p_training',
               labelText: 'Training pets',
             ),
             FastCheckbox(
-              name: 'feeding',
+              name: 'p_feeding',
               labelText: 'Feeding pets',
             ),
           ])
