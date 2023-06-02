@@ -160,7 +160,7 @@ class _ProfilePictureUpdateScreenState
                                 ? () {
                                     debugPrint(widget.routetext);
                                     if (widget.routetext == 'profile') {
-                                      Navigator.of(context).push(
+                                      Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(
                                             builder: (context) => VolunteerView(
                                                   image: file.path,
@@ -168,14 +168,14 @@ class _ProfilePictureUpdateScreenState
                                                 )),
                                       );
                                     } else if (widget.routetext == 'pet') {
-                                      Navigator.of(context).push(
+                                      Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 MCreatePetScreen(
                                                     imagePath: file.path)),
                                       );
                                     } else if (widget.routetext == 'user') {
-                                      Navigator.of(context).push(
+                                      Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 MCreateUserScreen(

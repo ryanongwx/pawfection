@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 class User {
-  String? referenceId;
+  String referenceId;
   String username;
   String email;
   String role;
@@ -11,16 +11,18 @@ class User {
   List<String?> experiences;
   String profilepicture;
   String contactnumber;
+  String bio;
 
   User(this.email,
-      {this.referenceId,
+      {required this.referenceId,
       required this.username,
       required this.role,
       required this.availabledates,
       required this.preferences,
       required this.experiences,
       required this.profilepicture,
-      required this.contactnumber});
+      required this.contactnumber,
+      required this.bio});
 
   factory User.fromSnapshot(DocumentSnapshot snapshot) {
     final newUser = User.fromJson(snapshot.data() as Map<String, dynamic>);
@@ -40,6 +42,8 @@ class User {
 
 User _userFromJson(Map<String, dynamic> json) {
   return User(json['email'] as String,
+      referenceId: json['referenceId'] as String,
+      bio: json['bio'] as String,
       username: json['username'] as String,
       role: json['role'] as String,
       availabledates:
@@ -52,6 +56,8 @@ User _userFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _userToJson(User instance) => <String, dynamic>{
       'username': instance.username.toLowerCase(),
+      'referenceId': instance.referenceId,
+      'bio': instance.bio,
       'email': instance.email,
       'role': instance.role,
       'availabledates': instance.availabledates,

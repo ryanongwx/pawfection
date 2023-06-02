@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 import '../models/pet.dart';
 import '../models/task.dart';
@@ -12,8 +13,6 @@ class DataRepository {
       FirebaseFirestore.instance.collection('tasks');
   final CollectionReference usercollection =
       FirebaseFirestore.instance.collection('users');
-
-
 
   // Retrieve Pet Data
 
@@ -129,6 +128,31 @@ class DataRepository {
     }
   }
 
+  List<User> snapshotToUserList_modified(QuerySnapshot<Object?> snapshot) {
+    if (snapshot.docs.isEmpty) {
+      return [];
+    } else {
+      return snapshot.docs.map((DocumentSnapshot<Object?> document) {
+        Map<String, dynamic> data = document.data()
+            as Map<String, dynamic>; // Cast to the correct data type
+        return User.fromJson(data);
+      }).toList();
+    }
+  }
+
+  Future<User?> findUserByUUID(String referenceId) async {
+    final querySnapshot = await usercollection.get();
+    final userList = snapshotToUserList_modified(querySnapshot);
+
+    for (User user in userList) {
+      if (user.referenceId == referenceId) {
+        return user;
+      }
+    }
+
+    return null;
+  }
+
   // Future<List<User>> getUserList() async {
   //   QuerySnapshot snapshot = await usercollection.get();
   //   return snapshot.docs
@@ -137,8 +161,8 @@ class DataRepository {
   //       .cast();
   // }
 
-  Future<DocumentReference> addUser(User user) {
-    return usercollection.add(user.toJson());
+  void addUser(User user) {
+    usercollection.doc(user.referenceId).set(user.toJson());
   }
 
   void updateUser(User user) async {

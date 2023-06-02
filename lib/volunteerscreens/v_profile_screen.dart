@@ -1,11 +1,13 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:pawfection/volunteerscreens/models/user.dart';
+import 'package:pawfection/services/data_repository.dart';
+import 'package:pawfection/models/user.dart';
 import 'package:pawfection/volunteerscreens/profile_picture_update_screen.dart';
 import 'package:pawfection/volunteerscreens/profile_update_screen.dart';
 import 'package:pawfection/volunteerscreens/update_availability_screen.dart';
 import 'package:pawfection/volunteerscreens/widgets/button_widget.dart';
-import 'package:pawfection/volunteerscreens/utils/user_accounts.dart';
 import 'package:pawfection/volunteerscreens/widgets/numbers_widget.dart';
 import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
 import 'package:pawfection/volunteerscreens/widgets/textfield_widget.dart';
@@ -22,9 +24,19 @@ class VProfileScreen extends StatefulWidget {
 }
 
 class _VProfileScreenState extends State<VProfileScreen> {
+  final DataRepository repository = DataRepository();
+  FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
+  late FirebaseAuth.User currentUser;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    currentUser = _auth.currentUser!;
+  }
+
   @override
   Widget build(BuildContext context) {
-    const user = UserPreferences.myUser;
     return Scaffold(
         appBar: AppBar(title: const Text("My Profile")),
         body: Padding(
@@ -49,12 +61,12 @@ class _VProfileScreenState extends State<VProfileScreen> {
                         },
                       ),
                       const SizedBox(height: 24),
-                      buildName(user),
+                      buildName(),
                       const SizedBox(height: 24),
                       Center(child: buildUpgradeButton1()),
                       Center(child: buildUpgradeButton2()),
                       const SizedBox(height: 48),
-                      buildAbout(user),
+                      buildAbout(),
                     ],
                   ),
                 ),
@@ -70,7 +82,7 @@ class _VProfileScreenState extends State<VProfileScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const VProfileUpdateScreen(),
+              builder: (context) => VProfileUpdateScreen(),
             ),
           );
         },
@@ -88,35 +100,63 @@ class _VProfileScreenState extends State<VProfileScreen> {
         },
       );
 
-  Widget buildName(User user) => Column(
-        children: [
-          Text(
-            user.name,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            user.email,
-            style: TextStyle(color: Colors.grey),
-          ),
-        ],
+  Widget buildName() => FutureBuilder<User?>(
+        future: repository.findUserByUUID(currentUser.uid),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // While waiting for the future to complete, show a loading indicator
+            return CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            // If an error occurs while fetching the user, display an error message
+            return Text('Error: ${snapshot.error}');
+          } else {
+            // The future completed successfully
+            final user = snapshot.data;
+
+            return (user == null
+                ? const Text('User not logged in')
+                : Center(
+                    child: Text("${user.username}",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 24))));
+          }
+        },
       );
 
-  Widget buildAbout(User user) => Container(
-        padding: EdgeInsets.symmetric(horizontal: 48),
-        child: const Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'About',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 16),
-            Text(
-              "This is about me.",
-              style: TextStyle(fontSize: 16, height: 1.4),
-            ),
-          ],
-        ),
+  Widget buildAbout() => FutureBuilder<User?>(
+        future: repository.findUserByUUID(currentUser.uid),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // While waiting for the future to complete, show a loading indicator
+            return CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            // If an error occurs while fetching the user, display an error message
+            return Text('Error: ${snapshot.error}');
+          } else {
+            // The future completed successfully
+            final user = snapshot.data;
+
+            return (user == null
+                ? const Text('User not logged in')
+                : Container(
+                    padding: EdgeInsets.symmetric(horizontal: 48),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'About',
+                          style: TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 16),
+                        Text(
+                          "${user.bio}",
+                          style: TextStyle(fontSize: 16, height: 1.4),
+                        ),
+                      ],
+                    ),
+                  ));
+          }
+        },
       );
 }
