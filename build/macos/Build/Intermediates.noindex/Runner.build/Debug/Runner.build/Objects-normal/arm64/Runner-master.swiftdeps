@@ -1,8 +1,0 @@
-version: "Apple Swift version 5.8 (swiftlang-5.8.0.124.2 clang-1403.0.22.11.100)"
-options: "292bdc025aca29d5d6d7235f6e214a71d9c5bfdbd882ce84c242f19f269a3d19"
-build_start_time: [1685087391, 3460000]
-build_end_time: [1685087398, 447393000]
-inputs:
-  "/Users/ryanongwx/Desktop/Pawfection/pawfection/macos/Flutter/GeneratedPluginRegistrant.swift": [1685087262, 814741981]
-  "/Users/ryanongwx/Desktop/Pawfection/pawfection/macos/Runner/AppDelegate.swift": [1681949587, 0]
-  "/Users/ryanongwx/Desktop/Pawfection/pawfection/macos/Runner/MainFlutterWindow.swift": [1683892864, 483005961]
