@@ -236,11 +236,13 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
       SizedBox(
         height: 200,
         child: ProfileWidget(
-          imagePath: widget.imagePath,
+          image: Image.asset(widget.imagePath),
           onClicked: () {
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>
-                    ProfilePictureUpdateScreen(routetext: 'user')));
+                builder: (context) => ProfilePictureUpdateScreen(
+                      routetext: 'user',
+                      petid: '',
+                    )));
           },
         ),
       ),
@@ -335,11 +337,13 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
       SizedBox(
         height: 200,
         child: ProfileWidget(
-          imagePath: widget.imagePath,
+          image: Image.asset(widget.imagePath),
           onClicked: () {
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>
-                    ProfilePictureUpdateScreen(routetext: 'user')));
+                builder: (context) => ProfilePictureUpdateScreen(
+                      routetext: 'user',
+                      petid: '',
+                    )));
           },
         ),
       ),

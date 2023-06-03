@@ -14,10 +14,7 @@ import 'package:pawfection/volunteerscreens/widgets/textfield_widget.dart';
 import 'package:pawfection/volunteerscreens/profile_update_screen.dart';
 
 class VProfileScreen extends StatefulWidget {
-  VProfileScreen({Key? key, this.imagePath = 'assets/images/user_profile.png'})
-      : super(key: key);
-
-  String imagePath;
+  VProfileScreen({Key? key}) : super(key: key);
 
   @override
   State<VProfileScreen> createState() => _VProfileScreenState();
@@ -49,17 +46,7 @@ class _VProfileScreenState extends State<VProfileScreen> {
                   child: ListView(
                     physics: BouncingScrollPhysics(),
                     children: [
-                      ProfileWidget(
-                        imagePath: widget.imagePath,
-                        onClicked: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    ProfilePictureUpdateScreen(
-                                        routetext: 'profile')),
-                          );
-                        },
-                      ),
+                      buildProfile(),
                       const SizedBox(height: 24),
                       buildName(),
                       const SizedBox(height: 24),
@@ -105,6 +92,37 @@ class _VProfileScreenState extends State<VProfileScreen> {
                             user: user,
                           ),
                         ),
+                      );
+                    },
+                  ));
+          }
+        },
+      );
+
+  Widget buildProfile() => FutureBuilder<User?>(
+        future: repository.findUserByUUID(currentUser.uid),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // While waiting for the future to complete, show a loading indicator
+            return CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            // If an error occurs while fetching the user, display an error message
+            return Text('Error: ${snapshot.error}');
+          } else {
+            // The future completed successfully
+            final user = snapshot.data;
+
+            return (user == null
+                ? const Text('User not logged in')
+                : ProfileWidget(
+                    image: Image.network(user.profilepicture),
+                    onClicked: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => ProfilePictureUpdateScreen(
+                                  routetext: 'profile',
+                                  petid: '',
+                                )),
                       );
                     },
                   ));

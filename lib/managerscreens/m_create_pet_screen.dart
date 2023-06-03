@@ -220,11 +220,13 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
   List<Widget> _buildForm(BuildContext context) {
     return [
       ProfileWidget(
-        imagePath: widget.imagePath,
+        image: Image.asset(widget.imagePath),
         onClicked: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) =>
-                  ProfilePictureUpdateScreen(routetext: 'pet')));
+              builder: (context) => ProfilePictureUpdateScreen(
+                    routetext: 'pet',
+                    petid: '',
+                  )));
         },
       ),
       FastFormSection(
@@ -266,11 +268,13 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
       SizedBox(
         height: 200,
         child: ProfileWidget(
-          imagePath: widget.imagePath,
+          image: Image.asset(widget.imagePath),
           onClicked: () {
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>
-                    ProfilePictureUpdateScreen(routetext: 'pet')));
+                builder: (context) => ProfilePictureUpdateScreen(
+                      routetext: 'pet',
+                      petid: '',
+                    )));
           },
         ),
       ),
