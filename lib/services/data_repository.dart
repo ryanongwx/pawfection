@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as FirebaseStorage;
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -13,6 +16,9 @@ class DataRepository {
       FirebaseFirestore.instance.collection('tasks');
   final CollectionReference usercollection =
       FirebaseFirestore.instance.collection('users');
+
+  final FirebaseStorage.FirebaseStorage _storage =
+      FirebaseStorage.FirebaseStorage.instance;
 
   // Retrieve Pet Data
 
@@ -51,6 +57,31 @@ class DataRepository {
 
   void deletePet(Pet pet) async {
     await petcollection.doc(pet.referenceId).delete();
+  }
+
+  List<Pet> snapshotToPetList_modified(QuerySnapshot<Object?> snapshot) {
+    if (snapshot.docs.isEmpty) {
+      return [];
+    } else {
+      return snapshot.docs.map((DocumentSnapshot<Object?> document) {
+        Map<String, dynamic> data = document.data()
+            as Map<String, dynamic>; // Cast to the correct data type
+        return Pet.fromJson(data);
+      }).toList();
+    }
+  }
+
+  Future<Pet?> findUserByPetID(String referenceId) async {
+    final querySnapshot = await petcollection.get();
+    final petList = snapshotToPetList_modified(querySnapshot);
+
+    for (Pet pet in petList) {
+      if (pet.referenceId == referenceId) {
+        return pet;
+      }
+    }
+
+    return null;
   }
 
   // Retrieve Task Data
@@ -171,5 +202,14 @@ class DataRepository {
 
   void deleteUser(User user) async {
     await usercollection.doc(user.referenceId).delete();
+  }
+
+  Future<String> uploadImageToStorage(File file, String user_id) async {
+    FirebaseStorage.Reference ref =
+        _storage.ref().child('profilepictures').child(user_id);
+    FirebaseStorage.UploadTask uploadTask = ref.putFile(file);
+    FirebaseStorage.TaskSnapshot taskSnapshot = await uploadTask;
+    String downloadURL = await taskSnapshot.ref.getDownloadURL();
+    return downloadURL;
   }
 }

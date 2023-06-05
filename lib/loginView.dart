@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
@@ -55,7 +57,8 @@ class LoginView extends StatelessWidget {
                           availabledates: [],
                           preferences: [],
                           experiences: [],
-                          profilepicture: '',
+                          profilepicture:
+                              'https://firebasestorage.googleapis.com/v0/b/pawfection-c14ed.appspot.com/o/profilepictures%2FFlFhhBapCZOzattk8mT1CMNxou22?alt=media&token=530bd4b2-95b6-45dc-88f0-9abf64d2a916',
                           contactnumber: ''));
                     }
                   }),
