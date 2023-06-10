@@ -12,16 +12,17 @@ import 'package:pawfection/volunteerscreens/profile_picture_update_screen.dart';
 import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
 import 'package:pawfection/voluteerView.dart';
 
-class MCreatePetScreen extends StatefulWidget {
-  MCreatePetScreen({super.key, required this.imageURL});
+class MUpdatePetScreen extends StatefulWidget {
+  MUpdatePetScreen({super.key, required this.imageURL, required this.pet});
 
   String imageURL;
+  Pet pet;
 
   @override
-  State<MCreatePetScreen> createState() => _MCreatePetScreenState();
+  State<MUpdatePetScreen> createState() => _MUpdatePetScreenState();
 }
 
-class _MCreatePetScreenState extends State<MCreatePetScreen> {
+class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
   final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
   final DataRepository repository = DataRepository();
@@ -29,11 +30,20 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
   late var alertmessage;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.imageURL == '') {
+      widget.imageURL = widget.pet.profilepicture;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     if (Platform.isAndroid) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Create Pet'),
+          title: Text('Update Pet'),
           elevation: 4.0,
         ),
         body: SafeArea(
@@ -70,7 +80,7 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
                   },
                 ),
                 ElevatedButton(
-                  child: const Text('Create'),
+                  child: const Text('Update'),
                   onPressed: () {
                     try {
                       repository.addPet(Pet(_form['name'],
@@ -78,7 +88,7 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
                           breed: _form['breed'],
                           description: _form['description'],
                           thingstonote: _form['thingstonote']));
-                      alertmessage = 'Pet has successfully been created';
+                      alertmessage == 'Pet has successfully been created';
                     } catch (e) {
                       setState(() {
                         alertmessage = 'Please ensure all fields are filled in';
@@ -87,7 +97,7 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
                       showDialog<String>(
                         context: context,
                         builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Create Pet'),
+                          title: const Text('Update Pet'),
                           content: Text(alertmessage),
                           actions: <Widget>[
                             TextButton(
@@ -98,7 +108,7 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
                               onPressed: () => {
                                 Navigator.pop(context, 'OK'),
                                 if (alertmessage ==
-                                    'Pet has successfully been created')
+                                    'Pet has successfully been updated')
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
@@ -123,7 +133,7 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
       );
     } else if (Platform.isIOS) {
       return CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(middle: Text('Create Pet')),
+        navigationBar: CupertinoNavigationBar(middle: Text('Update Pet')),
         child: SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -147,7 +157,7 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
                           breed: _form['breed'],
                           description: _form['description'],
                           thingstonote: _form['thingstonote']));
-                      alertmessage = 'Pet has successfully been created';
+                      alertmessage == 'Pet has successfully been created';
                     } catch (e) {
                       setState(() {
                         alertmessage = 'Please ensure all fields are filled in';
@@ -156,7 +166,7 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
                       showDialog<String>(
                         context: context,
                         builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Create Pet'),
+                          title: const Text('Update Pet'),
                           content: Text(alertmessage),
                           actions: <Widget>[
                             TextButton(
@@ -167,7 +177,7 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
                               onPressed: () => {
                                 Navigator.pop(context, 'OK'),
                                 if (alertmessage ==
-                                    'Pet has successfully been created')
+                                    'Pet has successfully been updated')
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
@@ -196,15 +206,18 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
 
   List<Widget> _buildForm(BuildContext context) {
     return [
-      ProfileWidget(
-        image: Image.network(widget.imageURL),
-        onClicked: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ProfilePictureUpdateScreen(
-                    routetext: 'pet',
-                    petid: '',
-                  )));
-        },
+      Padding(
+        padding: EdgeInsets.only(top: 20),
+        child: ProfileWidget(
+          image: Image.network(widget.imageURL),
+          onClicked: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ProfilePictureUpdateScreen(
+                      routetext: 'pet',
+                      petid: widget.pet.referenceId!,
+                    )));
+          },
+        ),
       ),
       FastFormSection(
         padding: const EdgeInsets.all(16.0),
@@ -218,6 +231,7 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
         children: [
           FastTextField(
             name: 'name',
+            placeholder: widget.pet.name,
             labelText: 'Name',
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
@@ -225,13 +239,16 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
           ),
           FastTextField(
             name: 'breed',
+            placeholder: widget.pet.breed,
             labelText: 'Breed',
           ),
-          const FastTextField(
+          FastTextField(
             name: 'description',
+            placeholder: widget.pet.description,
             labelText: 'Description',
           ),
-          const FastTextField(
+          FastTextField(
+            placeholder: widget.pet.thingstonote,
             name: 'thingstonote',
             labelText: 'Things to note',
           ),
@@ -263,20 +280,24 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
         children: [
           FastTextField(
             name: 'name',
+            placeholder: widget.pet.name,
             labelText: 'Name',
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
             ]),
           ),
-          const FastTextField(
+          FastTextField(
+            placeholder: widget.pet.breed,
             name: 'breed',
             labelText: 'Breed',
           ),
-          const FastTextField(
+          FastTextField(
             name: 'description',
+            placeholder: widget.pet.description,
             labelText: 'Description',
           ),
-          const FastTextField(
+          FastTextField(
+            placeholder: widget.pet.thingstonote,
             name: 'thingstonote',
             labelText: 'Things to note',
           ),

@@ -33,6 +33,7 @@ class Pet {
 
 Pet _petFromJson(Map<String, dynamic> json) {
   return Pet(json['name'] as String,
+      referenceId: json['referenceId'] as String,
       breed: json['breed'] as String?,
       description: json['description'] as String?,
       thingstonote: json['thingstonote'] as String?,
@@ -40,6 +41,7 @@ Pet _petFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _petToJson(Pet instance) => <String, dynamic>{
+      'referenceId': instance.referenceId,
       'name': instance.name.toLowerCase(),
       'breed': instance.breed,
       'description': instance.description,

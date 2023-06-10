@@ -100,7 +100,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                           assignedto: 'soo',
                           description: _form['description'],
                           status: 'Pending',
-                          resources: [_form['resources']],
+                          resources: _form['resources'],
                           contactperson: _form['contactperson'],
                           contactpersonnumber: _form['contactpersonnumber'],
                           deadline: [
@@ -179,7 +179,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                           assignedto: 'soo',
                           description: _form['description'],
                           status: 'Pending',
-                          resources: [_form['resources']],
+                          resources: _form['resources'],
                           contactperson: _form['contactperson'],
                           contactpersonnumber: _form['contactnumber'],
                           deadline: [

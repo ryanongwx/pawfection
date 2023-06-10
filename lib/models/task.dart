@@ -10,11 +10,11 @@ class Task {
   String assignedto;
   String description;
   String status;
-  List<String?> resources;
+  String resources;
   String contactperson;
   String contactpersonnumber;
   String? feedback;
-  List<DateTime?> deadline;
+  List<Timestamp?> deadline;
   String pet;
 
   Task(
@@ -50,20 +50,22 @@ class Task {
 
 Task _taskFromJson(Map<String, dynamic> json) {
   return Task(json['name'] as String,
+      referenceId: json['referenceId'] as String,
       assignedto: json['assignedto'] as String,
       createdby: json['createdby'] as String,
       description: json['description'] as String,
       status: json['status'] as String,
-      resources: json['resources'].cast<String?>() as List<String?>,
+      resources: json['resources'] as String,
       contactperson: json['contactperson'] as String,
       contactpersonnumber: json['contactpersonnumber'] as String,
       feedback: json['feedback'] as String?,
-      deadline: json['deadline'].cast<DateTime?>() as List<DateTime?>,
+      deadline: json['deadline'].cast<Timestamp?>() as List<Timestamp?>,
       pet: json['pet'] as String);
 }
 
 Map<String, dynamic> _taskToJson(Task instance) => <String, dynamic>{
       'name': instance.name.toLowerCase(),
+      'referenceId': instance.referenceId,
       'createdby': instance.createdby,
       'assignedto': instance.assignedto,
       'description': instance.description,

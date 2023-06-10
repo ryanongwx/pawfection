@@ -47,8 +47,10 @@ class DataRepository {
   //       .cast();
   // }
 
-  Future<DocumentReference> addPet(Pet pet) {
-    return petcollection.add(pet.toJson());
+  Future<void> addPet(Pet pet) {
+    var newDocRef = petcollection.doc();
+    pet.referenceId = newDocRef.id;
+    return newDocRef.set(pet.toJson());
   }
 
   void updatePet(Pet pet) async {
@@ -71,7 +73,7 @@ class DataRepository {
     }
   }
 
-  Future<Pet?> findUserByPetID(String referenceId) async {
+  Future<Pet?> findPetByPetID(String referenceId) async {
     final querySnapshot = await petcollection.get();
     final petList = snapshotToPetList_modified(querySnapshot);
 
@@ -112,6 +114,31 @@ class DataRepository {
     }
   }
 
+  List<Task> snapshotToTaskList_modified(QuerySnapshot<Object?> snapshot) {
+    if (snapshot.docs.isEmpty) {
+      return [];
+    } else {
+      return snapshot.docs.map((DocumentSnapshot<Object?> document) {
+        Map<String, dynamic> data = document.data()
+            as Map<String, dynamic>; // Cast to the correct data type
+        return Task.fromJson(data);
+      }).toList();
+    }
+  }
+
+  Future<Task?> findTaskByTaskID(String referenceId) async {
+    final querySnapshot = await taskcollection.get();
+    final taskList = snapshotToTaskList_modified(querySnapshot);
+
+    for (Task task in taskList) {
+      if (task.referenceId == referenceId) {
+        return task;
+      }
+    }
+
+    return null;
+  }
+
   // Future<List<Task>> getTaskList() async {
   //   QuerySnapshot snapshot = await taskcollection.get();
   //   return snapshot.docs
@@ -120,8 +147,10 @@ class DataRepository {
   //       .cast();
   // }
 
-  Future<DocumentReference> addTask(Task task) {
-    return taskcollection.add(task.toJson());
+  Future<void> addTask(Task task) {
+    var newDocRef = taskcollection.doc();
+    task.referenceId = newDocRef.id;
+    return newDocRef.set(task.toJson());
   }
 
   void updateTask(Task task) async {

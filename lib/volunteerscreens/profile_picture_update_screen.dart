@@ -199,7 +199,7 @@ class _ProfilePictureUpdateScreenState
                                                           .uploadImageToStorage(
                                                               file,
                                                               user.referenceId);
-                                                  repository.addUser(User(
+                                                  repository.updateUser(User(
                                                       user.email,
                                                       username: user.email,
                                                       bio: user.bio,
@@ -243,62 +243,32 @@ class _ProfilePictureUpdateScreenState
                               },
                             );
                           } else if (widget.routetext == 'pet') {
-                            return FutureBuilder<Pet?>(
-                              future:
-                                  repository.findUserByPetID(currentUser.uid),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  // While waiting for the future to complete, show a loading indicator
-                                  return CircularProgressIndicator();
-                                } else if (snapshot.hasError) {
-                                  // If an error occurs while fetching the user, display an error message
-                                  return Text('Error: ${snapshot.error}');
-                                } else {
-                                  // The future completed successfully
-                                  final pet = snapshot.data;
-
-                                  return (pet == null
-                                      ? const Text('User not logged in')
-                                      : ElevatedButton(
-                                          onPressed: filecheck
-                                              ? () async {
-                                                  debugPrint(widget.routetext);
-                                                  String imageURL =
-                                                      await repository
-                                                          .uploadImageToStorage(
-                                                              file,
-                                                              pet.referenceId!);
-                                                  repository.updatePet(Pet(
-                                                      pet.name,
-                                                      profilepicture:
-                                                          imageURL));
-                                                  Navigator.of(context)
-                                                      .pushReplacement(
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            MCreatePetScreen(
-                                                                imagePath:
-                                                                    file.path)),
-                                                  );
-                                                }
-                                              : null,
-                                          child: Padding(
-                                            padding: EdgeInsets.all(15.0),
-                                            child:
-                                                Text('Update Profile Picture'),
-                                          ),
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.blue,
-                                            foregroundColor: Colors.white,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(32.0),
-                                            ),
-                                          ),
-                                        ));
-                                }
-                              },
+                            return ElevatedButton(
+                              onPressed: filecheck
+                                  ? () async {
+                                      debugPrint(widget.routetext);
+                                      String imageURL =
+                                          await repository.uploadImageToStorage(
+                                              file, widget.petid);
+                                      Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                MCreatePetScreen(
+                                                    imageURL: imageURL)),
+                                      );
+                                    }
+                                  : null,
+                              child: Padding(
+                                padding: EdgeInsets.all(15.0),
+                                child: Text('Update Profile Picture'),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blue,
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(32.0),
+                                ),
+                              ),
                             );
                           } else {
                             return FutureBuilder<User?>(

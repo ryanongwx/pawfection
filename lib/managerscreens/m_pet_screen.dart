@@ -7,6 +7,7 @@ import 'package:pawfection/services/data_repository.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 import 'package:pawfection/services/data_repository.dart';
 import 'package:pawfection/models/pet.dart';
+import 'package:pawfection/managerscreens/m_pet_dialog.dart' as Dialog;
 
 class MPetScreen extends StatefulWidget {
   const MPetScreen({super.key});
@@ -59,7 +60,10 @@ class _MPetScreenState extends State<MPetScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MCreatePetScreen()),
+                              builder: (context) => MCreatePetScreen(
+                                    imageURL:
+                                        'https://firebasestorage.googleapis.com/v0/b/pawfection-c14ed.appspot.com/o/profilepictures%2FFlFhhBapCZOzattk8mT1CMNxou22?alt=media&token=530bd4b2-95b6-45dc-88f0-9abf64d2a916',
+                                  )),
                         );
                       },
                       child: Icon(
@@ -130,13 +134,16 @@ class PetItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
-        height: 60,
-        decoration: BoxDecoration(
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Row(
+      child: ListTile(
+        onTap: () {
+          debugPrint(pet.referenceId);
+          Dialog.displayPetItemDialog(context, pet.referenceId!);
+        },
+        tileColor: Colors.grey[200],
+        shape: RoundedRectangleBorder(
+            side: BorderSide(width: 2),
+            borderRadius: BorderRadius.circular(20)),
+        title: Row(
           children: [
             const SizedBox(
               width: 10,
