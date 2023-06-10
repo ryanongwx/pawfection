@@ -69,7 +69,7 @@ class _MVolunteerListScreenState extends State<MVolunteerListScreen> {
             ),
             body: Stack(children: [
               SizedBox(
-                height: 550,
+                height: MediaQuery.of(context).size.height * 0.7,
                 child: Padding(
                   padding:
                       const EdgeInsets.only(top: 20.0, left: 20, right: 20),
@@ -127,44 +127,46 @@ class UserItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ListTile(
-        onTap: () {
-          Dialog.displayUserItemDialog(context, user.referenceId!);
-        },
-        tileColor: Colors.grey[200],
-        shape: RoundedRectangleBorder(
-            side: BorderSide(width: 2),
-            borderRadius: BorderRadius.circular(20)),
-        title: Row(
-          children: [
-            const SizedBox(
-              width: 10,
-            ),
-            const Icon(
-              Icons.account_circle,
-              color: Colors.black,
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  user.username,
-                  style: const TextStyle(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(width: 2),
+          ),
+          child: InkWell(
+            onTap: () {
+              Dialog.displayUserItemDialog(context, user.referenceId!);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.account_circle,
                     color: Colors.black,
-                    fontWeight: FontWeight.bold,
                   ),
-                ),
-              ],
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '${user.username}',
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }
 

@@ -74,7 +74,7 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
               ),
               body: Stack(children: [
                 SizedBox(
-                  height: 550,
+                  height: MediaQuery.of(context).size.height * 0.7,
                   child: Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Align(
@@ -183,47 +183,48 @@ class TaskItem extends StatelessWidget {
       return Column();
     } else {
       return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListTile(
-          onTap: () {
-            if (task.referenceId != null) {
-              Dialog.displayTaskItemDialog(context, task.referenceId!);
-            }
-            debugPrint(task.referenceId);
-          },
-          tileColor: Colors.grey[200],
-          shape: RoundedRectangleBorder(
-              side: BorderSide(width: 2),
-              borderRadius: BorderRadius.circular(20)),
-          title: Row(
-            children: [
-              const SizedBox(
-                width: 10,
-              ),
-              const Icon(
-                Icons.account_circle,
-                color: Colors.black,
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    task.name,
-                    style: const TextStyle(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(width: 2),
+            ),
+            child: InkWell(
+              onTap: () {
+                if (task.referenceId != null) {
+                  Dialog.displayTaskItemDialog(context, task.referenceId!);
+                }
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.account_circle,
                       color: Colors.black,
-                      fontWeight: FontWeight.bold,
                     ),
-                  ),
-                ],
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '${task.name}',
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
-        ),
-      );
+            ),
+          ));
     }
   }
 }
