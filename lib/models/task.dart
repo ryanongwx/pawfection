@@ -10,7 +10,7 @@ class Task {
   String assignedto;
   String description;
   String status;
-  String resources;
+  List<String?> resources;
   String contactperson;
   String contactpersonnumber;
   String? feedback;
@@ -55,7 +55,7 @@ Task _taskFromJson(Map<String, dynamic> json) {
       createdby: json['createdby'] as String,
       description: json['description'] as String,
       status: json['status'] as String,
-      resources: json['resources'] as String,
+      resources: json['resources'].cast<String?>() as List<String?>,
       contactperson: json['contactperson'] as String,
       contactpersonnumber: json['contactpersonnumber'] as String,
       feedback: json['feedback'] as String?,

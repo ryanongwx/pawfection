@@ -266,7 +266,6 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
           ),
           FastTextField(
             name: 'resources',
-            placeholder: widget.task.resources,
             labelText: 'Resources',
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
@@ -338,7 +337,6 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
           FastTextField(
             name: 'resources',
             labelText: 'Resources',
-            placeholder: widget.task.resources,
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
             ]),
