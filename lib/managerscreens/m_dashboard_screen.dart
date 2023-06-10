@@ -23,10 +23,10 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Dashboard')),
+        appBar: AppBar(title: const Text('Dashboard')),
         body: Stack(children: [
           Padding(
-              padding: EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(20.0),
               child: Align(
                 alignment: Alignment.topCenter,
                 child: AdvancedSegment(
@@ -55,14 +55,14 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
                     horizontal: 15,
                     vertical: 10,
                   ),
-                  animationDuration: Duration(milliseconds: 250), // Duration
+                  animationDuration: const Duration(milliseconds: 250), // Duration
                 ),
               )),
           ValueListenableBuilder(
             valueListenable: _selectedSegment_04,
             builder: (context, value, child) {
               return Padding(
-                padding: EdgeInsets.only(top: 75.0, left: 20, right: 20),
+                padding: const EdgeInsets.only(top: 75.0, left: 20, right: 20),
                 child: SearchableList<Actor>(
                   autoFocusOnSearch: false,
                   initialList: actors
@@ -94,7 +94,6 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
             },
           ),
         ]));
-    ;
   }
 }
 
