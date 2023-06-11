@@ -55,7 +55,7 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
                 title: const Text('Tasks'),
                 actions: <Widget>[
                   Padding(
-                      padding: EdgeInsets.only(right: 20.0),
+                      padding: const EdgeInsets.only(right: 20.0),
                       child: GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -64,7 +64,7 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
                                 builder: (context) => MCreateTaskScreen()),
                           );
                         },
-                        child: Icon(
+                        child: const Icon(
                           Icons.add,
                           size: 26.0,
                         ),
@@ -117,40 +117,35 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
                   valueListenable: _selectedSegment_04,
                   builder: (context, value, child) {
                     return Padding(
-                      padding:
-                          const EdgeInsets.only(top: 75.0, left: 20, right: 20),
-                      child: SearchableList<Task>(
-                        autoFocusOnSearch: false,
-                        initialList: taskList
-                            .where((element) => element.status
-                                .contains(_selectedSegment_04.value))
-                            .toList(),
-                        builder: (Task task) => TaskItem(task: task),
-                        filter: (value) => taskList
-                            .where(
-                              (element) =>
-                                  element
-                                      .name
-                                      .toLowerCase()
-                                      .contains(value.toLowerCase())
-                            )
-                            .where((element) => element.status
-                                .contains(_selectedSegment_04.value))
-                            .toList(),
-                        emptyWidget: const EmptyView(),
-                        inputDecoration: InputDecoration(
-                          labelText: "Search Task",
-                          fillColor: Colors.white,
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Colors.blue,
-                              width: 1.0,
+                        padding: const EdgeInsets.only(
+                            top: 75.0, left: 20, right: 20),
+                        child: SearchableList<Task>(
+                          autoFocusOnSearch: false,
+                          initialList: taskList
+                              .where((element) => element.status
+                                  .contains(_selectedSegment_04.value))
+                              .toList(),
+                          builder: (Task task) => TaskItem(task: task),
+                          filter: (value) => taskList
+                              .where((element) => element.name
+                                  .toLowerCase()
+                                  .contains(value.toLowerCase()))
+                              .where((element) => element.status
+                                  .contains(_selectedSegment_04.value))
+                              .toList(),
+                          emptyWidget: const EmptyView(),
+                          inputDecoration: InputDecoration(
+                            labelText: "Search Task",
+                            fillColor: Colors.white,
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Colors.blue,
+                                width: 1.0,
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
-                            borderRadius: BorderRadius.circular(10.0),
                           ),
-                        ),
-                      ),
-                    );
+                        ));
                   },
                 ),
                 // Padding(
