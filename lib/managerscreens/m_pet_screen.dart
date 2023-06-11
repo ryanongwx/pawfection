@@ -6,6 +6,7 @@ import 'package:pawfection/repository/pet_repository.dart';
 import 'package:pawfection/service/pet_service.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 import 'package:pawfection/models/pet.dart';
+import 'package:pawfection/managerscreens/m_pet_dialog.dart' as Dialog;
 
 class MPetScreen extends StatefulWidget {
   const MPetScreen({super.key});
@@ -52,7 +53,10 @@ class _MPetScreenState extends State<MPetScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MCreatePetScreen()),
+                              builder: (context) => MCreatePetScreen(
+                                    imageURL:
+                                        'https://firebasestorage.googleapis.com/v0/b/pawfection-c14ed.appspot.com/o/profilepictures%2FFlFhhBapCZOzattk8mT1CMNxou22?alt=media&token=530bd4b2-95b6-45dc-88f0-9abf64d2a916',
+                                  )),
                         );
                       },
                       child: const Icon(
@@ -64,7 +68,7 @@ class _MPetScreenState extends State<MPetScreen> {
             ),
             body: Stack(children: [
               SizedBox(
-                height: 550,
+                height: MediaQuery.of(context).size.height * 0.7,
                 child: Padding(
                   padding:
                       const EdgeInsets.only(top: 20.0, left: 20, right: 20),
@@ -122,42 +126,46 @@ class PetItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        height: 60,
-        decoration: BoxDecoration(
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Row(
-          children: [
-            const SizedBox(
-              width: 10,
-            ),
-            const Icon(
-              Icons.account_circle,
-              color: Colors.black,
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  pet.name,
-                  style: const TextStyle(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(width: 2),
+          ),
+          child: InkWell(
+            onTap: () {
+              Dialog.displayPetItemDialog(context, pet.referenceId!);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.account_circle,
                     color: Colors.black,
-                    fontWeight: FontWeight.bold,
                   ),
-                ),
-              ],
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '${pet.name}',
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }
 

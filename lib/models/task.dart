@@ -14,7 +14,7 @@ class Task {
   String contactperson;
   String contactpersonnumber;
   String? feedback;
-  List<DateTime?> deadline;
+  List<Timestamp?> deadline;
   String pet;
 
   Task(
@@ -35,5 +35,3 @@ class Task {
   @override
   String toString() => 'Task<$name>';
 }
-
-

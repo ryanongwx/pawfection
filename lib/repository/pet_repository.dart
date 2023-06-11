@@ -9,7 +9,7 @@ import '../models/pet.dart';
 
 class PetRepository {
   final CollectionReference petcollection =
-  FirebaseFirestore.instance.collection('pets');
+      FirebaseFirestore.instance.collection('pets');
   final petService = PetService();
 
   Stream<QuerySnapshot> get pets {
@@ -37,6 +37,19 @@ class PetRepository {
   }
 
   Future<Pet?> findUserByPetID(String referenceId) async {
+    final querySnapshot = await petcollection.get();
+    final petList = petService.snapshotToPetList_modified(querySnapshot);
+
+    for (Pet pet in petList) {
+      if (pet.referenceId == referenceId) {
+        return pet;
+      }
+    }
+
+    return null;
+  }
+
+  Future<Pet?> findPetByPetID(String referenceId) async {
     final querySnapshot = await petcollection.get();
     final petList = petService.snapshotToPetList_modified(querySnapshot);
 

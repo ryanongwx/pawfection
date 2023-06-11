@@ -6,6 +6,8 @@ import 'package:pawfection/repository/task_repository.dart';
 import 'package:pawfection/service/task_service.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 import 'package:pawfection/managerscreens/m_create_task_screen.dart';
+import '../volunteerscreens/v_dashboard_screen.dart';
+import 'package:pawfection/managerscreens/m_task_dialog.dart' as Dialog;
 
 class MDashboardScreen extends StatefulWidget {
   const MDashboardScreen({super.key});
@@ -72,7 +74,7 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
               ),
               body: Stack(children: [
                 SizedBox(
-                  height: 550,
+                  height: MediaQuery.of(context).size.height * 0.7,
                   child: Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Align(
@@ -119,32 +121,30 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
                         padding: const EdgeInsets.only(
                             top: 75.0, left: 20, right: 20),
                         child: SearchableList<Task>(
-                          autoFocusOnSearch: false,
-                          initialList: taskList
-                              .where((element) => element.status
-                                  .contains(_selectedSegment_04.value))
-                              .toList(),
-                          builder: (Task task) => TaskItem(task: task),
-                          filter: (value) => taskList
-                              .where((element) => element.name
-                                  .toLowerCase()
-                                  .contains(value.toLowerCase()))
-                              .where((element) => element.status
-                                  .contains(_selectedSegment_04.value))
-                              .toList(),
-                          emptyWidget: const EmptyView(),
-                          inputDecoration: InputDecoration(
-                            labelText: "Search Task",
-                            fillColor: Colors.white,
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                color: Colors.blue,
-                                width: 1.0,
+                            autoFocusOnSearch: false,
+                            initialList: taskList
+                                .where((element) => element.status
+                                    .contains(_selectedSegment_04.value))
+                                .toList(),
+                            builder: (Task task) => TaskItem(task: task),
+                            filter: (value) => taskList
+                                .where((element) => element.name
+                                    .toLowerCase()
+                                    .contains(value.toLowerCase()))
+                                .where((element) => element.status
+                                    .contains(_selectedSegment_04.value))
+                                .toList(),
+                            emptyWidget: const EmptyView(),
+                            inputDecoration: InputDecoration(
+                              labelText: "Search Task",
+                              fillColor: Colors.white,
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: Colors.blue,
+                                  width: 1.0,
+                                ),
                               ),
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                          ),
-                        ));
+                            )));
                   },
                 ),
                 // Padding(
@@ -176,43 +176,53 @@ class TaskItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        height: 60,
-        decoration: BoxDecoration(
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Row(
-          children: [
-            const SizedBox(
-              width: 10,
+    if (task == null) {
+      return Column();
+    } else {
+      return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(width: 2),
             ),
-            const Icon(
-              Icons.account_circle,
-              color: Colors.black,
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  task.name,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
+            child: InkWell(
+              onTap: () {
+                if (task.referenceId != null) {
+                  Dialog.displayTaskItemDialog(context, task.referenceId!);
+                }
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.account_circle,
+                      color: Colors.black,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '${task.name}',
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ],
-        ),
-      ),
-    );
+          ));
+    }
   }
 }
 

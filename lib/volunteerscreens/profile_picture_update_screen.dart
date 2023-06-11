@@ -177,8 +177,8 @@ class _ProfilePictureUpdateScreenState
                           filecheck = true;
                           if (widget.routetext == 'profile') {
                             return FutureBuilder<User?>(
-                              future:
-                                  userRepository.findUserByUUID(currentUser.uid),
+                              future: userRepository
+                                  .findUserByUUID(currentUser.uid),
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
@@ -202,6 +202,7 @@ class _ProfilePictureUpdateScreenState
                                                           .uploadImageToStorage(
                                                               file,
                                                               user.referenceId);
+
                                                   userRepository.addUser(User(
                                                       user.email,
                                                       username: user.email,
@@ -246,67 +247,37 @@ class _ProfilePictureUpdateScreenState
                               },
                             );
                           } else if (widget.routetext == 'pet') {
-                            return FutureBuilder<Pet?>(
-                              future:
-                                  petRepository.findUserByPetID(currentUser.uid),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  // While waiting for the future to complete, show a loading indicator
-                                  return const CircularProgressIndicator();
-                                } else if (snapshot.hasError) {
-                                  // If an error occurs while fetching the user, display an error message
-                                  return Text('Error: ${snapshot.error}');
-                                } else {
-                                  // The future completed successfully
-                                  final pet = snapshot.data;
-
-                                  return (pet == null
-                                      ? const Text('User not logged in')
-                                      : ElevatedButton(
-                                          onPressed: filecheck
-                                              ? () async {
-                                                  debugPrint(widget.routetext);
-                                                  String imageURL =
-                                                      await storageRepository
-                                                          .uploadImageToStorage(
-                                                              file,
-                                                              pet.referenceId!);
-                                                  petRepository.updatePet(Pet(
-                                                      pet.name,
-                                                      profilepicture:
-                                                          imageURL));
-                                                  Navigator.of(context)
-                                                      .pushReplacement(
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            MCreatePetScreen(
-                                                                imagePath:
-                                                                    file.path)),
-                                                  );
-                                                }
-                                              : null,
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.blue,
-                                            foregroundColor: Colors.white,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(32.0),
-                                            ),
-                                          ),
-                                          child: const Padding(
-                                            padding: EdgeInsets.all(15.0),
-                                            child:
-                                                Text('Update Profile Picture'),
-                                          ),
-                                        ));
-                                }
-                              },
+                            return ElevatedButton(
+                              onPressed: filecheck
+                                  ? () async {
+                                      debugPrint(widget.routetext);
+                                      String imageURL = await storageRepository
+                                          .uploadImageToStorage(
+                                              file, widget.petid);
+                                      Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                MCreatePetScreen(
+                                                    imageURL: imageURL)),
+                                      );
+                                    }
+                                  : null,
+                              child: Padding(
+                                padding: EdgeInsets.all(15.0),
+                                child: Text('Update Profile Picture'),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blue,
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(32.0),
+                                ),
+                              ),
                             );
                           } else {
                             return FutureBuilder<User?>(
-                              future:
-                                  userRepository.findUserByUUID(currentUser.uid),
+                              future: userRepository
+                                  .findUserByUUID(currentUser.uid),
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
