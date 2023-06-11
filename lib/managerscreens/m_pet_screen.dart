@@ -135,6 +135,7 @@ class PetItem extends StatelessWidget {
           ),
           child: InkWell(
             onTap: () {
+              debugPrint(pet.name);
               Dialog.displayPetItemDialog(context, pet.referenceId!);
             },
             child: Padding(

@@ -4,7 +4,6 @@ import 'package:firebase_storage/firebase_storage.dart' as FirebaseStorage;
 import 'dart:async';
 
 class StorageRepository {
-
   final FirebaseStorage.FirebaseStorage _storage =
       FirebaseStorage.FirebaseStorage.instance;
 

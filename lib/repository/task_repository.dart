@@ -26,8 +26,10 @@ class TaskRepository {
   //       .cast();
   // }
 
-  Future<DocumentReference> addTask(Task task) {
-    return taskcollection.add(taskService.taskToJson(task));
+  Future<void> addTask(Task task) {
+    var newDocRef = taskcollection.doc();
+    task.referenceId = newDocRef.id;
+    return newDocRef.set(taskService.taskToJson(task));
   }
 
   void updateTask(Task task) async {
@@ -38,5 +40,18 @@ class TaskRepository {
 
   void deleteTask(Task task) async {
     await taskcollection.doc(task.referenceId).delete();
+  }
+
+  Future<Task?> findTaskByTaskID(String referenceId) async {
+    final querySnapshot = await taskcollection.get();
+    final taskList = taskService.snapshotToTaskList_modified(querySnapshot);
+
+    for (Task task in taskList) {
+      if (task.referenceId == referenceId) {
+        return task;
+      }
+    }
+
+    return null;
   }
 }
