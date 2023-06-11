@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawfection/homepage.dart';
 import 'package:pawfection/managerview.dart';
 import 'package:pawfection/voluteerView.dart';
 import 'package:pawfection/loginview.dart';
@@ -29,51 +30,7 @@ class MyApp extends StatelessWidget {
       //   title: const Text('First Screen'),
       // ),
 
-      body: Center(
-        child: Column(
-            // A container takes one child widget as an argumrent
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset('assets/images/logo.png'),
-
-              // Manager view Button
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ManagerView(),
-                      ),
-                    );
-                  },
-                  child: const Text('Manager View')),
-
-              // Volunteer view Button
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const VolunteerView(),
-                      ),
-                    );
-                  },
-                  child: const Text('Volunteer View')),
-
-              // Volunteer view Button
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => LoginView(),
-                      ),
-                    );
-                  },
-                  child: const Text('Login View'))
-            ]),
-      ),
+      body: Homepage(),
     );
   }
 }

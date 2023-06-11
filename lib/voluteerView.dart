@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
-import 'package:pawfection/volunteersreens/v_profile_screen.dart';
-import 'package:pawfection/volunteersreens/v_dashboard_screen.dart';
+import 'package:pawfection/volunteerscreens/v_profile_screen.dart';
+import 'package:pawfection/volunteerscreens/v_dashboard_screen.dart';
 
 import 'package:searchable_listview/searchable_listview.dart';
 
-import 'volunteersreens/profile_picture_update_screen.dart';
+import 'volunteerscreens/profile_picture_update_screen.dart';
 
 class VolunteerView extends StatefulWidget {
-  const VolunteerView({Key? key, this.image = 'assets/images/user_profile.png'})
-      : super(key: key);
+  const VolunteerView({Key? key, required this.tab}) : super(key: key);
 
-  final String image;
+  final int tab;
 
   @override
   State<VolunteerView> createState() => _VolunteerViewState();
 }
 
 class _VolunteerViewState extends State<VolunteerView> {
-  final _pageController = PageController(initialPage: 0);
+  var _pageController = PageController();
   late List<Widget> bottomBarPages;
   int maxCount = 2;
 
@@ -32,12 +31,12 @@ class _VolunteerViewState extends State<VolunteerView> {
   void initState() {
     super.initState();
 
+    _pageController = PageController(initialPage: widget.tab);
+
     /// widget list
     bottomBarPages = [
       const VDashboardScreen(),
-      VProfileScreen(
-        imagePath: widget.image,
-      ),
+      VProfileScreen(),
     ];
   }
 

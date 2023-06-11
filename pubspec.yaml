@@ -47,6 +47,17 @@ dependencies:
   flutter_plugin_android_lifecycle: ^2.0.15
   firebase_auth: ^4.6.1
   firebase_core: ^2.13.0
+  cloud_firestore: ^4.7.1
+  flutter_fast_forms: ^11.0.0
+  firebase_storage: ^11.2.2
+  flutter_native_splash: ^2.3.0
+
+
+flutter_native_splash:
+  color: "#FFFFFF" # black background
+  image: assets/images/logo.png 
+  android_12:
+      image: assets/images/logo.png
 
 dev_dependencies:
   flutter_test:

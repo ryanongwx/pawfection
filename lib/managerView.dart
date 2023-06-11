@@ -8,14 +8,16 @@ import 'package:pawfection/managerscreens/m_pet_screen.dart';
 import 'package:pawfection/managerscreens/m_volunteerlist_screen.dart';
 
 class ManagerView extends StatefulWidget {
-  const ManagerView({super.key});
+  const ManagerView({super.key, required this.tab});
+
+  final int tab;
 
   @override
   State<ManagerView> createState() => _ManagerViewState();
 }
 
 class _ManagerViewState extends State<ManagerView> {
-  final _pageController = PageController(initialPage: 1);
+  var _pageController = PageController();
 
   int maxCount = 3;
 
@@ -35,6 +37,7 @@ class _ManagerViewState extends State<ManagerView> {
   @override
   void initState() {
     super.initState();
+    _pageController = PageController(initialPage: widget.tab);
   }
 
   @override

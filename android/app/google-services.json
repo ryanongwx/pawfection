@@ -1,46 +1,46 @@
 {
-  "project_info": {
-    "project_number": "521732512335",
-    "project_id": "pawfection-c14ed",
-    "storage_bucket": "pawfection-c14ed.appspot.com"
-  },
-  "client": [
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:521732512335:android:780eb0f59741e153d4683a",
-        "android_client_info": {
-          "package_name": "com.top3.pawfection"
-        }
-      },
-      "oauth_client": [
+    "project_info": {
+        "project_number": "521732512335",
+        "project_id": "pawfection-c14ed",
+        "storage_bucket": "pawfection-c14ed.appspot.com"
+    },
+    "client": [
         {
-          "client_id": "521732512335-0fbjb8iec9lr3mvka5iq4t9f12s6e358.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBGumxUe17MfInqYDcUhYioFpd8aNeI73U"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "521732512335-0fbjb8iec9lr3mvka5iq4t9f12s6e358.apps.googleusercontent.com",
-              "client_type": 3
+            "client_info": {
+                "mobilesdk_app_id": "1:521732512335:android:780eb0f59741e153d4683a",
+                "android_client_info": {
+                    "package_name": "com.top3.pawfection"
+                }
             },
-            {
-              "client_id": "521732512335-gv30q6f1j1vc0sljq1tucihn5v86ftvg.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.pawfection"
-              }
+            "oauth_client": [
+                {
+                    "client_id": "521732512335-0fbjb8iec9lr3mvka5iq4t9f12s6e358.apps.googleusercontent.com",
+                    "client_type": 3
+                }
+            ],
+            "api_key": [
+                {
+                    "current_key": "AIzaSyBGumxUe17MfInqYDcUhYioFpd8aNeI73U"
+                }
+            ],
+            "services": {
+                "appinvite_service": {
+                    "other_platform_oauth_client": [
+                        {
+                            "client_id": "521732512335-0fbjb8iec9lr3mvka5iq4t9f12s6e358.apps.googleusercontent.com",
+                            "client_type": 3
+                        },
+                        {
+                            "client_id": "521732512335-gv30q6f1j1vc0sljq1tucihn5v86ftvg.apps.googleusercontent.com",
+                            "client_type": 2,
+                            "ios_info": {
+                                "bundle_id": "com.example.pawfection"
+                            }
+                        }
+                    ]
+                }
             }
-          ]
         }
-      }
-    }
-  ],
-  "configuration_version": "1"
+    ],
+    "configuration_version": "1"
 }

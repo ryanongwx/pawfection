@@ -32,6 +32,7 @@ migrate_working_dir/
 .pub/
 /build/
 
+
 # Symbolication related
 app.*.symbols
 
@@ -43,7 +44,3 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-# Keys
-google-services.json
-GoogleService-Info.plist
-api-keys.json
