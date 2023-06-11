@@ -1,14 +1,11 @@
 import 'dart:core';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:card_settings/card_settings.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:pawfection/managerView.dart';
 import 'package:pawfection/models/user.dart';
-import 'package:pawfection/repository/data_repository.dart';
-import 'package:pawfection/volunteerscreens/profile_picture_update_screen.dart';
-import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
+import 'package:pawfection/repository/storage_repository.dart';
+import 'package:pawfection/repository/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
 import 'package:pawfection/voluteerView.dart';
 
@@ -28,7 +25,8 @@ class VProfileUpdateScreen extends StatefulWidget {
 class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
   final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
-  final DataRepository repository = DataRepository();
+  final userRepository = UserRepository();
+  final storageRepository = StorageRepository();
   final FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
   late var _form;
   late var alertmessage;
@@ -69,7 +67,7 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
     if (Platform.isAndroid) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Update Volunteer Profile'),
+          title: const Text('Update Volunteer Profile'),
           elevation: 4.0,
         ),
         body: SafeArea(
@@ -111,7 +109,7 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
                   child: const Text('Update'),
                   onPressed: () {
                     try {
-                      repository.updateUser(User(_form['email'],
+                      userRepository.updateUser(User(_form['email'],
                           referenceId: widget.user.referenceId,
                           username: _form['username'],
                           role: widget.user.role,
@@ -147,7 +145,7 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => VolunteerView(
+                                          builder: (context) => const VolunteerView(
                                                 tab: 1,
                                               )),
                                     )
@@ -169,7 +167,7 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
     } else if (Platform.isIOS) {
       return CupertinoPageScaffold(
         navigationBar:
-            CupertinoNavigationBar(middle: Text('Update Volunteer Profile')),
+            const CupertinoNavigationBar(middle: Text('Update Volunteer Profile')),
         child: SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -215,7 +213,7 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
                       if (_form['e_training']) {
                         experiences.add('training');
                       }
-                      repository.updateUser(User(_form['email'],
+                      userRepository.updateUser(User(_form['email'],
                           referenceId: widget.user.referenceId,
                           username: _form['username'],
                           role: widget.user.role,
@@ -251,7 +249,7 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => VolunteerView(
+                                          builder: (context) => const VolunteerView(
                                                 tab: 1,
                                               )),
                                     )
@@ -271,7 +269,7 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
         ),
       );
     }
-    return Column();
+    return const Column();
   }
 
   List<Widget> _buildForm(BuildContext context) {
