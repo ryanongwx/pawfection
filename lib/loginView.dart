@@ -1,11 +1,7 @@
-import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:pawfection/managerview.dart';
-import 'package:pawfection/services/data_repository.dart';
-import 'package:pawfection/volunteerscreens/v_dashboard_screen.dart';
+import 'package:pawfection/repository/user_repository.dart';
 import 'package:pawfection/voluteerView.dart';
 import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
 import 'package:pawfection/models/user.dart';
@@ -14,7 +10,7 @@ class LoginView extends StatelessWidget {
   LoginView({super.key});
   Duration get loginTime => Duration(milliseconds: 2250);
   final FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
-  final DataRepository repository = DataRepository();
+  final userRepository = UserRepository();
 
   Future<String?> _authUser(LoginData data) async {
     debugPrint('Name: ${data.name}, Password: ${data.password}');
@@ -49,7 +45,7 @@ class LoginView extends StatelessWidget {
                       .authStateChanges()
                       .listen((FirebaseAuth.User? user) async {
                     if (user != null) {
-                      repository.addUser(User(user.email!,
+                      userRepository.addUser(User(user.email!,
                           username: user.email!,
                           bio: '',
                           referenceId: user.uid,
@@ -63,7 +59,6 @@ class LoginView extends StatelessWidget {
                     }
                   }),
                 });
-        ;
       } on FirebaseAuth.FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           return 'The password provided is too weak.';
@@ -90,7 +85,7 @@ class LoginView extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(),
         body: FlutterLogin(
-          logo: AssetImage('assets/images/logo.png'),
+          logo: const AssetImage('assets/images/logo.png'),
           onLogin: _authUser,
           onSignup: _signupUser,
           onRecoverPassword: _recoverPassword,
@@ -100,17 +95,17 @@ class LoginView extends StatelessWidget {
                   'An email will be sent to your email addess for password reset.'),
           onSubmitAnimationCompleted: () async {
             FirebaseAuth.User currentUser = _auth.currentUser!;
-            User? user = await repository.findUserByUUID(currentUser.uid);
+            User? user = await userRepository.findUserByUUID(currentUser.uid);
             if (user != null) {
               if (user.role == 'Manager') {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => ManagerView(
+                  builder: (context) => const ManagerView(
                     tab: 1,
                   ),
                 ));
               } else {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => VolunteerView(
+                  builder: (context) => const VolunteerView(
                     tab: 0,
                   ),
                 ));

@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:pawfection/managerscreens/m_pet_screen.dart';
 import 'package:pawfection/managerview.dart';
 import 'package:pawfection/models/pet.dart';
-import 'package:pawfection/services/data_repository.dart';
+import 'package:pawfection/repository/pet_repository.dart';
 import 'package:pawfection/volunteerscreens/profile_picture_update_screen.dart';
 import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
 import 'package:pawfection/voluteerView.dart';
@@ -25,7 +25,7 @@ class MUpdatePetScreen extends StatefulWidget {
 class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
   final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
-  final DataRepository repository = DataRepository();
+  final petRepository = PetRepository();
   late var _form;
   late var alertmessage;
 
@@ -83,7 +83,7 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
                   child: const Text('Update'),
                   onPressed: () {
                     try {
-                      repository.addPet(Pet(_form['name'],
+                      petRepository.addPet(Pet(_form['name'],
                           profilepicture: widget.imageURL,
                           breed: _form['breed'],
                           description: _form['description'],
@@ -152,7 +152,7 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
                   child: const Text('Create'),
                   onPressed: () {
                     try {
-                      repository.addPet(Pet(_form['name'],
+                      petRepository.addPet(Pet(_form['name'],
                           profilepicture: widget.imageURL,
                           breed: _form['breed'],
                           description: _form['description'],

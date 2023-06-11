@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pawfection/managerscreens/m_update_pet_screen.dart';
 import 'package:pawfection/models/pet.dart';
-import 'package:pawfection/services/data_repository.dart';
+import 'package:pawfection/repository/pet_repository.dart';
 import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
 
 Future<void> displayPetItemDialog(BuildContext context, String id) async {
-  final DataRepository repository = DataRepository();
+  final petRepository = PetRepository();
   return showDialog(
     context: context,
     builder: (context) {
@@ -15,7 +15,7 @@ Future<void> displayPetItemDialog(BuildContext context, String id) async {
           borderRadius: BorderRadius.circular(20),
         ),
         child: FutureBuilder<Pet?>(
-          future: repository.findPetByPetID(id),
+          future: petRepository.findPetByPetID(id),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               // While waiting for the future to complete, show a loading indicator

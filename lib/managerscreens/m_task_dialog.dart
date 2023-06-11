@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:pawfection/managerscreens/m_update_task_screen.dart';
 import 'package:pawfection/models/task.dart';
 import 'package:pawfection/models/user.dart';
-import 'package:pawfection/services/data_repository.dart';
+import 'package:pawfection/repository/task_repository.dart';
+import 'package:pawfection/repository/user_repository.dart';
 import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
 import 'package:pawfection/managerscreens/m_user_dialog.dart' as UserDialog;
 import 'package:pawfection/managerscreens/m_pet_dialog.dart' as PetDialog;
 
 Future<void> displayTaskItemDialog(BuildContext context, String id) async {
-  final DataRepository repository = DataRepository();
+  final taskRepository = TaskRepository();
+  final userRepository = UserRepository();
   return showDialog(
     context: context,
     builder: (context) {
@@ -18,7 +20,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
           borderRadius: BorderRadius.circular(20),
         ),
         child: FutureBuilder<Task?>(
-          future: repository.findTaskByTaskID(id),
+          future: taskRepository.findTaskByTaskID(id),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               // While waiting for the future to complete, show a loading indicator
@@ -144,7 +146,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                 ),
                                 FutureBuilder(
                                   future: task != null
-                                      ? repository
+                                      ? userRepository
                                           .findUserByUUID(task.assignedto)
                                       : null,
                                   builder: (context, snapshot) {
@@ -209,7 +211,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                 ),
                                 FutureBuilder(
                                   future: task != null
-                                      ? repository
+                                      ? userRepository
                                           .findUserByUUID(task.createdby)
                                       : null,
                                   builder: (context, snapshot) {
@@ -274,7 +276,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                 ),
                                 FutureBuilder(
                                   future: task != null
-                                      ? repository
+                                      ? userRepository
                                           .findUserByUUID(task.contactperson)
                                       : null,
                                   builder: (context, snapshot) {

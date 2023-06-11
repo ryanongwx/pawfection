@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:pawfection/managerView.dart';
 import 'package:pawfection/models/task.dart';
 import 'package:pawfection/models/user.dart';
-import 'package:pawfection/services/data_repository.dart';
+import 'package:pawfection/repository/task_repository.dart';
 import 'package:pawfection/volunteerscreens/profile_picture_update_screen.dart';
 import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
 
@@ -23,7 +23,7 @@ class MUpdateTaskScreen extends StatefulWidget {
 class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
   final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
-  final DataRepository repository = DataRepository();
+  final taskRepository = TaskRepository();
   late var _form;
   late var alertmessage;
   void _showDialog(Widget child) {
@@ -94,7 +94,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                   child: const Text('Update'),
                   onPressed: () {
                     try {
-                      repository.updateTask(Task(_form['name'],
+                      taskRepository.updateTask(Task(_form['name'],
                           createdby: 'soo',
                           assignedto: 'soo',
                           description: _form['description'],
@@ -173,7 +173,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                   child: const Text('Update'),
                   onPressed: () {
                     try {
-                      repository.updateTask(Task(_form['name'],
+                      taskRepository.updateTask(Task(_form['name'],
                           createdby: 'soo',
                           assignedto: 'soo',
                           description: _form['description'],

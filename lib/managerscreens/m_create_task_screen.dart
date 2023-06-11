@@ -1,15 +1,11 @@
 import 'dart:core';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:card_settings/card_settings.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pawfection/managerView.dart';
 import 'package:pawfection/models/task.dart';
-import 'package:pawfection/models/user.dart';
-import 'package:pawfection/services/data_repository.dart';
-import 'package:pawfection/volunteerscreens/profile_picture_update_screen.dart';
-import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
+import 'package:pawfection/repository/task_repository.dart';
 
 class MCreateTaskScreen extends StatefulWidget {
   MCreateTaskScreen(
@@ -24,7 +20,7 @@ class MCreateTaskScreen extends StatefulWidget {
 class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
   final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
-  final DataRepository repository = DataRepository();
+  final taskRepository = TaskRepository();
   late var _form;
   late var alertmessage;
   void _showDialog(Widget child) {
@@ -95,7 +91,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                   child: const Text('Create'),
                   onPressed: () {
                     try {
-                      repository.addTask(Task(_form['name'],
+                      taskRepository.addTask(Task(_form['name'],
                           createdby: 'soo',
                           assignedto: 'soo',
                           description: _form['description'],
@@ -134,7 +130,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => ManagerView(
+                                          builder: (context) => const ManagerView(
                                                 tab: 1,
                                               )),
                                     )
@@ -155,7 +151,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
       );
     } else if (Platform.isIOS) {
       return CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(middle: Text('Create Task')),
+        navigationBar: const CupertinoNavigationBar(middle: Text('Create Task')),
         child: SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -174,7 +170,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                   child: const Text('Create'),
                   onPressed: () {
                     try {
-                      repository.addTask(Task(_form['name'],
+                      taskRepository.addTask(Task(_form['name'],
                           createdby: 'soo',
                           assignedto: 'soo',
                           description: _form['description'],
@@ -214,7 +210,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => ManagerView(
+                                          builder: (context) => const ManagerView(
                                                 tab: 1,
                                               )),
                                     )

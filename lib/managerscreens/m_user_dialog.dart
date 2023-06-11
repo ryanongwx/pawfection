@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pawfection/models/user.dart';
-import 'package:pawfection/services/data_repository.dart';
+import 'package:pawfection/repository/user_repository.dart';
 import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
 
 Future<void> displayUserItemDialog(BuildContext context, String id) async {
-  final DataRepository repository = DataRepository();
+  final userRepository = UserRepository();
   return showDialog(
     context: context,
     builder: (context) {
@@ -14,7 +14,7 @@ Future<void> displayUserItemDialog(BuildContext context, String id) async {
           borderRadius: BorderRadius.circular(20),
         ),
         child: FutureBuilder<User?>(
-          future: repository.findUserByUUID(id),
+          future: userRepository.findUserByUUID(id),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               // While waiting for the future to complete, show a loading indicator

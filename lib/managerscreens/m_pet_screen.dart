@@ -1,11 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_advanced_segment/flutter_advanced_segment.dart';
 import 'package:pawfection/managerscreens/m_create_pet_screen.dart';
 import 'package:pawfection/models/pet.dart';
-import 'package:pawfection/services/data_repository.dart';
+import 'package:pawfection/repository/pet_repository.dart';
+import 'package:pawfection/service/pet_service.dart';
 import 'package:searchable_listview/searchable_listview.dart';
-import 'package:pawfection/services/data_repository.dart';
 import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/managerscreens/m_pet_dialog.dart' as Dialog;
 
@@ -16,14 +15,8 @@ class MPetScreen extends StatefulWidget {
   State<MPetScreen> createState() => _MPetScreenState();
 }
 
-final DataRepository repository = DataRepository();
-
-// List<Pet> petList = [];
-
-// Future<void> fetchPetList() async {
-//   Future<List<Pet>> petListFuture = repository.getPetList();
-//   petList = await petListFuture;
-// }
+final petRepository = PetRepository();
+final petService = PetService();
 
 class _MPetScreenState extends State<MPetScreen> {
   // @override
@@ -36,10 +29,10 @@ class _MPetScreenState extends State<MPetScreen> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: DataRepository().pets,
+      stream: petRepository.pets,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         // Convert to List
-        List<Pet> petList = DataRepository().snapshotToPetList(snapshot);
+        List<Pet> petList = petService.snapshotToPetList(snapshot);
 
         if (snapshot.hasError) {
           return const Text('Something went wrong');
@@ -54,7 +47,7 @@ class _MPetScreenState extends State<MPetScreen> {
               title: const Text('Pets'),
               actions: <Widget>[
                 Padding(
-                    padding: EdgeInsets.only(right: 20.0),
+                    padding: const EdgeInsets.only(right: 20.0),
                     child: GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -66,7 +59,7 @@ class _MPetScreenState extends State<MPetScreen> {
                                   )),
                         );
                       },
-                      child: Icon(
+                      child: const Icon(
                         Icons.add,
                         size: 26.0,
                       ),

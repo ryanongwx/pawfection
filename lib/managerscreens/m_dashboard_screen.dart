@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_segment/flutter_advanced_segment.dart';
-import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/models/task.dart';
-import 'package:pawfection/models/user.dart';
-import 'package:pawfection/services/data_repository.dart';
+import 'package:pawfection/repository/task_repository.dart';
+import 'package:pawfection/service/task_service.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 import 'package:pawfection/managerscreens/m_create_task_screen.dart';
 import '../volunteerscreens/v_dashboard_screen.dart';
@@ -19,7 +18,8 @@ class MDashboardScreen extends StatefulWidget {
 
 final _selectedSegment_04 = ValueNotifier('Pending');
 
-final DataRepository repository = DataRepository();
+final taskRepository = TaskRepository();
+final taskService = TaskService();
 
 // List<Task> taskList = [];
 
@@ -38,10 +38,10 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: DataRepository().tasks,
+        stream: taskRepository.tasks,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           // Convert to List
-          List<Task> taskList = DataRepository().snapshotToTaskList(snapshot);
+          List<Task> taskList = taskService.snapshotToTaskList(snapshot);
 
           if (snapshot.hasError) {
             return const Text('Something went wrong');
@@ -56,7 +56,7 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
                 title: const Text('Tasks'),
                 actions: <Widget>[
                   Padding(
-                      padding: EdgeInsets.only(right: 20.0),
+                      padding: const EdgeInsets.only(right: 20.0),
                       child: GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -65,7 +65,7 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
                                 builder: (context) => MCreateTaskScreen()),
                           );
                         },
-                        child: Icon(
+                        child: const Icon(
                           Icons.add,
                           size: 26.0,
                         ),
@@ -118,36 +118,33 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
                   valueListenable: _selectedSegment_04,
                   builder: (context, value, child) {
                     return Padding(
-                      padding:
-                          const EdgeInsets.only(top: 75.0, left: 20, right: 20),
-                      child: SearchableList<Task>(
-                        autoFocusOnSearch: false,
-                        initialList: taskList
-                            .where((element) => element.status
-                                .contains(_selectedSegment_04.value))
-                            .toList(),
-                        builder: (Task task) => TaskItem(task: task),
-                        filter: (value) => taskList
-                            .where((element) => element.name
-                                .toLowerCase()
-                                .contains(value.toLowerCase()))
-                            .where((element) => element.status
-                                .contains(_selectedSegment_04.value))
-                            .toList(),
-                        emptyWidget: const EmptyView(),
-                        inputDecoration: InputDecoration(
-                          labelText: "Search Task",
-                          fillColor: Colors.white,
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Colors.blue,
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                      ),
-                    );
+                        padding: const EdgeInsets.only(
+                            top: 75.0, left: 20, right: 20),
+                        child: SearchableList<Task>(
+                            autoFocusOnSearch: false,
+                            initialList: taskList
+                                .where((element) => element.status
+                                    .contains(_selectedSegment_04.value))
+                                .toList(),
+                            builder: (Task task) => TaskItem(task: task),
+                            filter: (value) => taskList
+                                .where((element) => element.name
+                                    .toLowerCase()
+                                    .contains(value.toLowerCase()))
+                                .where((element) => element.status
+                                    .contains(_selectedSegment_04.value))
+                                .toList(),
+                            emptyWidget: const EmptyView(),
+                            inputDecoration: InputDecoration(
+                              labelText: "Search Task",
+                              fillColor: Colors.white,
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: Colors.blue,
+                                  width: 1.0,
+                                ),
+                              ),
+                            )));
                   },
                 ),
                 // Padding(

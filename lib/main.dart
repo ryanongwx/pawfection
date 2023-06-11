@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pawfection/homepage.dart';
-import 'package:pawfection/managerview.dart';
-import 'package:pawfection/voluteerView.dart';
-import 'package:pawfection/loginview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -22,7 +19,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: Colors.white,
       //backgroundColor: const Color(0xff3F1845),
 
