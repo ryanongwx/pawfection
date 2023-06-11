@@ -4,7 +4,7 @@ import 'package:flutter_advanced_segment/flutter_advanced_segment.dart';
 import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/models/task.dart';
 import 'package:pawfection/models/user.dart';
-import 'package:pawfection/services/data_repository.dart';
+import 'package:pawfection/repository/data_repository.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 
 class VDashboardScreen extends StatefulWidget {

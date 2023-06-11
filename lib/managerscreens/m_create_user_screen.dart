@@ -1,12 +1,10 @@
 import 'dart:core';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:card_settings/card_settings.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:pawfection/managerView.dart';
-import 'package:pawfection/models/user.dart';
-import 'package:pawfection/services/data_repository.dart';
+
+import 'package:pawfection/repository/user_repository.dart';
 import 'package:pawfection/volunteerscreens/profile_picture_update_screen.dart';
 import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
 
@@ -23,7 +21,7 @@ class MCreateUserScreen extends StatefulWidget {
 class _MCreateUserScreenState extends State<MCreateUserScreen> {
   final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
-  final DataRepository repository = DataRepository();
+  final userRepository = UserRepository();
   late var _form;
   late var alertmessage;
 
@@ -100,7 +98,7 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
                 //   child: const Text('Create'),
                 //   onPressed: () {
                 //     try {
-                //       repository.addUser(User(_form['email'],
+                //       userRepository.addUser(User(_form['email'],
                 //           username: _form['username'],
                 //           role: _form['role'],
                 //           availabledates: [],
@@ -174,7 +172,7 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
                 //   child: const Text('Create'),
                 //   onPressed: () {
                 //     try {
-                //       repository.addUser(User(_form['email'],
+                //       userRepository.addUser(User(_form['email'],
                 //           username: _form['username'],
                 //           role: _form['role'],
                 //           availabledates: [],

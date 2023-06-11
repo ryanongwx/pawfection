@@ -32,8 +32,6 @@ class DataRepository {
     } else {
       return snapshot.data!.docs.map((DocumentSnapshot document) {
         Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-        // return Pet(data['name'],
-        //     profilepicture: ' ', description: data['description']);
         return Pet.fromJson(data);
       }).toList();
     }

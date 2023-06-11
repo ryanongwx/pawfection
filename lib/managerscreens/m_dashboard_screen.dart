@@ -1,13 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_segment/flutter_advanced_segment.dart';
-import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/models/task.dart';
-import 'package:pawfection/models/user.dart';
-import 'package:pawfection/services/data_repository.dart';
+import 'package:pawfection/repository/task_repository.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 import 'package:pawfection/managerscreens/m_create_task_screen.dart';
-import '../volunteerscreens/v_dashboard_screen.dart';
 
 class MDashboardScreen extends StatefulWidget {
   const MDashboardScreen({super.key});
@@ -18,7 +15,7 @@ class MDashboardScreen extends StatefulWidget {
 
 final _selectedSegment_04 = ValueNotifier('Pending');
 
-final DataRepository repository = DataRepository();
+final taskRepository = TaskRepository();
 
 // List<Task> taskList = [];
 
@@ -37,10 +34,10 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: DataRepository().tasks,
+        stream: taskRepository.tasks,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           // Convert to List
-          List<Task> taskList = DataRepository().snapshotToTaskList(snapshot);
+          List<Task> taskList = taskRepository.snapshotToTaskList(snapshot);
 
           if (snapshot.hasError) {
             return const Text('Something went wrong');

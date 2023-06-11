@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
-import 'package:flutter_advanced_segment/flutter_advanced_segment.dart';
-import 'package:searchable_listview/searchable_listview.dart';
 
 import 'package:pawfection/managerscreens/m_dashboard_screen.dart';
 import 'package:pawfection/managerscreens/m_pet_screen.dart';
