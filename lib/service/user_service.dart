@@ -11,7 +11,7 @@ class UserService {
         username: json['username'] as String,
         role: json['role'] as String,
         availabledates:
-        json['availabledates'].cast<Timestamp?>() as List<Timestamp?>,
+            json['availabledates'].cast<Timestamp?>() as List<Timestamp?>,
         preferences: json['preferences'].cast<String?>() as List<String?>,
         experiences: json['experiences'].cast<String?>() as List<String?>,
         profilepicture: json['profilepicture'] as String,
@@ -19,17 +19,17 @@ class UserService {
   }
 
   Map<String, dynamic> userToJson(User instance) => <String, dynamic>{
-    'username': instance.username.toLowerCase(),
-    'referenceId': instance.referenceId,
-    'bio': instance.bio,
-    'email': instance.email,
-    'role': instance.role,
-    'availabledates': instance.availabledates,
-    'preferences': instance.preferences,
-    'experiences': instance.experiences,
-    'profilepicture': instance.profilepicture,
-    'contactnumber': instance.contactnumber,
-  };
+        'username': instance.username.toLowerCase(),
+        'referenceId': instance.referenceId,
+        'bio': instance.bio,
+        'email': instance.email,
+        'role': instance.role,
+        'availabledates': instance.availabledates,
+        'preferences': instance.preferences,
+        'experiences': instance.experiences,
+        'profilepicture': instance.profilepicture,
+        'contactnumber': instance.contactnumber,
+      };
 
   User fromSnapshot(DocumentSnapshot snapshot) {
     final newUser = userFromJson(snapshot.data() as Map<String, dynamic>);
@@ -54,7 +54,7 @@ class UserService {
     } else {
       return snapshot.docs.map((DocumentSnapshot<Object?> document) {
         Map<String, dynamic> data = document.data()
-        as Map<String, dynamic>; // Cast to the correct data type
+            as Map<String, dynamic>; // Cast to the correct data type
         return userFromJson(data);
       }).toList();
     }

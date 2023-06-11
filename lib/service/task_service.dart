@@ -8,6 +8,7 @@ class TaskService {
 
   Task taskFromJson(Map<String, dynamic> json) {
     return Task(json['name'] as String,
+        referenceId: json['referenceId'] as String,
         assignedto: json['assignedto'] as String,
         createdby: json['createdby'] as String,
         description: json['description'] as String,
@@ -23,6 +24,7 @@ class TaskService {
   Map<String, dynamic> taskToJson(Task instance) => <String, dynamic>{
         'name': instance.name.toLowerCase(),
         'createdby': instance.createdby,
+        'referenceId': instance.referenceId,
         'assignedto': instance.assignedto,
         'description': instance.description,
         'status': instance.status,

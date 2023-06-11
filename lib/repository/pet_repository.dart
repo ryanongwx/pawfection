@@ -24,8 +24,10 @@ class PetRepository {
   //       .cast();
   // }
 
-  Future<DocumentReference> addPet(Pet pet) {
-    return petcollection.add(petService.petToJson(pet));
+  Future<void> addPet(Pet pet) {
+    var newDocRef = petcollection.doc();
+    pet.referenceId = newDocRef.id;
+    return newDocRef.set(petService.petToJson(pet));
   }
 
   void updatePet(Pet pet) async {
