@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/user_repository.dart';
+import 'package:pawfection/service/user_service.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 
 class MVolunteerListScreen extends StatefulWidget {
@@ -12,6 +13,7 @@ class MVolunteerListScreen extends StatefulWidget {
 }
 
 final userRepository = UserRepository();
+final userService = UserService();
 
 List<User> userList = [];
 
@@ -33,7 +35,7 @@ class _MVolunteerListScreenState extends State<MVolunteerListScreen> {
       stream: userRepository.users,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         // Convert to List
-        List<User> userList = userRepository.snapshotToUserList(snapshot);
+        List<User> userList = userService.snapshotToUserList(snapshot);
 
         if (snapshot.hasError) {
           return const Text('Something went wrong');

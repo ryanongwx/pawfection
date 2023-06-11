@@ -6,6 +6,7 @@ import 'package:pawfection/models/task.dart';
 import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/storage_repository.dart';
 import 'package:pawfection/repository/task_repository.dart';
+import 'package:pawfection/service/task_service.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 
 class VDashboardScreen extends StatefulWidget {
@@ -18,6 +19,7 @@ class VDashboardScreen extends StatefulWidget {
 final _selectedSegment_04 = ValueNotifier('Pending');
 
 final taskRepository = TaskRepository();
+final taskService = TaskService();
 
 // List<Task> taskList = [];
 
@@ -39,7 +41,7 @@ class _VDashboardScreenState extends State<VDashboardScreen> {
         stream: taskRepository.tasks,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           // Convert to List
-          List<Task> taskList = taskRepository.snapshotToTaskList(snapshot);
+          List<Task> taskList = taskService.snapshotToTaskList(snapshot);
 
           if (snapshot.hasError) {
             return const Text('Something went wrong');

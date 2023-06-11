@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pawfection/managerscreens/m_create_pet_screen.dart';
 import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/repository/pet_repository.dart';
+import 'package:pawfection/service/pet_service.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 import 'package:pawfection/models/pet.dart';
 
@@ -14,13 +15,7 @@ class MPetScreen extends StatefulWidget {
 }
 
 final petRepository = PetRepository();
-
-// List<Pet> petList = [];
-
-// Future<void> fetchPetList() async {
-//   Future<List<Pet>> petListFuture = repository.getPetList();
-//   petList = await petListFuture;
-// }
+final petService = PetService();
 
 class _MPetScreenState extends State<MPetScreen> {
   // @override
@@ -36,7 +31,7 @@ class _MPetScreenState extends State<MPetScreen> {
       stream: petRepository.pets,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         // Convert to List
-        List<Pet> petList = petRepository.snapshotToPetList(snapshot);
+        List<Pet> petList = petService.snapshotToPetList(snapshot);
 
         if (snapshot.hasError) {
           return const Text('Something went wrong');
