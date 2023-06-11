@@ -1,17 +1,12 @@
-import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:pawfection/services/data_repository.dart';
 import 'package:pawfection/models/user.dart';
+import 'package:pawfection/repository/user_repository.dart';
 import 'package:pawfection/volunteerscreens/profile_picture_update_screen.dart';
 import 'package:pawfection/volunteerscreens/profile_update_screen.dart';
 import 'package:pawfection/volunteerscreens/update_availability_screen.dart';
 import 'package:pawfection/volunteerscreens/widgets/button_widget.dart';
-import 'package:pawfection/volunteerscreens/widgets/numbers_widget.dart';
 import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
-import 'package:pawfection/volunteerscreens/widgets/textfield_widget.dart';
-import 'package:pawfection/volunteerscreens/profile_update_screen.dart';
 
 class VProfileScreen extends StatefulWidget {
   VProfileScreen({Key? key}) : super(key: key);
@@ -21,7 +16,7 @@ class VProfileScreen extends StatefulWidget {
 }
 
 class _VProfileScreenState extends State<VProfileScreen> {
-  final DataRepository repository = DataRepository();
+  final userRepository = UserRepository();
   FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
   late FirebaseAuth.User currentUser;
 
@@ -44,7 +39,7 @@ class _VProfileScreenState extends State<VProfileScreen> {
                 builder: (context) => Expanded(
                   // Wrap ListView with Expanded widget
                   child: ListView(
-                    physics: BouncingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     children: [
                       buildProfile(),
                       const SizedBox(height: 24),
@@ -68,11 +63,11 @@ class _VProfileScreenState extends State<VProfileScreen> {
   }
 
   Widget buildUpgradeButton1() => FutureBuilder<User?>(
-        future: repository.findUserByUUID(currentUser.uid),
+        future: userRepository.findUserByUUID(currentUser.uid),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // While waiting for the future to complete, show a loading indicator
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           } else if (snapshot.hasError) {
             // If an error occurs while fetching the user, display an error message
             return Text('Error: ${snapshot.error}');
@@ -100,11 +95,11 @@ class _VProfileScreenState extends State<VProfileScreen> {
       );
 
   Widget buildProfile() => FutureBuilder<User?>(
-        future: repository.findUserByUUID(currentUser.uid),
+        future: userRepository.findUserByUUID(currentUser.uid),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // While waiting for the future to complete, show a loading indicator
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           } else if (snapshot.hasError) {
             // If an error occurs while fetching the user, display an error message
             return Text('Error: ${snapshot.error}');
@@ -143,11 +138,11 @@ class _VProfileScreenState extends State<VProfileScreen> {
       );
 
   Widget buildName() => FutureBuilder<User?>(
-        future: repository.findUserByUUID(currentUser.uid),
+        future: userRepository.findUserByUUID(currentUser.uid),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // While waiting for the future to complete, show a loading indicator
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           } else if (snapshot.hasError) {
             // If an error occurs while fetching the user, display an error message
             return Text('Error: ${snapshot.error}');
@@ -159,18 +154,18 @@ class _VProfileScreenState extends State<VProfileScreen> {
                 ? const Text('User not logged in')
                 : Center(
                     child: Text("${user.username}",
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 24))));
           }
         },
       );
 
   Widget buildAbout() => FutureBuilder<User?>(
-        future: repository.findUserByUUID(currentUser.uid),
+        future: userRepository.findUserByUUID(currentUser.uid),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // While waiting for the future to complete, show a loading indicator
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           } else if (snapshot.hasError) {
             // If an error occurs while fetching the user, display an error message
             return Text('Error: ${snapshot.error}');
@@ -182,19 +177,19 @@ class _VProfileScreenState extends State<VProfileScreen> {
                 ? const Text('User not logged in')
                 : Column(children: [
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 48),
+                      padding: const EdgeInsets.symmetric(horizontal: 48),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             'About',
                             style: TextStyle(
                                 fontSize: 24, fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                           Text(
                             "${user.bio}",
-                            style: TextStyle(fontSize: 16, height: 1.4),
+                            style: const TextStyle(fontSize: 16, height: 1.4),
                           ),
                         ],
                       ),
@@ -205,11 +200,11 @@ class _VProfileScreenState extends State<VProfileScreen> {
       );
 
   Widget buildPreferences() => FutureBuilder<User?>(
-        future: repository.findUserByUUID(currentUser.uid),
+        future: userRepository.findUserByUUID(currentUser.uid),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // While waiting for the future to complete, show a loading indicator
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           } else if (snapshot.hasError) {
             // If an error occurs while fetching the user, display an error message
             return Text('Error: ${snapshot.error}');
@@ -223,22 +218,22 @@ class _VProfileScreenState extends State<VProfileScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 60),
-                          child: Text(
+                          padding: const EdgeInsets.symmetric(horizontal: 60),
+                          child: const Text(
                             'Preferences',
                             style: TextStyle(
                                 fontSize: 24, fontWeight: FontWeight.bold),
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 60),
+                          padding: const EdgeInsets.symmetric(horizontal: 60),
                           height: 100,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: user.preferences.length,
                             itemBuilder: (BuildContext context, int index) {
                               return Padding(
-                                  padding: EdgeInsets.only(right: 10),
+                                  padding: const EdgeInsets.only(right: 10),
                                   child: Chip(
                                     label: Text('${user.preferences[index]}'),
                                   ));
@@ -251,11 +246,11 @@ class _VProfileScreenState extends State<VProfileScreen> {
       );
 
   Widget buildExperiences() => FutureBuilder<User?>(
-        future: repository.findUserByUUID(currentUser.uid),
+        future: userRepository.findUserByUUID(currentUser.uid),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // While waiting for the future to complete, show a loading indicator
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           } else if (snapshot.hasError) {
             // If an error occurs while fetching the user, display an error message
             return Text('Error: ${snapshot.error}');
@@ -269,22 +264,22 @@ class _VProfileScreenState extends State<VProfileScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 60),
-                          child: Text(
+                          padding: const EdgeInsets.symmetric(horizontal: 60),
+                          child: const Text(
                             'Experiences',
                             style: TextStyle(
                                 fontSize: 24, fontWeight: FontWeight.bold),
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 60),
+                          padding: const EdgeInsets.symmetric(horizontal: 60),
                           height: 100,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: user.experiences.length,
                             itemBuilder: (BuildContext context, int index) {
                               return Padding(
-                                  padding: EdgeInsets.only(right: 10),
+                                  padding: const EdgeInsets.only(right: 10),
                                   child: Chip(
                                     label: Text('${user.experiences[index]}'),
                                   ));

@@ -3,10 +3,6 @@ import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_not
 import 'package:pawfection/volunteerscreens/v_profile_screen.dart';
 import 'package:pawfection/volunteerscreens/v_dashboard_screen.dart';
 
-import 'package:searchable_listview/searchable_listview.dart';
-
-import 'volunteerscreens/profile_picture_update_screen.dart';
-
 class VolunteerView extends StatefulWidget {
   const VolunteerView({Key? key, required this.tab}) : super(key: key);
 

@@ -1,16 +1,13 @@
 import 'dart:core';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:card_settings/card_settings.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:pawfection/managerscreens/m_pet_screen.dart';
 import 'package:pawfection/managerview.dart';
 import 'package:pawfection/models/pet.dart';
-import 'package:pawfection/services/data_repository.dart';
+import 'package:pawfection/repository/pet_repository.dart';
 import 'package:pawfection/volunteerscreens/profile_picture_update_screen.dart';
 import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
-import 'package:pawfection/voluteerView.dart';
 
 class MCreatePetScreen extends StatefulWidget {
   MCreatePetScreen(
@@ -25,7 +22,7 @@ class MCreatePetScreen extends StatefulWidget {
 class _MCreatePetScreenState extends State<MCreatePetScreen> {
   final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
-  final DataRepository repository = DataRepository();
+  final petRepository = PetRepository();
   late var _form;
   late var alertmessage;
 
@@ -76,7 +73,7 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
                     try {
                       if (widget.imagePath !=
                           'assets/images/user_profile.png') {
-                        repository.addPet(Pet(_form['name'],
+                        petRepository.addPet(Pet(_form['name'],
                             profilepicture: widget.imagePath,
                             breed: _form['breed'],
                             description: _form['description'],
@@ -156,7 +153,7 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
                     try {
                       if (widget.imagePath !=
                           'assets/images/user_profile.png') {
-                        repository.addPet(Pet(_form['name'],
+                        petRepository.addPet(Pet(_form['name'],
                             profilepicture: widget.imagePath,
                             breed: _form['breed'],
                             description: _form['description'],
