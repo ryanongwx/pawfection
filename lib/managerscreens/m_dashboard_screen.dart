@@ -135,11 +135,11 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
                                     .contains(_selectedSegment_04.value))
                                 .toList(),
                             emptyWidget: const EmptyView(),
-                            inputDecoration: InputDecoration(
+                            inputDecoration: const InputDecoration(
                               labelText: "Search Task",
                               fillColor: Colors.white,
                               focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
+                                borderSide: BorderSide(
                                   color: Colors.blue,
                                   width: 1.0,
                                 ),
@@ -177,7 +177,7 @@ class TaskItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (task == null) {
-      return Column();
+      return const Column();
     } else {
       return Padding(
           padding: const EdgeInsets.all(8.0),
@@ -217,6 +217,17 @@ class TaskItem extends StatelessWidget {
                         ),
                       ],
                     ),
+                    if (task.status == "open")
+                      IconButton(
+                        icon: const Icon(Icons.person_add),
+                        onPressed: () async {
+                          // var volunteerId = await displayVolunteersDialog(context);
+                          // if(volunteerId != null){
+                          //   task.assignedVolunteer = volunteerId;
+                          //   task.status = 'pending';
+                          //   updateTask(task);
+                          }
+                      ),
                   ],
                 ),
               ),

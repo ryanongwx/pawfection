@@ -1,5 +1,6 @@
 import 'dart:core';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:card_settings/card_settings.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
@@ -57,7 +58,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
     if (Platform.isAndroid) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Create Task'),
+          title: const Text('Create Task'),
           elevation: 4.0,
         ),
         body: SafeArea(
@@ -108,16 +109,17 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                               : 'Pending',
                           resources: [_form['resources']],
                           deadline: [
-                            _form['deadlinestart'],
-                            _form['deadlineend']
+                            Timestamp.fromDate(_form['deadlinestart']),
+                            Timestamp.fromDate(_form['deadlineend'])
                           ],
                           pet: _form['pet'],
-                          contactperson: '',
-                          contactpersonnumber: ''));
+                          contactperson: '1',
+                          contactpersonnumber: '1'));
                       setState(() {
                         alertmessage = 'Task has successfully been created';
                       });
                     } catch (e) {
+                      debugPrint(e.toString());
                       setState(() {
                         alertmessage = 'Please ensure all fields are filled in';
                       });
@@ -162,7 +164,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
       );
     } else if (Platform.isIOS) {
       return CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(middle: Text('Create Task')),
+        navigationBar: const CupertinoNavigationBar(middle: Text('Create Task')),
         child: SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -190,12 +192,12 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                               : 'Pending',
                           resources: [_form['resources']],
                           deadline: [
-                            _form['deadlinestart'],
-                            _form['deadlineend']
+                            Timestamp.fromDate(_form['deadlinestart']),
+                            Timestamp.fromDate(_form['deadlineend'])
                           ],
                           pet: _form['pet'],
-                          contactperson: '',
-                          contactpersonnumber: ''));
+                          contactperson: '1',
+                          contactpersonnumber: '1'));
                       setState(() {
                         alertmessage = 'Task has successfully been created';
                       });
@@ -244,7 +246,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
         ),
       );
     }
-    return Column();
+    return const Column();
   }
 
   // To getPetList
@@ -253,7 +255,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.waiting) {
         // While waiting for the future to complete, show a loading indicator
-        return CircularProgressIndicator();
+        return const CircularProgressIndicator();
       } else if (snapshot.hasError) {
         // If an error occurs while fetching the user, display an error message
         return Text('Error: ${snapshot.error}');
@@ -280,7 +282,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.waiting) {
         // While waiting for the future to complete, show a loading indicator
-        return CircularProgressIndicator();
+        return const CircularProgressIndicator();
       } else if (snapshot.hasError) {
         // If an error occurs while fetching the user, display an error message
         return Text('Error: ${snapshot.error}');
@@ -400,8 +402,8 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
             labelText: 'Deadline',
             mode: CupertinoDatePickerMode.dateAndTime,
           ),
-          buildPetList(),
-          buildVolunteerList()
+          Material(child: buildPetList()),
+          Material(child: buildVolunteerList())
         ],
       ),
     ];
