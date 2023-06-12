@@ -8,9 +8,9 @@ import 'package:pawfection/managerView.dart';
 import 'package:pawfection/models/task.dart';
 import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/models/user.dart';
+import 'package:pawfection/repository/pet_repository.dart';
 import 'package:pawfection/repository/task_repository.dart';
-import 'package:pawfection/volunteerscreens/profile_picture_update_screen.dart';
-import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
+import 'package:pawfection/repository/user_repository.dart';
 
 class MCreateTaskScreen extends StatefulWidget {
   MCreateTaskScreen(
@@ -26,6 +26,8 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
   final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
   final taskRepository = TaskRepository();
+  final petRepository = PetRepository();
+  final userRepository = UserRepository();
   late var _form;
   late var alertmessage;
 
@@ -109,7 +111,9 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                             _form['deadlinestart'],
                             _form['deadlineend']
                           ],
-                          pet: _form['pet']));
+                          pet: _form['pet'],
+                          contactperson: '',
+                          contactpersonnumber: ''));
                       setState(() {
                         alertmessage = 'Task has successfully been created';
                       });
@@ -189,7 +193,9 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                             _form['deadlinestart'],
                             _form['deadlineend']
                           ],
-                          pet: _form['pet']));
+                          pet: _form['pet'],
+                          contactperson: '',
+                          contactpersonnumber: ''));
                       setState(() {
                         alertmessage = 'Task has successfully been created';
                       });
