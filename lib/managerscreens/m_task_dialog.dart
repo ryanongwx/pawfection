@@ -16,7 +16,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
     builder: (context) {
       return Dialog(
         shape: RoundedRectangleBorder(
-          side: BorderSide(width: 2),
+          side: const BorderSide(width: 2),
           borderRadius: BorderRadius.circular(20),
         ),
         child: FutureBuilder<Task?>(
