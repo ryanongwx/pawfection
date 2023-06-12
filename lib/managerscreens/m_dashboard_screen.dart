@@ -7,7 +7,8 @@ import 'package:pawfection/service/task_service.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 import 'package:pawfection/managerscreens/m_create_task_screen.dart';
 import '../volunteerscreens/v_dashboard_screen.dart';
-import 'package:pawfection/managerscreens/m_task_dialog.dart' as Dialog;
+import 'package:pawfection/managerscreens/m_task_dialog.dart' as taskDialog;
+import 'package:pawfection/managerscreens/m_volunteer_dialog.dart' as volunteerDialog;
 
 class MDashboardScreen extends StatefulWidget {
   const MDashboardScreen({super.key});
@@ -190,7 +191,7 @@ class TaskItem extends StatelessWidget {
             child: InkWell(
               onTap: () {
                 if (task.referenceId != null) {
-                  Dialog.displayTaskItemDialog(context, task.referenceId!);
+                  taskDialog.displayTaskItemDialog(context, task.referenceId!);
                 }
               },
               child: Padding(
@@ -209,7 +210,7 @@ class TaskItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          '${task.name}',
+                          task.name,
                           style: const TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -217,17 +218,23 @@ class TaskItem extends StatelessWidget {
                         ),
                       ],
                     ),
-                    if (task.status == "open")
-                      IconButton(
-                        icon: const Icon(Icons.person_add),
-                        onPressed: () async {
-                          // var volunteerId = await displayVolunteersDialog(context);
-                          // if(volunteerId != null){
-                          //   task.assignedVolunteer = volunteerId;
-                          //   task.status = 'pending';
-                          //   updateTask(task);
-                          }
-                      ),
+                    // To push icon to the right
+                    const Expanded(child: SizedBox()),
+                    if (task.status == "Open")
+                      SizedBox(
+                        height: 24.0, // Change as needed
+                        width: 24.0, // Change as needed
+                        child: IconButton(
+                          padding: EdgeInsets.zero, // removes default padding
+                          alignment: Alignment.center, // centers the icon
+                          icon: const Icon(Icons.person_add),
+                          iconSize: 20.0, // Change as needed
+                          onPressed: () async {
+                            volunteerDialog.displayVolunteersDialog(context, task);
+                          },
+                        ),
+                      )
+
                   ],
                 ),
               ),
