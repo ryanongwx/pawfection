@@ -63,4 +63,11 @@ class PetRepository {
 
     return null;
   }
+
+  Future<List<Pet>> getPetList() async {
+    QuerySnapshot snapshot = await petcollection.get();
+    return snapshot.docs
+        .map((doc) => petService.petFromJson(doc.data() as Map<String, dynamic>))
+        .toList();
+  }
 }

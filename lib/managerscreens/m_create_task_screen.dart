@@ -1,11 +1,16 @@
 import 'dart:core';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:card_settings/card_settings.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pawfection/managerView.dart';
 import 'package:pawfection/models/task.dart';
+import 'package:pawfection/models/pet.dart';
+import 'package:pawfection/models/user.dart';
+import 'package:pawfection/repository/pet_repository.dart';
 import 'package:pawfection/repository/task_repository.dart';
+import 'package:pawfection/repository/user_repository.dart';
 
 class MCreateTaskScreen extends StatefulWidget {
   MCreateTaskScreen(
@@ -21,8 +26,11 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
   final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
   final taskRepository = TaskRepository();
+  final petRepository = PetRepository();
+  final userRepository = UserRepository();
   late var _form;
   late var alertmessage;
+
   void _showDialog(Widget child) {
     showCupertinoModalPopup<void>(
       context: context,
@@ -64,7 +72,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderSide:
-                          BorderSide(color: Colors.grey[700]!, width: 1),
+                      BorderSide(color: Colors.grey[700]!, width: 1),
                     ),
                     focusedBorder: const OutlineInputBorder(
                       borderSide: BorderSide(width: 2),
@@ -93,17 +101,19 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                     try {
                       taskRepository.addTask(Task(_form['name'],
                           createdby: 'soo',
-                          assignedto: 'soo',
+                          assignedto: _form['user'],
                           description: _form['description'],
-                          status: 'Pending',
-                          resources: _form['resources'],
-                          contactperson: _form['contactperson'],
-                          contactpersonnumber: _form['contactpersonnumber'],
+                          status: _form['user'] == "<No volunteer assigned>"
+                              ? 'Open'
+                              : 'Pending',
+                          resources: [_form['resources']],
                           deadline: [
                             _form['deadlinestart'],
                             _form['deadlineend']
                           ],
-                          pet: 'Truffle'));
+                          pet: _form['pet'],
+                          contactperson: '',
+                          contactpersonnumber: ''));
                       setState(() {
                         alertmessage = 'Task has successfully been created';
                       });
@@ -130,9 +140,10 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => const ManagerView(
-                                                tab: 1,
-                                              )),
+                                          builder: (context) =>
+                                          const ManagerView(
+                                            tab: 1,
+                                          )),
                                     )
                                   }
                               },
@@ -151,7 +162,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
       );
     } else if (Platform.isIOS) {
       return CupertinoPageScaffold(
-        navigationBar: const CupertinoNavigationBar(middle: Text('Create Task')),
+        navigationBar: CupertinoNavigationBar(middle: Text('Create Task')),
         child: SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -172,17 +183,19 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                     try {
                       taskRepository.addTask(Task(_form['name'],
                           createdby: 'soo',
-                          assignedto: 'soo',
+                          assignedto: _form['user'],
                           description: _form['description'],
-                          status: 'Pending',
-                          resources: _form['resources'],
-                          contactperson: _form['contactperson'],
-                          contactpersonnumber: _form['contactnumber'],
+                          status: _form['user'] == "<No volunteer assigned>"
+                              ? 'Open'
+                              : 'Pending',
+                          resources: [_form['resources']],
                           deadline: [
                             _form['deadlinestart'],
                             _form['deadlineend']
                           ],
-                          pet: 'Truffle'));
+                          pet: _form['pet'],
+                          contactperson: '',
+                          contactpersonnumber: ''));
                       setState(() {
                         alertmessage = 'Task has successfully been created';
                       });
@@ -210,9 +223,10 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => const ManagerView(
-                                                tab: 1,
-                                              )),
+                                          builder: (context) =>
+                                          const ManagerView(
+                                            tab: 1,
+                                          )),
                                     )
                                   }
                               },
@@ -232,6 +246,64 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
     }
     return Column();
   }
+
+  // To getPetList
+  Widget buildPetList() => FutureBuilder<List<Pet>>(
+    future: petRepository.getPetList(),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        // While waiting for the future to complete, show a loading indicator
+        return CircularProgressIndicator();
+      } else if (snapshot.hasError) {
+        // If an error occurs while fetching the user, display an error message
+        return Text('Error: ${snapshot.error}');
+      } else {
+        // The future completed successfully
+        final petList = snapshot.data;
+        List<String> nameList =
+            petList?.map((pet) => pet.name).toSet().toList() ?? [];
+        nameList.insert(0, "<No pet assigned>");
+        return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: FastDropdown(
+                name: 'pet',
+                labelText: 'Pet',
+                items: nameList,
+                initialValue: nameList[0]));
+      }
+    },
+  );
+
+  // To getUserList
+  Widget buildVolunteerList() => FutureBuilder<List<User>>(
+    future: userRepository.getUserList(),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        // While waiting for the future to complete, show a loading indicator
+        return CircularProgressIndicator();
+      } else if (snapshot.hasError) {
+        // If an error occurs while fetching the user, display an error message
+        return Text('Error: ${snapshot.error}');
+      } else {
+        // The future completed successfully
+        final userList = snapshot.data;
+        List<String?> nameList = userList
+            ?.where((user) => user.role.toLowerCase() == "volunteer")
+            .map((user) => user.username)
+            .toSet()
+            .toList() ??
+            [];
+        nameList.insert(0, "<No volunteer assigned>");
+        return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: FastDropdown(
+                name: 'user',
+                labelText: 'Volunteer',
+                items: nameList,
+                initialValue: nameList[0]));
+      }
+    },
+  );
 
   List<Widget> _buildForm(BuildContext context) {
     return [
@@ -266,20 +338,6 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
               Validators.required((value) => 'Field is required'),
             ]),
           ),
-          FastTextField(
-            name: 'contactperson',
-            labelText: 'Contact Person',
-            validator: Validators.compose([
-              Validators.required((value) => 'Field is required'),
-            ]),
-          ),
-          FastTextField(
-            name: 'contactnumber',
-            labelText: 'Contact Number',
-            validator: Validators.compose([
-              Validators.required((value) => 'Field is required'),
-            ]),
-          ),
           FastCalendar(
             name: 'deadlinestart',
             labelText: 'Deadline Start',
@@ -292,8 +350,8 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
             firstDate: DateTime(2023),
             lastDate: DateTime(2040),
           ),
-          ElevatedButton(child: Text('Assign Pet'), onPressed: () {}),
-          ElevatedButton(child: Text('Assign Volunteer'), onPressed: () {}),
+          buildPetList(),
+          buildVolunteerList(),
         ],
       ),
     ];
@@ -328,20 +386,6 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
               Validators.required((value) => 'Field is required'),
             ]),
           ),
-          FastTextField(
-            name: 'contactperson',
-            labelText: 'Contact Person',
-            validator: Validators.compose([
-              Validators.required((value) => 'Field is required'),
-            ]),
-          ),
-          FastTextField(
-            name: 'contactnumber',
-            labelText: 'Contact Number',
-            validator: Validators.compose([
-              Validators.required((value) => 'Field is required'),
-            ]),
-          ),
           FastDatePicker(
             name: 'deadlinestart',
             firstDate: DateTime(2023),
@@ -356,8 +400,8 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
             labelText: 'Deadline',
             mode: CupertinoDatePickerMode.dateAndTime,
           ),
-          CupertinoButton(child: Text('Assign Pet'), onPressed: () {}),
-          CupertinoButton(child: Text('Assign Volunteer'), onPressed: () {}),
+          buildPetList(),
+          buildVolunteerList()
         ],
       ),
     ];

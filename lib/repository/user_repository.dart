@@ -48,4 +48,12 @@ class UserRepository {
   void deleteUser(User user) async {
     await usercollection.doc(user.referenceId).delete();
   }
+
+  Future<List<User>> getUserList() async {
+    QuerySnapshot snapshot = await usercollection.get();
+    return snapshot.docs
+        .map((doc) => userService.userFromJson(doc.data() as Map<String, dynamic>))
+        .toList()
+        .cast();
+  }
 }
