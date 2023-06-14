@@ -6,9 +6,10 @@ import 'package:pawfection/repository/task_repository.dart';
 import 'package:pawfection/service/task_service.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 import 'package:pawfection/managerscreens/m_create_task_screen.dart';
-import '../volunteerscreens/v_dashboard_screen.dart';
 import 'package:pawfection/managerscreens/m_task_dialog.dart' as taskDialog;
 import 'package:pawfection/managerscreens/m_volunteer_dialog.dart' as volunteerDialog;
+import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
+import 'package:pawfection/loginView.dart';
 
 class MDashboardScreen extends StatefulWidget {
   const MDashboardScreen({super.key});
@@ -21,6 +22,8 @@ final _selectedSegment_04 = ValueNotifier('Pending');
 
 final taskRepository = TaskRepository();
 final taskService = TaskService();
+
+final _auth = FirebaseAuth.FirebaseAuth.instance; // authInstance
 
 // List<Task> taskList = [];
 
@@ -55,7 +58,22 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
           return Scaffold(
               appBar: AppBar(
                 title: const Text('Tasks'),
-                actions: <Widget>[
+                actions: <Widget>[IconButton(
+                  icon: const Icon(Icons.logout),
+                  onPressed: () async {
+                    try {
+                      _auth.signOut();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginView(),
+                        ),
+                      );
+                    } catch (e) {
+                      debugPrint(e.toString());
+                    }
+                },
+                ),
                   Padding(
                       padding: const EdgeInsets.only(right: 20.0),
                       child: GestureDetector(

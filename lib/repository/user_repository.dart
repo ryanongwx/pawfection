@@ -56,4 +56,14 @@ class UserRepository {
         .toList()
         .cast();
   }
+
+  // Returns User object
+  Future<User?> currentUser(_auth) async {
+    var user = _auth.currentUser;
+    if (user != null) {
+      return await UserRepository().findUserByUUID(user.uid);
+    } else {
+      return null;
+    }
+  }
 }
