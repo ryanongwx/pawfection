@@ -7,7 +7,8 @@ import 'package:pawfection/service/task_service.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 import 'package:pawfection/managerscreens/m_create_task_screen.dart';
 import 'package:pawfection/managerscreens/m_task_dialog.dart' as taskDialog;
-import 'package:pawfection/managerscreens/m_volunteer_dialog.dart' as volunteerDialog;
+import 'package:pawfection/managerscreens/m_volunteer_dialog.dart'
+    as volunteerDialog;
 import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
 import 'package:pawfection/loginView.dart';
 
@@ -58,22 +59,7 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
           return Scaffold(
               appBar: AppBar(
                 title: const Text('Tasks'),
-                actions: <Widget>[IconButton(
-                  icon: const Icon(Icons.logout),
-                  onPressed: () async {
-                    try {
-                      _auth.signOut();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LoginView(),
-                        ),
-                      );
-                    } catch (e) {
-                      debugPrint(e.toString());
-                    }
-                },
-                ),
+                actions: <Widget>[
                   Padding(
                       padding: const EdgeInsets.only(right: 20.0),
                       child: GestureDetector(
@@ -89,6 +75,22 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
                           size: 26.0,
                         ),
                       )),
+                  IconButton(
+                    icon: const Icon(Icons.logout),
+                    onPressed: () async {
+                      try {
+                        _auth.signOut();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LoginView(),
+                          ),
+                        );
+                      } catch (e) {
+                        debugPrint(e.toString());
+                      }
+                    },
+                  ),
                 ],
               ),
               body: Stack(children: [
@@ -248,11 +250,11 @@ class TaskItem extends StatelessWidget {
                           icon: const Icon(Icons.person_add),
                           iconSize: 20.0, // Change as needed
                           onPressed: () async {
-                            volunteerDialog.displayVolunteersDialog(context, task);
+                            volunteerDialog.displayVolunteersDialog(
+                                context, task);
                           },
                         ),
                       )
-
                   ],
                 ),
               ),
