@@ -33,10 +33,19 @@ Future<void> displayUserItemDialog(BuildContext context, String id) async {
                       physics: BouncingScrollPhysics(),
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(top: 30),
-                          child: ProfileWidget(
-                            image: Image.network(user.profilepicture),
-                            onClicked: () {},
+                          padding: EdgeInsets.only(top: 20),
+                          child: ClipOval(
+                            child: Container(
+                              width: 150,
+                              height: 150,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image: NetworkImage(user.profilepicture),
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                         Padding(
