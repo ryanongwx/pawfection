@@ -2,7 +2,6 @@ import 'dart:core';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:card_settings/card_settings.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pawfection/managerView.dart';
@@ -12,6 +11,7 @@ import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/pet_repository.dart';
 import 'package:pawfection/repository/task_repository.dart';
 import 'package:pawfection/repository/user_repository.dart';
+import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
 
 class MCreateTaskScreen extends StatefulWidget {
   MCreateTaskScreen(
@@ -26,11 +26,15 @@ class MCreateTaskScreen extends StatefulWidget {
 class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
   final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
+
   final taskRepository = TaskRepository();
   final petRepository = PetRepository();
   final userRepository = UserRepository();
+
   late var _form;
   late var alertmessage;
+
+  final _auth = FirebaseAuth.FirebaseAuth.instance; // authInstance
 
   void _showDialog(Widget child) {
     showCupertinoModalPopup<void>(
@@ -98,10 +102,14 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                 ),
                 ElevatedButton(
                   child: const Text('Create'),
-                  onPressed: () {
+                  onPressed: () async {
                     try {
+                      final User? user = await userRepository.currentUser(_auth);
+                      if (user == null) {
+                        throw Exception('Please log into a manager account to create task');
+                      }
                       taskRepository.addTask(Task(_form['name'],
-                          createdby: 'soo',
+                          createdby: user.referenceId,
                           assignedto: _form['user'],
                           description: _form['description'],
                           status: _form['user'] == "<No volunteer assigned>"
@@ -113,13 +121,18 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                             Timestamp.fromDate(_form['deadlineend'])
                           ],
                           pet: _form['pet'],
-                          contactperson: '1',
-                          contactpersonnumber: '1'));
+                          contactperson: user.referenceId,
+                          contactpersonnumber: user.contactnumber));
                       setState(() {
                         alertmessage = 'Task has successfully been created';
                       });
+                    } on Exception catch (e) {
+                      // If the exception thrown is a general Exception
+                      setState(() {
+                        alertmessage = e.toString();
+                      });
                     } catch (e) {
-                      debugPrint(e.toString());
+                      // If any other type of exception/error is thrown
                       setState(() {
                         alertmessage = 'Please ensure all fields are filled in';
                       });
@@ -181,10 +194,14 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                 ),
                 CupertinoButton(
                   child: const Text('Create'),
-                  onPressed: () {
+                  onPressed: () async {
                     try {
+                      final User? user = await userRepository.currentUser(_auth);
+                      if (user == null) {
+                        throw Exception('Please log into a manager account to create task');
+                      }
                       taskRepository.addTask(Task(_form['name'],
-                          createdby: 'soo',
+                          createdby: user.referenceId,
                           assignedto: _form['user'],
                           description: _form['description'],
                           status: _form['user'] == "<No volunteer assigned>"
@@ -196,13 +213,18 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                             Timestamp.fromDate(_form['deadlineend'])
                           ],
                           pet: _form['pet'],
-                          contactperson: '1',
-                          contactpersonnumber: '1'));
+                          contactperson: user.referenceId,
+                          contactpersonnumber: user.contactnumber));
                       setState(() {
                         alertmessage = 'Task has successfully been created';
                       });
+                    } on Exception catch (e) {
+                      // If the exception thrown is a general Exception
+                      setState(() {
+                        alertmessage = e.toString();
+                      });
                     } catch (e) {
-                      debugPrint(e.toString());
+                      // If any other type of exception/error is thrown
                       setState(() {
                         alertmessage = 'Please ensure all fields are filled in';
                       });
