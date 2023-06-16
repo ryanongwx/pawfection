@@ -142,9 +142,16 @@ class PetItem extends StatelessWidget {
               padding: const EdgeInsets.all(10),
               child: Row(
                 children: [
-                  const Icon(
-                    Icons.account_circle,
-                    color: Colors.black,
+                  ClipOval(
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Ink.image(
+                        image: Image.network(pet.profilepicture).image,
+                        fit: BoxFit.cover,
+                        width: 50,
+                        height: 50,
+                      ),
+                    ),
                   ),
                   const SizedBox(
                     width: 10,

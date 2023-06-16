@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/user_repository.dart';
 import 'package:pawfection/service/user_service.dart';
+import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 import 'package:pawfection/managerscreens/m_user_dialog.dart' as Dialog;
 
@@ -142,9 +143,16 @@ class UserItem extends StatelessWidget {
               padding: const EdgeInsets.all(10),
               child: Row(
                 children: [
-                  const Icon(
-                    Icons.account_circle,
-                    color: Colors.black,
+                  ClipOval(
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Ink.image(
+                        image: Image.network(user.profilepicture).image,
+                        fit: BoxFit.cover,
+                        width: 50,
+                        height: 50,
+                      ),
+                    ),
                   ),
                   const SizedBox(
                     width: 10,
