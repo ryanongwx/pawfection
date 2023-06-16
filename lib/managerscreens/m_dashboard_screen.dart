@@ -6,8 +6,11 @@ import 'package:pawfection/repository/task_repository.dart';
 import 'package:pawfection/service/task_service.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 import 'package:pawfection/managerscreens/m_create_task_screen.dart';
-import '../volunteerscreens/v_dashboard_screen.dart';
-import 'package:pawfection/managerscreens/m_task_dialog.dart' as Dialog;
+import 'package:pawfection/managerscreens/m_task_dialog.dart' as taskDialog;
+import 'package:pawfection/managerscreens/m_volunteer_dialog.dart'
+    as volunteerDialog;
+import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
+import 'package:pawfection/loginView.dart';
 
 class MDashboardScreen extends StatefulWidget {
   const MDashboardScreen({super.key});
@@ -20,6 +23,8 @@ final _selectedSegment_04 = ValueNotifier('Pending');
 
 final taskRepository = TaskRepository();
 final taskService = TaskService();
+
+final _auth = FirebaseAuth.FirebaseAuth.instance; // authInstance
 
 // List<Task> taskList = [];
 
@@ -70,6 +75,22 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
                           size: 26.0,
                         ),
                       )),
+                  IconButton(
+                    icon: const Icon(Icons.logout),
+                    onPressed: () async {
+                      try {
+                        _auth.signOut();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LoginView(),
+                          ),
+                        );
+                      } catch (e) {
+                        debugPrint(e.toString());
+                      }
+                    },
+                  ),
                 ],
               ),
               body: Stack(children: [
@@ -135,11 +156,11 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
                                     .contains(_selectedSegment_04.value))
                                 .toList(),
                             emptyWidget: const EmptyView(),
-                            inputDecoration: InputDecoration(
+                            inputDecoration: const InputDecoration(
                               labelText: "Search Task",
                               fillColor: Colors.white,
                               focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
+                                borderSide: BorderSide(
                                   color: Colors.blue,
                                   width: 1.0,
                                 ),
@@ -177,7 +198,7 @@ class TaskItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (task == null) {
-      return Column();
+      return const Column();
     } else {
       return Padding(
           padding: const EdgeInsets.all(8.0),
@@ -190,7 +211,7 @@ class TaskItem extends StatelessWidget {
             child: InkWell(
               onTap: () {
                 if (task.referenceId != null) {
-                  Dialog.displayTaskItemDialog(context, task.referenceId!);
+                  taskDialog.displayTaskItemDialog(context, task.referenceId!);
                 }
               },
               child: Padding(
@@ -209,7 +230,7 @@ class TaskItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          '${task.name}',
+                          task.name,
                           style: const TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -217,6 +238,23 @@ class TaskItem extends StatelessWidget {
                         ),
                       ],
                     ),
+                    // To push icon to the right
+                    const Expanded(child: SizedBox()),
+                    if (task.status == "Open")
+                      SizedBox(
+                        height: 24.0, // Change as needed
+                        width: 24.0, // Change as needed
+                        child: IconButton(
+                          padding: EdgeInsets.zero, // removes default padding
+                          alignment: Alignment.center, // centers the icon
+                          icon: const Icon(Icons.person_add),
+                          iconSize: 20.0, // Change as needed
+                          onPressed: () async {
+                            volunteerDialog.displayVolunteersDialog(
+                                context, task);
+                          },
+                        ),
+                      )
                   ],
                 ),
               ),

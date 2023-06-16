@@ -54,4 +54,12 @@ class TaskRepository {
 
     return null;
   }
+
+  Future<List<Task>> getTaskList() async {
+    QuerySnapshot snapshot = await taskcollection.get();
+    return snapshot.docs
+        .map((doc) => taskService.taskFromJson(doc.data() as Map<String, dynamic>))
+        .toList()
+        .cast();
+  }
 }
