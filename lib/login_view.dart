@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
-import 'package:pawfection/managerview.dart';
+import 'package:pawfection/manager_view.dart';
 import 'package:pawfection/repository/user_repository.dart';
-import 'package:pawfection/voluteerView.dart';
+import 'package:pawfection/voluteer_view.dart';
 import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
 import 'package:pawfection/models/user.dart';
 

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:card_settings/card_settings.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:pawfection/managerView.dart';
+import 'package:pawfection/manager_view.dart';
 import 'package:pawfection/models/task.dart';
 import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/task_repository.dart';
