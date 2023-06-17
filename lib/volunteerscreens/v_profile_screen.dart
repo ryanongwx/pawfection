@@ -7,7 +7,7 @@ import 'package:pawfection/volunteerscreens/profile_update_screen.dart';
 import 'package:pawfection/volunteerscreens/update_availability_screen.dart';
 import 'package:pawfection/volunteerscreens/widgets/button_widget.dart';
 import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
-import 'package:pawfection/loginView.dart';
+import 'package:pawfection/login_view.dart';
 
 class VProfileScreen extends StatefulWidget {
   VProfileScreen({Key? key}) : super(key: key);
@@ -31,23 +31,24 @@ class _VProfileScreenState extends State<VProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text("My Profile"),
-            actions: <Widget>[IconButton(
+        appBar: AppBar(title: const Text("My Profile"), actions: <Widget>[
+          IconButton(
             icon: const Icon(Icons.logout),
-      onPressed: () async {
-        try {
-          _auth.signOut();
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => LoginView(),
-            ),
-          );
-        } catch (e) {
-          debugPrint(e.toString());
-        }
-      },
-    )]),
+            onPressed: () async {
+              try {
+                _auth.signOut();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginView(),
+                  ),
+                );
+              } catch (e) {
+                debugPrint(e.toString());
+              }
+            },
+          )
+        ]),
         body: Padding(
           padding: const EdgeInsets.only(top: 20),
           child: Column(

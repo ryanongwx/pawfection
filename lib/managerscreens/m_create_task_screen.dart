@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:pawfection/managerView.dart';
+import 'package:pawfection/manager_view.dart';
 import 'package:pawfection/models/task.dart';
 import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/models/user.dart';
@@ -77,7 +77,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderSide:
-                      BorderSide(color: Colors.grey[700]!, width: 1),
+                          BorderSide(color: Colors.grey[700]!, width: 1),
                     ),
                     focusedBorder: const OutlineInputBorder(
                       borderSide: BorderSide(width: 2),
@@ -104,9 +104,11 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                   child: const Text('Create'),
                   onPressed: () async {
                     try {
-                      final User? user = await userRepository.currentUser(_auth);
+                      final User? user =
+                          await userRepository.currentUser(_auth);
                       if (user == null) {
-                        throw Exception('Please log into a manager account to create task');
+                        throw Exception(
+                            'Please log into a manager account to create task');
                       }
                       taskRepository.addTask(Task(_form['name'],
                           createdby: user.referenceId,
@@ -156,9 +158,9 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                          const ManagerView(
-                                            tab: 1,
-                                          )),
+                                              const ManagerView(
+                                                tab: 1,
+                                              )),
                                     )
                                   }
                               },
@@ -177,7 +179,8 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
       );
     } else if (Platform.isIOS) {
       return CupertinoPageScaffold(
-        navigationBar: const CupertinoNavigationBar(middle: Text('Create Task')),
+        navigationBar:
+            const CupertinoNavigationBar(middle: Text('Create Task')),
         child: SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -196,9 +199,11 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                   child: const Text('Create'),
                   onPressed: () async {
                     try {
-                      final User? user = await userRepository.currentUser(_auth);
+                      final User? user =
+                          await userRepository.currentUser(_auth);
                       if (user == null) {
-                        throw Exception('Please log into a manager account to create task');
+                        throw Exception(
+                            'Please log into a manager account to create task');
                       }
                       taskRepository.addTask(Task(_form['name'],
                           createdby: user.referenceId,
@@ -248,9 +253,9 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                          const ManagerView(
-                                            tab: 1,
-                                          )),
+                                              const ManagerView(
+                                                tab: 1,
+                                              )),
                                     )
                                   }
                               },
@@ -273,61 +278,61 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
 
   // To getPetList
   Widget buildPetList() => FutureBuilder<List<Pet>>(
-    future: petRepository.getPetList(),
-    builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        // While waiting for the future to complete, show a loading indicator
-        return const CircularProgressIndicator();
-      } else if (snapshot.hasError) {
-        // If an error occurs while fetching the user, display an error message
-        return Text('Error: ${snapshot.error}');
-      } else {
-        // The future completed successfully
-        final petList = snapshot.data;
-        List<String> nameList =
-            petList?.map((pet) => pet.name).toSet().toList() ?? [];
-        nameList.insert(0, "<No pet assigned>");
-        return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: FastDropdown(
-                name: 'pet',
-                labelText: 'Pet',
-                items: nameList,
-                initialValue: nameList[0]));
-      }
-    },
-  );
+        future: petRepository.getPetList(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // While waiting for the future to complete, show a loading indicator
+            return const CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            // If an error occurs while fetching the user, display an error message
+            return Text('Error: ${snapshot.error}');
+          } else {
+            // The future completed successfully
+            final petList = snapshot.data;
+            List<String> nameList =
+                petList?.map((pet) => pet.name).toSet().toList() ?? [];
+            nameList.insert(0, "<No pet assigned>");
+            return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: FastDropdown(
+                    name: 'pet',
+                    labelText: 'Pet',
+                    items: nameList,
+                    initialValue: nameList[0]));
+          }
+        },
+      );
 
   // To getUserList
   Widget buildVolunteerList() => FutureBuilder<List<User>>(
-    future: userRepository.getUserList(),
-    builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        // While waiting for the future to complete, show a loading indicator
-        return const CircularProgressIndicator();
-      } else if (snapshot.hasError) {
-        // If an error occurs while fetching the user, display an error message
-        return Text('Error: ${snapshot.error}');
-      } else {
-        // The future completed successfully
-        final userList = snapshot.data;
-        List<String?> nameList = userList
-            ?.where((user) => user.role.toLowerCase() == "volunteer")
-            .map((user) => user.username)
-            .toSet()
-            .toList() ??
-            [];
-        nameList.insert(0, "<No volunteer assigned>");
-        return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: FastDropdown(
-                name: 'user',
-                labelText: 'Volunteer',
-                items: nameList,
-                initialValue: nameList[0]));
-      }
-    },
-  );
+        future: userRepository.getUserList(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // While waiting for the future to complete, show a loading indicator
+            return const CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            // If an error occurs while fetching the user, display an error message
+            return Text('Error: ${snapshot.error}');
+          } else {
+            // The future completed successfully
+            final userList = snapshot.data;
+            List<String?> nameList = userList
+                    ?.where((user) => user.role.toLowerCase() == "volunteer")
+                    .map((user) => user.username)
+                    .toSet()
+                    .toList() ??
+                [];
+            nameList.insert(0, "<No volunteer assigned>");
+            return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: FastDropdown(
+                    name: 'user',
+                    labelText: 'Volunteer',
+                    items: nameList,
+                    initialValue: nameList[0]));
+          }
+        },
+      );
 
   List<Widget> _buildForm(BuildContext context) {
     return [

@@ -1,0 +1,29 @@
+@startuml
+class "LoginView" {
+  -FirebaseAuth _auth
+  +UserRepository userRepository
+  +Duration loginTime
+  -dynamic _authUser()
+  -dynamic _signupUser()
+  -dynamic _recoverPassword()
+}
+
+"LoginView" o-- "FirebaseAuth"
+"LoginView" o-- "UserRepository"
+
+class "FirebaseAuth" {
+  Abstracted
+}
+
+class "UserRepository" {
+  +CollectionReference<Object?> usercollection
+  +UserService userService
+  +Stream<QuerySnapshot<Object?>> users
+  +dynamic findUserByUUID()
+  +void addUser()
+  +void updateUser()
+  +void deleteUser()
+  +dynamic getUserList()
+  +dynamic currentUser()
+}
+@enduml

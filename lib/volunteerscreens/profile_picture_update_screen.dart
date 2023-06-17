@@ -10,7 +10,7 @@ import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/pet_repository.dart';
 import 'package:pawfection/repository/storage_repository.dart';
 import 'package:pawfection/repository/user_repository.dart';
-import 'package:pawfection/voluteerView.dart';
+import 'package:pawfection/voluteer_view.dart';
 
 class ProfilePictureUpdateScreen extends StatefulWidget {
   ProfilePictureUpdateScreen(

@@ -7,7 +7,7 @@ import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/storage_repository.dart';
 import 'package:pawfection/repository/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
-import 'package:pawfection/voluteerView.dart';
+import 'package:pawfection/voluteer_view.dart';
 
 class VProfileUpdateScreen extends StatefulWidget {
   VProfileUpdateScreen(
@@ -145,7 +145,8 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => const VolunteerView(
+                                          builder: (context) =>
+                                              const VolunteerView(
                                                 tab: 1,
                                               )),
                                     )
@@ -166,8 +167,8 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
       );
     } else if (Platform.isIOS) {
       return CupertinoPageScaffold(
-        navigationBar:
-            const CupertinoNavigationBar(middle: Text('Update Volunteer Profile')),
+        navigationBar: const CupertinoNavigationBar(
+            middle: Text('Update Volunteer Profile')),
         child: SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -249,7 +250,8 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => const VolunteerView(
+                                          builder: (context) =>
+                                              const VolunteerView(
                                                 tab: 1,
                                               )),
                                     )
