@@ -10,7 +10,7 @@ import 'package:pawfection/managerscreens/m_task_dialog.dart' as taskDialog;
 import 'package:pawfection/managerscreens/m_volunteer_dialog.dart'
     as volunteerDialog;
 import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
-import 'package:pawfection/loginView.dart';
+import 'package:pawfection/login_view.dart';
 
 class MDashboardScreen extends StatefulWidget {
   const MDashboardScreen({super.key});

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:pawfection/managerview.dart';
+import 'package:pawfection/manager_view.dart';
 import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/repository/pet_repository.dart';
 import 'package:pawfection/volunteerscreens/profile_picture_update_screen.dart';

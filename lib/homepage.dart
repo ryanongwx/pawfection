@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pawfection/loginView.dart';
-import 'package:pawfection/managerView.dart';
-import 'package:pawfection/voluteerView.dart';
+import 'package:pawfection/login_view.dart';
+import 'package:pawfection/manager_view.dart';
+import 'package:pawfection/voluteer_view.dart';
 
 class Homepage extends StatelessWidget {
   const Homepage({super.key});

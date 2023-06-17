@@ -5,12 +5,12 @@ import 'package:card_settings/card_settings.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pawfection/managerscreens/m_pet_screen.dart';
-import 'package:pawfection/managerview.dart';
+import 'package:pawfection/manager_view.dart';
 import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/repository/pet_repository.dart';
 import 'package:pawfection/volunteerscreens/profile_picture_update_screen.dart';
 import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
-import 'package:pawfection/voluteerView.dart';
+import 'package:pawfection/voluteer_view.dart';
 
 class MUpdatePetScreen extends StatefulWidget {
   MUpdatePetScreen({super.key, required this.imageURL, required this.pet});
