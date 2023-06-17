@@ -6,8 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:pawfection/manager_view.dart';
 import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/repository/pet_repository.dart';
-import 'package:pawfection/volunteerscreens/profile_picture_update_screen.dart';
-import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
+import 'package:pawfection/volunteer/profile_picture_update_screen.dart';
+import 'package:pawfection/volunteer/widgets/profile_widget.dart';
 
 class MCreatePetScreen extends StatefulWidget {
   MCreatePetScreen({super.key, required this.imageURL});

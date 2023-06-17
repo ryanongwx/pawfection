@@ -4,47 +4,38 @@ import 'package:flutter/material.dart';
 import 'package:card_settings/card_settings.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:pawfection/manager/m_pet_screen.dart';
 import 'package:pawfection/manager_view.dart';
-import 'package:pawfection/models/task.dart';
-import 'package:pawfection/models/user.dart';
-import 'package:pawfection/repository/task_repository.dart';
-import 'package:pawfection/volunteerscreens/profile_picture_update_screen.dart';
-import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
+import 'package:pawfection/models/pet.dart';
+import 'package:pawfection/repository/pet_repository.dart';
+import 'package:pawfection/volunteer/profile_picture_update_screen.dart';
+import 'package:pawfection/volunteer/widgets/profile_widget.dart';
+import 'package:pawfection/voluteer_view.dart';
 
-class MUpdateTaskScreen extends StatefulWidget {
-  MUpdateTaskScreen({super.key, required this.task});
+class MUpdatePetScreen extends StatefulWidget {
+  MUpdatePetScreen({super.key, required this.imageURL, required this.pet});
 
-  Task task;
+  String imageURL;
+  Pet pet;
 
   @override
-  State<MUpdateTaskScreen> createState() => _MUpdateTaskScreenState();
+  State<MUpdatePetScreen> createState() => _MUpdatePetScreenState();
 }
 
-class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
+class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
   final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
-  final taskRepository = TaskRepository();
+  final petRepository = PetRepository();
   late var _form;
   late var alertmessage;
-  void _showDialog(Widget child) {
-    showCupertinoModalPopup<void>(
-      context: context,
-      builder: (BuildContext context) => Container(
-        height: 216,
-        padding: const EdgeInsets.only(top: 6.0),
-        // The Bottom margin is provided to align the popup above the system navigation bar.
-        margin: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        // Provide a background color for the popup.
-        color: CupertinoColors.systemBackground.resolveFrom(context),
-        // Use a SafeArea widget to avoid system overlaps.
-        child: SafeArea(
-          top: false,
-          child: child,
-        ),
-      ),
-    );
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.imageURL == '') {
+      widget.imageURL = widget.pet.profilepicture;
+    }
   }
 
   @override
@@ -52,7 +43,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
     if (Platform.isAndroid) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Update Task'),
+          title: Text('Update Pet'),
           elevation: 4.0,
         ),
         body: SafeArea(
@@ -86,30 +77,18 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                     // ignore: avoid_print
                     print('Form changed: ${value.toString()}');
                     _form = value;
-
-                    if (_form['walking']) {}
                   },
                 ),
                 ElevatedButton(
                   child: const Text('Update'),
                   onPressed: () {
                     try {
-                      taskRepository.updateTask(Task(_form['name'],
-                          createdby: 'soo',
-                          assignedto: 'soo',
+                      petRepository.addPet(Pet(_form['name'],
+                          profilepicture: widget.imageURL,
+                          breed: _form['breed'],
                           description: _form['description'],
-                          status: 'Pending',
-                          resources: _form['resources'],
-                          contactperson: _form['contactperson'],
-                          contactpersonnumber: _form['contactpersonnumber'],
-                          deadline: [
-                            _form['deadlinestart'],
-                            _form['deadlineend']
-                          ],
-                          pet: 'Truffle'));
-                      setState(() {
-                        alertmessage = 'Task has successfully been updated';
-                      });
+                          thingstonote: _form['thingstonote']));
+                      alertmessage == 'Pet has successfully been created';
                     } catch (e) {
                       setState(() {
                         alertmessage = 'Please ensure all fields are filled in';
@@ -118,7 +97,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                       showDialog<String>(
                         context: context,
                         builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Update Task'),
+                          title: const Text('Update Pet'),
                           content: Text(alertmessage),
                           actions: <Widget>[
                             TextButton(
@@ -129,7 +108,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                               onPressed: () => {
                                 Navigator.pop(context, 'OK'),
                                 if (alertmessage ==
-                                    'Task has successfully been updated')
+                                    'Pet has successfully been updated')
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
@@ -154,7 +133,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
       );
     } else if (Platform.isIOS) {
       return CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(middle: Text('Update Task')),
+        navigationBar: CupertinoNavigationBar(middle: Text('Update Pet')),
         child: SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -170,27 +149,16 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                   },
                 ),
                 CupertinoButton(
-                  child: const Text('Update'),
+                  child: const Text('Create'),
                   onPressed: () {
                     try {
-                      taskRepository.updateTask(Task(_form['name'],
-                          createdby: 'soo',
-                          assignedto: 'soo',
+                      petRepository.addPet(Pet(_form['name'],
+                          profilepicture: widget.imageURL,
+                          breed: _form['breed'],
                           description: _form['description'],
-                          status: 'Pending',
-                          resources: _form['resources'],
-                          contactperson: _form['contactperson'],
-                          contactpersonnumber: _form['contactnumber'],
-                          deadline: [
-                            _form['deadlinestart'],
-                            _form['deadlineend']
-                          ],
-                          pet: 'Truffle'));
-                      setState(() {
-                        alertmessage = 'Task has successfully been updated';
-                      });
+                          thingstonote: _form['thingstonote']));
+                      alertmessage == 'Pet has successfully been created';
                     } catch (e) {
-                      debugPrint(e.toString());
                       setState(() {
                         alertmessage = 'Please ensure all fields are filled in';
                       });
@@ -198,7 +166,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                       showDialog<String>(
                         context: context,
                         builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Create Task'),
+                          title: const Text('Update Pet'),
                           content: Text(alertmessage),
                           actions: <Widget>[
                             TextButton(
@@ -209,12 +177,12 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                               onPressed: () => {
                                 Navigator.pop(context, 'OK'),
                                 if (alertmessage ==
-                                    'Task has successfully been updated')
+                                    'Pet has successfully been updated')
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
                                           builder: (context) => ManagerView(
-                                                tab: 1,
+                                                tab: 0,
                                               )),
                                     )
                                   }
@@ -238,73 +206,52 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
 
   List<Widget> _buildForm(BuildContext context) {
     return [
+      Padding(
+        padding: EdgeInsets.only(top: 20),
+        child: ProfileWidget(
+          image: Image.network(widget.imageURL),
+          onClicked: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ProfilePictureUpdateScreen(
+                      routetext: 'pet',
+                      petid: widget.pet.referenceId!,
+                    )));
+          },
+        ),
+      ),
       FastFormSection(
         padding: const EdgeInsets.all(16.0),
         header: const Padding(
           padding: EdgeInsets.all(12.0),
           child: Text(
-            'Task Details',
+            'Pet Details',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
           ),
         ),
         children: [
           FastTextField(
             name: 'name',
-            placeholder: widget.task.name,
+            placeholder: widget.pet.name,
             labelText: 'Name',
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
             ]),
           ),
           FastTextField(
+            name: 'breed',
+            placeholder: widget.pet.breed,
+            labelText: 'Breed',
+          ),
+          FastTextField(
             name: 'description',
-            placeholder: widget.task.description,
+            placeholder: widget.pet.description,
             labelText: 'Description',
-            validator: Validators.compose([
-              Validators.required((value) => 'Field is required'),
-            ]),
           ),
           FastTextField(
-            name: 'resources',
-            labelText: 'Resources',
-            validator: Validators.compose([
-              Validators.required((value) => 'Field is required'),
-            ]),
+            placeholder: widget.pet.thingstonote,
+            name: 'thingstonote',
+            labelText: 'Things to note',
           ),
-          FastTextField(
-            name: 'contactperson',
-            placeholder: widget.task.contactperson,
-            labelText: 'Contact Person',
-            validator: Validators.compose([
-              Validators.required((value) => 'Field is required'),
-            ]),
-          ),
-          FastTextField(
-            name: 'contactnumber',
-            placeholder: widget.task.contactpersonnumber,
-            labelText: 'Contact Number',
-            validator: Validators.compose([
-              Validators.required((value) => 'Field is required'),
-            ]),
-          ),
-          FastCalendar(
-            name: 'deadlinestart',
-            initialValue: DateTime.fromMicrosecondsSinceEpoch(
-                widget.task.deadline.elementAt(0)!.microsecondsSinceEpoch),
-            labelText: 'Deadline Start',
-            firstDate: DateTime(2023),
-            lastDate: DateTime(2040),
-          ),
-          FastCalendar(
-            name: 'deadlineend',
-            initialValue: DateTime.fromMicrosecondsSinceEpoch(
-                widget.task.deadline.elementAt(1)!.microsecondsSinceEpoch),
-            labelText: 'Deadline End',
-            firstDate: DateTime(2023),
-            lastDate: DateTime(2040),
-          ),
-          ElevatedButton(child: Text('Assign Pet'), onPressed: () {}),
-          ElevatedButton(child: Text('Assign Volunteer'), onPressed: () {}),
         ],
       ),
     ];
@@ -312,71 +259,48 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
 
   List<Widget> _buildCupertinoForm(BuildContext context) {
     return [
+      SizedBox(
+        height: 200,
+        child: ProfileWidget(
+          image: Image.network(widget.imageURL),
+          onClicked: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ProfilePictureUpdateScreen(
+                      routetext: 'pet',
+                      petid: '',
+                    )));
+          },
+        ),
+      ),
       FastFormSection(
         adaptive: true,
         insetGrouped: true,
         padding: const EdgeInsets.symmetric(vertical: 12.0),
-        header: const Text('Task Details'),
+        header: const Text('Pet Details'),
         children: [
           FastTextField(
             name: 'name',
-            placeholder: widget.task.name,
+            placeholder: widget.pet.name,
             labelText: 'Name',
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
             ]),
           ),
           FastTextField(
+            placeholder: widget.pet.breed,
+            name: 'breed',
+            labelText: 'Breed',
+          ),
+          FastTextField(
             name: 'description',
-            placeholder: widget.task.description,
+            placeholder: widget.pet.description,
             labelText: 'Description',
-            validator: Validators.compose([
-              Validators.required((value) => 'Field is required'),
-            ]),
           ),
           FastTextField(
-            name: 'resources',
-            labelText: 'Resources',
-            validator: Validators.compose([
-              Validators.required((value) => 'Field is required'),
-            ]),
+            placeholder: widget.pet.thingstonote,
+            name: 'thingstonote',
+            labelText: 'Things to note',
           ),
-          FastTextField(
-            placeholder: widget.task.contactperson,
-            name: 'contactperson',
-            labelText: 'Contact Person',
-            validator: Validators.compose([
-              Validators.required((value) => 'Field is required'),
-            ]),
-          ),
-          FastTextField(
-            placeholder: widget.task.contactpersonnumber,
-            name: 'contactnumber',
-            labelText: 'Contact Number',
-            validator: Validators.compose([
-              Validators.required((value) => 'Field is required'),
-            ]),
-          ),
-          FastDatePicker(
-            name: 'deadlinestart',
-            initialValue: DateTime.fromMicrosecondsSinceEpoch(
-                widget.task.deadline.elementAt(0)!.microsecondsSinceEpoch),
-            firstDate: DateTime(2023),
-            lastDate: DateTime(2040),
-            labelText: 'Start',
-            mode: CupertinoDatePickerMode.dateAndTime,
-          ),
-          FastDatePicker(
-            name: 'deadlineend',
-            initialValue: DateTime.fromMicrosecondsSinceEpoch(
-                widget.task.deadline.elementAt(1)!.microsecondsSinceEpoch),
-            firstDate: DateTime(2023),
-            lastDate: DateTime(2040),
-            labelText: 'Deadline',
-            mode: CupertinoDatePickerMode.dateAndTime,
-          ),
-          CupertinoButton(child: Text('Assign Pet'), onPressed: () {}),
-          CupertinoButton(child: Text('Assign Volunteer'), onPressed: () {}),
         ],
       ),
     ];
