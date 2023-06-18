@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/user_repository.dart';
-import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
 
 Future<void> displayUserItemDialog(BuildContext context, String id) async {
   final userRepository = UserRepository();
@@ -10,30 +9,31 @@ Future<void> displayUserItemDialog(BuildContext context, String id) async {
     builder: (context) {
       return Dialog(
         shape: RoundedRectangleBorder(
-          side: BorderSide(width: 2),
+          side: const BorderSide(width: 2),
           borderRadius: BorderRadius.circular(20),
         ),
         child: FutureBuilder<User?>(
           future: userRepository.findUserByUUID(id),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              // While waiting for the future to complete, show a loading indicator
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             } else if (snapshot.hasError) {
-              // If an error occurs while fetching the user, display an error message
               return Text('Error: ${snapshot.error}');
             } else {
-              // The future completed successfully
               final user = snapshot.data;
 
-              return (user == null)
-                  ? const Text('Error retrieving pet details')
-                  : ListView(
+              if (user == null) {
+                return const Text('Error retrieving user details');
+              } else {
+                return Stack(
+                  alignment: Alignment.topRight,
+                  children: [
+                    ListView(
                       shrinkWrap: true,
-                      physics: BouncingScrollPhysics(),
+                      physics: const BouncingScrollPhysics(),
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(top: 20),
+                          padding: const EdgeInsets.only(top: 20),
                           child: ClipOval(
                             child: Container(
                               width: 150,
@@ -49,11 +49,11 @@ Future<void> displayUserItemDialog(BuildContext context, String id) async {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.all(30),
+                          padding: const EdgeInsets.all(30),
                           child: Center(
                             child: Text(
                               "${user.username}",
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 24,
                               ),
@@ -62,13 +62,13 @@ Future<void> displayUserItemDialog(BuildContext context, String id) async {
                         ),
                         const SizedBox(height: 24),
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 48),
+                          padding: const EdgeInsets.symmetric(horizontal: 48),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 'Role: ${user.role}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -77,13 +77,13 @@ Future<void> displayUserItemDialog(BuildContext context, String id) async {
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 48),
+                          padding: const EdgeInsets.symmetric(horizontal: 48),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 'Contact Number: ${user.contactnumber}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -92,13 +92,13 @@ Future<void> displayUserItemDialog(BuildContext context, String id) async {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top: 30),
+                          padding: const EdgeInsets.only(top: 30),
                           child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 48),
+                            padding: const EdgeInsets.symmetric(horizontal: 48),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                const Text(
                                   'Bio',
                                   style: TextStyle(
                                     fontSize: 24,
@@ -107,7 +107,8 @@ Future<void> displayUserItemDialog(BuildContext context, String id) async {
                                 ),
                                 Text(
                                   "${user.bio}",
-                                  style: TextStyle(fontSize: 16, height: 1.4),
+                                  style: const TextStyle(
+                                      fontSize: 16, height: 1.4),
                                 ),
                               ],
                             ),
@@ -117,8 +118,9 @@ Future<void> displayUserItemDialog(BuildContext context, String id) async {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                padding: EdgeInsets.symmetric(horizontal: 48),
-                                child: Text(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 48),
+                                child: const Text(
                                   'Preferences',
                                   style: TextStyle(
                                       fontSize: 24,
@@ -126,7 +128,8 @@ Future<void> displayUserItemDialog(BuildContext context, String id) async {
                                 ),
                               ),
                               Container(
-                                padding: EdgeInsets.symmetric(horizontal: 48),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 48),
                                 height: 100,
                                 child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
@@ -134,7 +137,8 @@ Future<void> displayUserItemDialog(BuildContext context, String id) async {
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     return Padding(
-                                        padding: EdgeInsets.only(right: 10),
+                                        padding:
+                                            const EdgeInsets.only(right: 10),
                                         child: Chip(
                                           label: Text(
                                               '${user.preferences[index]}'),
@@ -147,8 +151,9 @@ Future<void> displayUserItemDialog(BuildContext context, String id) async {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                padding: EdgeInsets.symmetric(horizontal: 48),
-                                child: Text(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 48),
+                                child: const Text(
                                   'Experiences',
                                   style: TextStyle(
                                       fontSize: 24,
@@ -156,7 +161,8 @@ Future<void> displayUserItemDialog(BuildContext context, String id) async {
                                 ),
                               ),
                               Container(
-                                padding: EdgeInsets.symmetric(horizontal: 48),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 48),
                                 height: 100,
                                 child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
@@ -164,7 +170,8 @@ Future<void> displayUserItemDialog(BuildContext context, String id) async {
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     return Padding(
-                                        padding: EdgeInsets.only(right: 10),
+                                        padding:
+                                            const EdgeInsets.only(right: 10),
                                         child: Chip(
                                           label: Text(
                                               '${user.experiences[index]}'),
@@ -174,16 +181,56 @@ Future<void> displayUserItemDialog(BuildContext context, String id) async {
                               )
                             ]),
                         Padding(
-                          padding: EdgeInsets.all(30),
+                          padding: const EdgeInsets.all(30),
                           child: ElevatedButton(
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: Text('Return'),
+                            child: const Text('Return'),
                           ),
                         )
                       ],
-                    );
+                    ),
+
+                    // Add this Padding at the end of your ListView
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () async {
+                          final confirmed = await showDialog<bool>(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text("Confirm Delete"),
+                              content: const Text(
+                                  "Are you sure you want to delete this user?"),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: const Text("Cancel"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop(false);
+                                  },
+                                ),
+                                TextButton(
+                                  child: const Text("Delete"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop(true);
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+
+                          if (confirmed ?? false) {
+                            userRepository.deleteUser(user);
+                            Navigator.of(context).pop();
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                );
+              }
             }
           },
         ),
