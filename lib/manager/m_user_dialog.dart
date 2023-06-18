@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/user_repository.dart';
-import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
+import 'package:pawfection/volunteer/widgets/profile_widget.dart';
 
 Future<void> displayUserItemDialog(BuildContext context, String id) async {
   final userRepository = UserRepository();

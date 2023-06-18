@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:pawfection/managerscreens/m_update_task_screen.dart';
+import 'package:pawfection/volunteer/v_complete_task_dialog.dart';
+import 'package:pawfection/manager/m_update_task_screen.dart';
 import 'package:pawfection/models/task.dart';
 import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/task_repository.dart';
 import 'package:pawfection/repository/user_repository.dart';
-import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
-import 'package:pawfection/managerscreens/m_user_dialog.dart' as UserDialog;
-import 'package:pawfection/managerscreens/m_pet_dialog.dart' as PetDialog;
+import 'package:pawfection/volunteer/widgets/profile_widget.dart';
+import 'package:pawfection/manager/m_user_dialog.dart' as UserDialog;
+import 'package:pawfection/manager/m_pet_dialog.dart' as PetDialog;
 
 Future<void> displayTaskItemDialog(BuildContext context, String id) async {
   final taskRepository = TaskRepository();
@@ -16,7 +17,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
     builder: (context) {
       return Dialog(
         shape: RoundedRectangleBorder(
-          side: const BorderSide(width: 2),
+          side: BorderSide(width: 2),
           borderRadius: BorderRadius.circular(20),
         ),
         child: FutureBuilder<Task?>(
@@ -24,7 +25,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               // While waiting for the future to complete, show a loading indicator
-              return const CircularProgressIndicator();
+              return CircularProgressIndicator();
             } else if (snapshot.hasError) {
               // If an error occurs while fetching the user, display an error message
               return Text('Error: ${snapshot.error}');
@@ -36,14 +37,14 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                   ? const Text('Error retrieving pet details')
                   : ListView(
                       shrinkWrap: true,
-                      physics: const BouncingScrollPhysics(),
+                      physics: BouncingScrollPhysics(),
                       children: [
                         Padding(
-                          padding: const EdgeInsets.all(30),
+                          padding: EdgeInsets.all(30),
                           child: Center(
                             child: Text(
                               "${task.name}",
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 24,
                               ),
@@ -51,7 +52,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                           ),
                         ),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 48),
+                          padding: EdgeInsets.symmetric(horizontal: 48),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -60,7 +61,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                 '${task.status}',
                                 style: TextStyle(
                                   color: task.status == 'Pending'
-                                      ? const Color.fromARGB(255, 194, 173, 77)
+                                      ? Color.fromARGB(255, 194, 173, 77)
                                       : task.status == 'Open'
                                           ? Colors.grey[400]
                                           : Colors.green,
@@ -72,13 +73,13 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                           ),
                         ),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 48),
+                          padding: EdgeInsets.symmetric(horizontal: 48),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 '${task.deadline.map((timestamp) => DateTime.fromMicrosecondsSinceEpoch(timestamp!.microsecondsSinceEpoch)).elementAt(0)} - ${task.deadline.map((timestamp) => DateTime.fromMicrosecondsSinceEpoch(timestamp!.microsecondsSinceEpoch)).elementAt(1)}',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -87,13 +88,13 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 30),
+                          padding: EdgeInsets.only(top: 30),
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 48),
+                            padding: EdgeInsets.symmetric(horizontal: 48),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
+                                Text(
                                   'Description',
                                   style: TextStyle(
                                     fontSize: 24,
@@ -102,20 +103,20 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                 ),
                                 Text(
                                   "${task.description}",
-                                  style: const TextStyle(fontSize: 16, height: 1.4),
+                                  style: TextStyle(fontSize: 16, height: 1.4),
                                 ),
                               ],
                             ),
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 30),
+                          padding: EdgeInsets.only(top: 30),
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 48),
+                            padding: EdgeInsets.symmetric(horizontal: 48),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
+                                Text(
                                   'Resources',
                                   style: TextStyle(
                                     fontSize: 24,
@@ -124,20 +125,20 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                 ),
                                 Text(
                                   "${task.resources}",
-                                  style: const TextStyle(fontSize: 16, height: 1.4),
+                                  style: TextStyle(fontSize: 16, height: 1.4),
                                 ),
                               ],
                             ),
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 30),
+                          padding: EdgeInsets.only(top: 30),
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 48),
+                            padding: EdgeInsets.symmetric(horizontal: 48),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
+                                Text(
                                   'Assigned to',
                                   style: TextStyle(
                                     fontSize: 24,
@@ -153,7 +154,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                     if (snapshot.connectionState ==
                                         ConnectionState.waiting) {
                                       // While waiting for the future to complete, show a loading indicator
-                                      return const CircularProgressIndicator();
+                                      return CircularProgressIndicator();
                                     } else if (snapshot.hasError) {
                                       // If an error occurs while fetching the user, display an error message
                                       return Text('Error: ${snapshot.error}');
@@ -172,7 +173,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                               },
                                               tileColor: Colors.grey[200],
                                               shape: RoundedRectangleBorder(
-                                                  side: const BorderSide(width: 2),
+                                                  side: BorderSide(width: 2),
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           20)),
@@ -196,13 +197,13 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 30),
+                          padding: EdgeInsets.only(top: 30),
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 48),
+                            padding: EdgeInsets.symmetric(horizontal: 48),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
+                                Text(
                                   'Created By',
                                   style: TextStyle(
                                     fontSize: 24,
@@ -218,7 +219,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                     if (snapshot.connectionState ==
                                         ConnectionState.waiting) {
                                       // While waiting for the future to complete, show a loading indicator
-                                      return const CircularProgressIndicator();
+                                      return CircularProgressIndicator();
                                     } else if (snapshot.hasError) {
                                       // If an error occurs while fetching the user, display an error message
                                       return Text('Error: ${snapshot.error}');
@@ -237,7 +238,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                               },
                                               tileColor: Colors.grey[200],
                                               shape: RoundedRectangleBorder(
-                                                  side: const BorderSide(width: 2),
+                                                  side: BorderSide(width: 2),
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           20)),
@@ -261,13 +262,13 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 30),
+                          padding: EdgeInsets.only(top: 30),
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 48),
+                            padding: EdgeInsets.symmetric(horizontal: 48),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
+                                Text(
                                   'Contact Person',
                                   style: TextStyle(
                                     fontSize: 24,
@@ -283,7 +284,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                     if (snapshot.connectionState ==
                                         ConnectionState.waiting) {
                                       // While waiting for the future to complete, show a loading indicator
-                                      return const CircularProgressIndicator();
+                                      return CircularProgressIndicator();
                                     } else if (snapshot.hasError) {
                                       // If an error occurs while fetching the user, display an error message
                                       return Text('Error: ${snapshot.error}');
@@ -302,7 +303,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                               },
                                               tileColor: Colors.grey[200],
                                               shape: RoundedRectangleBorder(
-                                                  side: const BorderSide(width: 2),
+                                                  side: BorderSide(width: 2),
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           20)),
@@ -327,27 +328,23 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                         ),
                         Padding(
                           padding:
-                              const EdgeInsets.only(right: 30, left: 30, top: 20),
+                              EdgeInsets.only(right: 30, left: 30, top: 10),
                           child: ElevatedButton(
                             onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) => MUpdateTaskScreen(
-                                          task: task,
-                                        )),
-                              );
+                              displayCompleteTaskDialog(
+                                  context, task.referenceId!);
                             },
-                            child: const Text('Edit'),
+                            child: Text('Complete'),
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(
+                          padding: EdgeInsets.only(
                               right: 30, left: 30, top: 10, bottom: 30),
                           child: ElevatedButton(
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: const Text('Return'),
+                            child: Text('Return'),
                           ),
                         )
                       ],
