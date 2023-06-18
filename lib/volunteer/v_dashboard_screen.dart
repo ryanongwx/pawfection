@@ -6,9 +6,8 @@ import 'package:pawfection/models/task.dart';
 import 'package:pawfection/repository/task_repository.dart';
 import 'package:pawfection/service/task_service.dart';
 import 'package:searchable_listview/searchable_listview.dart';
-import 'package:pawfection/volunteerscreens/v_task_dialog.dart' as taskDialog;
-import 'package:pawfection/managerscreens/m_volunteer_dialog.dart'
-    as volunteerDialog;
+import 'package:pawfection/volunteer/v_task_dialog.dart' as taskDialog;
+import 'package:pawfection/manager/m_volunteer_dialog.dart' as volunteerDialog;
 
 class VDashboardScreen extends StatefulWidget {
   const VDashboardScreen({super.key});

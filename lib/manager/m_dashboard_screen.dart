@@ -5,10 +5,9 @@ import 'package:pawfection/models/task.dart';
 import 'package:pawfection/repository/task_repository.dart';
 import 'package:pawfection/service/task_service.dart';
 import 'package:searchable_listview/searchable_listview.dart';
-import 'package:pawfection/managerscreens/m_create_task_screen.dart';
-import 'package:pawfection/managerscreens/m_task_dialog.dart' as taskDialog;
-import 'package:pawfection/managerscreens/m_volunteer_dialog.dart'
-    as volunteerDialog;
+import 'package:pawfection/manager/m_create_task_screen.dart';
+import 'package:pawfection/manager/m_task_dialog.dart' as taskDialog;
+import 'package:pawfection/manager/m_volunteer_dialog.dart' as volunteerDialog;
 import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
 import 'package:pawfection/login_view.dart';
 

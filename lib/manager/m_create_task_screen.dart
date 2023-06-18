@@ -1,58 +1,47 @@
 import 'dart:core';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:card_settings/card_settings.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pawfection/manager_view.dart';
 import 'package:pawfection/models/task.dart';
+import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/models/user.dart';
+import 'package:pawfection/repository/pet_repository.dart';
 import 'package:pawfection/repository/task_repository.dart';
-import 'package:pawfection/volunteerscreens/profile_picture_update_screen.dart';
-import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
+import 'package:pawfection/repository/user_repository.dart';
+import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
 
-class MUpdateTaskScreen extends StatefulWidget {
-  MUpdateTaskScreen({super.key, required this.task});
+class MCreateTaskScreen extends StatefulWidget {
+  MCreateTaskScreen(
+      {super.key, this.imagePath = 'assets/images/user_profile.png'});
 
-  Task task;
+  String imagePath;
 
   @override
-  State<MUpdateTaskScreen> createState() => _MUpdateTaskScreenState();
+  State<MCreateTaskScreen> createState() => _MCreateTaskScreenState();
 }
 
-class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
+class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
   final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
+
   final taskRepository = TaskRepository();
+  final petRepository = PetRepository();
+  final userRepository = UserRepository();
+
   late var _form;
   late var alertmessage;
-  void _showDialog(Widget child) {
-    showCupertinoModalPopup<void>(
-      context: context,
-      builder: (BuildContext context) => Container(
-        height: 216,
-        padding: const EdgeInsets.only(top: 6.0),
-        // The Bottom margin is provided to align the popup above the system navigation bar.
-        margin: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        // Provide a background color for the popup.
-        color: CupertinoColors.systemBackground.resolveFrom(context),
-        // Use a SafeArea widget to avoid system overlaps.
-        child: SafeArea(
-          top: false,
-          child: child,
-        ),
-      ),
-    );
-  }
+
+  final _auth = FirebaseAuth.FirebaseAuth.instance; // authInstance
 
   @override
   Widget build(BuildContext context) {
     if (Platform.isAndroid) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Update Task'),
+          title: const Text('Create Task'),
           elevation: 4.0,
         ),
         body: SafeArea(
@@ -91,26 +80,40 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                   },
                 ),
                 ElevatedButton(
-                  child: const Text('Update'),
-                  onPressed: () {
+                  child: const Text('Create'),
+                  onPressed: () async {
                     try {
-                      taskRepository.updateTask(Task(_form['name'],
-                          createdby: 'soo',
-                          assignedto: 'soo',
+                      final User? user =
+                          await userRepository.currentUser(_auth);
+                      if (user == null) {
+                        throw Exception(
+                            'Please log into a manager account to create task');
+                      }
+                      taskRepository.addTask(Task(_form['name'],
+                          createdby: user.referenceId,
+                          assignedto: _form['user'],
                           description: _form['description'],
-                          status: 'Pending',
-                          resources: _form['resources'],
-                          contactperson: _form['contactperson'],
-                          contactpersonnumber: _form['contactpersonnumber'],
+                          status: _form['user'] == "<No volunteer assigned>"
+                              ? 'Open'
+                              : 'Pending',
+                          resources: [_form['resources']],
                           deadline: [
-                            _form['deadlinestart'],
-                            _form['deadlineend']
+                            Timestamp.fromDate(_form['deadlinestart']),
+                            Timestamp.fromDate(_form['deadlineend'])
                           ],
-                          pet: 'Truffle'));
+                          pet: _form['pet'],
+                          contactperson: user.referenceId,
+                          contactpersonnumber: user.contactnumber));
                       setState(() {
-                        alertmessage = 'Task has successfully been updated';
+                        alertmessage = 'Task has successfully been created';
+                      });
+                    } on Exception catch (e) {
+                      // If the exception thrown is a general Exception
+                      setState(() {
+                        alertmessage = e.toString();
                       });
                     } catch (e) {
+                      // If any other type of exception/error is thrown
                       setState(() {
                         alertmessage = 'Please ensure all fields are filled in';
                       });
@@ -118,7 +121,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                       showDialog<String>(
                         context: context,
                         builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Update Task'),
+                          title: const Text('Create Task'),
                           content: Text(alertmessage),
                           actions: <Widget>[
                             TextButton(
@@ -129,11 +132,12 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                               onPressed: () => {
                                 Navigator.pop(context, 'OK'),
                                 if (alertmessage ==
-                                    'Task has successfully been updated')
+                                    'Task has successfully been created')
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => ManagerView(
+                                          builder: (context) =>
+                                              const ManagerView(
                                                 tab: 1,
                                               )),
                                     )
@@ -154,7 +158,8 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
       );
     } else if (Platform.isIOS) {
       return CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(middle: Text('Update Task')),
+        navigationBar:
+            const CupertinoNavigationBar(middle: Text('Create Task')),
         child: SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -170,27 +175,40 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                   },
                 ),
                 CupertinoButton(
-                  child: const Text('Update'),
-                  onPressed: () {
+                  child: const Text('Create'),
+                  onPressed: () async {
                     try {
-                      taskRepository.updateTask(Task(_form['name'],
-                          createdby: 'soo',
-                          assignedto: 'soo',
+                      final User? user =
+                          await userRepository.currentUser(_auth);
+                      if (user == null) {
+                        throw Exception(
+                            'Please log into a manager account to create task');
+                      }
+                      taskRepository.addTask(Task(_form['name'],
+                          createdby: user.referenceId,
+                          assignedto: _form['user'],
                           description: _form['description'],
-                          status: 'Pending',
-                          resources: _form['resources'],
-                          contactperson: _form['contactperson'],
-                          contactpersonnumber: _form['contactnumber'],
+                          status: _form['user'] == "<No volunteer assigned>"
+                              ? 'Open'
+                              : 'Pending',
+                          resources: [_form['resources']],
                           deadline: [
-                            _form['deadlinestart'],
-                            _form['deadlineend']
+                            Timestamp.fromDate(_form['deadlinestart']),
+                            Timestamp.fromDate(_form['deadlineend'])
                           ],
-                          pet: 'Truffle'));
+                          pet: _form['pet'],
+                          contactperson: user.referenceId,
+                          contactpersonnumber: user.contactnumber));
                       setState(() {
-                        alertmessage = 'Task has successfully been updated';
+                        alertmessage = 'Task has successfully been created';
+                      });
+                    } on Exception catch (e) {
+                      // If the exception thrown is a general Exception
+                      setState(() {
+                        alertmessage = e.toString();
                       });
                     } catch (e) {
-                      debugPrint(e.toString());
+                      // If any other type of exception/error is thrown
                       setState(() {
                         alertmessage = 'Please ensure all fields are filled in';
                       });
@@ -209,11 +227,12 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                               onPressed: () => {
                                 Navigator.pop(context, 'OK'),
                                 if (alertmessage ==
-                                    'Task has successfully been updated')
+                                    'Task has successfully been created')
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => ManagerView(
+                                          builder: (context) =>
+                                              const ManagerView(
                                                 tab: 1,
                                               )),
                                     )
@@ -233,8 +252,66 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
         ),
       );
     }
-    return Column();
+    return const Column();
   }
+
+  // To getPetList
+  Widget buildPetList() => FutureBuilder<List<Pet>>(
+        future: petRepository.getPetList(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // While waiting for the future to complete, show a loading indicator
+            return const CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            // If an error occurs while fetching the user, display an error message
+            return Text('Error: ${snapshot.error}');
+          } else {
+            // The future completed successfully
+            final petList = snapshot.data;
+            List<String> nameList =
+                petList?.map((pet) => pet.name).toSet().toList() ?? [];
+            nameList.insert(0, "<No pet assigned>");
+            return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: FastDropdown(
+                    name: 'pet',
+                    labelText: 'Pet',
+                    items: nameList,
+                    initialValue: nameList[0]));
+          }
+        },
+      );
+
+  // To getUserList
+  Widget buildVolunteerList() => FutureBuilder<List<User>>(
+        future: userRepository.getUserList(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // While waiting for the future to complete, show a loading indicator
+            return const CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            // If an error occurs while fetching the user, display an error message
+            return Text('Error: ${snapshot.error}');
+          } else {
+            // The future completed successfully
+            final userList = snapshot.data;
+            List<String?> nameList = userList
+                    ?.where((user) => user.role.toLowerCase() == "volunteer")
+                    .map((user) => user.username)
+                    .toSet()
+                    .toList() ??
+                [];
+            nameList.insert(0, "<No volunteer assigned>");
+            return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: FastDropdown(
+                    name: 'user',
+                    labelText: 'Volunteer',
+                    items: nameList,
+                    initialValue: nameList[0]));
+          }
+        },
+      );
 
   List<Widget> _buildForm(BuildContext context) {
     return [
@@ -250,7 +327,6 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
         children: [
           FastTextField(
             name: 'name',
-            placeholder: widget.task.name,
             labelText: 'Name',
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
@@ -258,7 +334,6 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
           ),
           FastTextField(
             name: 'description',
-            placeholder: widget.task.description,
             labelText: 'Description',
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
@@ -271,40 +346,20 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
               Validators.required((value) => 'Field is required'),
             ]),
           ),
-          FastTextField(
-            name: 'contactperson',
-            placeholder: widget.task.contactperson,
-            labelText: 'Contact Person',
-            validator: Validators.compose([
-              Validators.required((value) => 'Field is required'),
-            ]),
-          ),
-          FastTextField(
-            name: 'contactnumber',
-            placeholder: widget.task.contactpersonnumber,
-            labelText: 'Contact Number',
-            validator: Validators.compose([
-              Validators.required((value) => 'Field is required'),
-            ]),
-          ),
           FastCalendar(
             name: 'deadlinestart',
-            initialValue: DateTime.fromMicrosecondsSinceEpoch(
-                widget.task.deadline.elementAt(0)!.microsecondsSinceEpoch),
             labelText: 'Deadline Start',
             firstDate: DateTime(2023),
             lastDate: DateTime(2040),
           ),
           FastCalendar(
             name: 'deadlineend',
-            initialValue: DateTime.fromMicrosecondsSinceEpoch(
-                widget.task.deadline.elementAt(1)!.microsecondsSinceEpoch),
             labelText: 'Deadline End',
             firstDate: DateTime(2023),
             lastDate: DateTime(2040),
           ),
-          ElevatedButton(child: Text('Assign Pet'), onPressed: () {}),
-          ElevatedButton(child: Text('Assign Volunteer'), onPressed: () {}),
+          buildPetList(),
+          buildVolunteerList(),
         ],
       ),
     ];
@@ -320,7 +375,6 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
         children: [
           FastTextField(
             name: 'name',
-            placeholder: widget.task.name,
             labelText: 'Name',
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
@@ -328,7 +382,6 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
           ),
           FastTextField(
             name: 'description',
-            placeholder: widget.task.description,
             labelText: 'Description',
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
@@ -341,26 +394,8 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
               Validators.required((value) => 'Field is required'),
             ]),
           ),
-          FastTextField(
-            placeholder: widget.task.contactperson,
-            name: 'contactperson',
-            labelText: 'Contact Person',
-            validator: Validators.compose([
-              Validators.required((value) => 'Field is required'),
-            ]),
-          ),
-          FastTextField(
-            placeholder: widget.task.contactpersonnumber,
-            name: 'contactnumber',
-            labelText: 'Contact Number',
-            validator: Validators.compose([
-              Validators.required((value) => 'Field is required'),
-            ]),
-          ),
           FastDatePicker(
             name: 'deadlinestart',
-            initialValue: DateTime.fromMicrosecondsSinceEpoch(
-                widget.task.deadline.elementAt(0)!.microsecondsSinceEpoch),
             firstDate: DateTime(2023),
             lastDate: DateTime(2040),
             labelText: 'Start',
@@ -368,15 +403,13 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
           ),
           FastDatePicker(
             name: 'deadlineend',
-            initialValue: DateTime.fromMicrosecondsSinceEpoch(
-                widget.task.deadline.elementAt(1)!.microsecondsSinceEpoch),
             firstDate: DateTime(2023),
             lastDate: DateTime(2040),
             labelText: 'Deadline',
             mode: CupertinoDatePickerMode.dateAndTime,
           ),
-          CupertinoButton(child: Text('Assign Pet'), onPressed: () {}),
-          CupertinoButton(child: Text('Assign Volunteer'), onPressed: () {}),
+          Material(child: buildPetList()),
+          Material(child: buildVolunteerList())
         ],
       ),
     ];

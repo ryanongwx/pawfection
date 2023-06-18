@@ -2,11 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
 import 'package:flutter/material.dart';
 import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/user_repository.dart';
-import 'package:pawfection/volunteerscreens/profile_picture_update_screen.dart';
-import 'package:pawfection/volunteerscreens/profile_update_screen.dart';
-import 'package:pawfection/volunteerscreens/update_availability_screen.dart';
-import 'package:pawfection/volunteerscreens/widgets/button_widget.dart';
-import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
+import 'package:pawfection/volunteer/profile_picture_update_screen.dart';
+import 'package:pawfection/volunteer/profile_update_screen.dart';
+import 'package:pawfection/volunteer/update_availability_screen.dart';
+import 'package:pawfection/volunteer/widgets/button_widget.dart';
+import 'package:pawfection/volunteer/widgets/profile_widget.dart';
 import 'package:pawfection/login_view.dart';
 
 class VProfileScreen extends StatefulWidget {

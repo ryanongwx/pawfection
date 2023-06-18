@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:pawfection/managerscreens/m_update_pet_screen.dart';
+import 'package:pawfection/manager/m_update_pet_screen.dart';
 import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/repository/pet_repository.dart';
-import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
+import 'package:pawfection/volunteer/widgets/profile_widget.dart';
 
 Future<void> displayPetItemDialog(BuildContext context, String id) async {
   final petRepository = PetRepository();

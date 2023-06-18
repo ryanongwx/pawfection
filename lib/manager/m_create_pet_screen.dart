@@ -1,28 +1,24 @@
 import 'dart:core';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:card_settings/card_settings.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:pawfection/managerscreens/m_pet_screen.dart';
 import 'package:pawfection/manager_view.dart';
 import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/repository/pet_repository.dart';
-import 'package:pawfection/volunteerscreens/profile_picture_update_screen.dart';
-import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
-import 'package:pawfection/voluteer_view.dart';
+import 'package:pawfection/volunteer/profile_picture_update_screen.dart';
+import 'package:pawfection/volunteer/widgets/profile_widget.dart';
 
-class MUpdatePetScreen extends StatefulWidget {
-  MUpdatePetScreen({super.key, required this.imageURL, required this.pet});
+class MCreatePetScreen extends StatefulWidget {
+  MCreatePetScreen({super.key, required this.imageURL});
 
   String imageURL;
-  Pet pet;
 
   @override
-  State<MUpdatePetScreen> createState() => _MUpdatePetScreenState();
+  State<MCreatePetScreen> createState() => _MCreatePetScreenState();
 }
 
-class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
+class _MCreatePetScreenState extends State<MCreatePetScreen> {
   final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
   final petRepository = PetRepository();
@@ -30,20 +26,11 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
   late var alertmessage;
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    if (widget.imageURL == '') {
-      widget.imageURL = widget.pet.profilepicture;
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     if (Platform.isAndroid) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Update Pet'),
+          title: Text('Create Pet'),
           elevation: 4.0,
         ),
         body: SafeArea(
@@ -80,7 +67,7 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
                   },
                 ),
                 ElevatedButton(
-                  child: const Text('Update'),
+                  child: const Text('Create'),
                   onPressed: () {
                     try {
                       petRepository.addPet(Pet(_form['name'],
@@ -88,7 +75,7 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
                           breed: _form['breed'],
                           description: _form['description'],
                           thingstonote: _form['thingstonote']));
-                      alertmessage == 'Pet has successfully been created';
+                      alertmessage = 'Pet has successfully been created';
                     } catch (e) {
                       setState(() {
                         alertmessage = 'Please ensure all fields are filled in';
@@ -97,7 +84,7 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
                       showDialog<String>(
                         context: context,
                         builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Update Pet'),
+                          title: const Text('Create Pet'),
                           content: Text(alertmessage),
                           actions: <Widget>[
                             TextButton(
@@ -108,7 +95,7 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
                               onPressed: () => {
                                 Navigator.pop(context, 'OK'),
                                 if (alertmessage ==
-                                    'Pet has successfully been updated')
+                                    'Pet has successfully been created')
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
@@ -133,7 +120,7 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
       );
     } else if (Platform.isIOS) {
       return CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(middle: Text('Update Pet')),
+        navigationBar: CupertinoNavigationBar(middle: Text('Create Pet')),
         child: SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -157,7 +144,7 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
                           breed: _form['breed'],
                           description: _form['description'],
                           thingstonote: _form['thingstonote']));
-                      alertmessage == 'Pet has successfully been created';
+                      alertmessage = 'Pet has successfully been created';
                     } catch (e) {
                       setState(() {
                         alertmessage = 'Please ensure all fields are filled in';
@@ -166,7 +153,7 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
                       showDialog<String>(
                         context: context,
                         builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Update Pet'),
+                          title: const Text('Create Pet'),
                           content: Text(alertmessage),
                           actions: <Widget>[
                             TextButton(
@@ -177,7 +164,7 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
                               onPressed: () => {
                                 Navigator.pop(context, 'OK'),
                                 if (alertmessage ==
-                                    'Pet has successfully been updated')
+                                    'Pet has successfully been created')
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
@@ -206,18 +193,15 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
 
   List<Widget> _buildForm(BuildContext context) {
     return [
-      Padding(
-        padding: EdgeInsets.only(top: 20),
-        child: ProfileWidget(
-          image: Image.network(widget.imageURL),
-          onClicked: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ProfilePictureUpdateScreen(
-                      routetext: 'pet',
-                      petid: widget.pet.referenceId!,
-                    )));
-          },
-        ),
+      ProfileWidget(
+        image: Image.network(widget.imageURL),
+        onClicked: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => ProfilePictureUpdateScreen(
+                    routetext: 'pet',
+                    petid: '',
+                  )));
+        },
       ),
       FastFormSection(
         padding: const EdgeInsets.all(16.0),
@@ -231,7 +215,6 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
         children: [
           FastTextField(
             name: 'name',
-            placeholder: widget.pet.name,
             labelText: 'Name',
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
@@ -239,16 +222,13 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
           ),
           FastTextField(
             name: 'breed',
-            placeholder: widget.pet.breed,
             labelText: 'Breed',
           ),
-          FastTextField(
+          const FastTextField(
             name: 'description',
-            placeholder: widget.pet.description,
             labelText: 'Description',
           ),
-          FastTextField(
-            placeholder: widget.pet.thingstonote,
+          const FastTextField(
             name: 'thingstonote',
             labelText: 'Things to note',
           ),
@@ -280,24 +260,20 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
         children: [
           FastTextField(
             name: 'name',
-            placeholder: widget.pet.name,
             labelText: 'Name',
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
             ]),
           ),
-          FastTextField(
-            placeholder: widget.pet.breed,
+          const FastTextField(
             name: 'breed',
             labelText: 'Breed',
           ),
-          FastTextField(
+          const FastTextField(
             name: 'description',
-            placeholder: widget.pet.description,
             labelText: 'Description',
           ),
-          FastTextField(
-            placeholder: widget.pet.thingstonote,
+          const FastTextField(
             name: 'thingstonote',
             labelText: 'Things to note',
           ),

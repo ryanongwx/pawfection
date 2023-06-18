@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
 
-import 'package:pawfection/managerscreens/m_dashboard_screen.dart';
-import 'package:pawfection/managerscreens/m_pet_screen.dart';
-import 'package:pawfection/managerscreens/m_volunteerlist_screen.dart';
+import 'package:pawfection/manager/m_dashboard_screen.dart';
+import 'package:pawfection/manager/m_pet_screen.dart';
+import 'package:pawfection/manager/m_volunteerlist_screen.dart';
 
 class ManagerView extends StatefulWidget {
   const ManagerView({super.key, required this.tab});
