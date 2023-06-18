@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../models/task.dart';
+import 'package:pawfection/models/task.dart';
+import 'package:pawfection/models/user.dart';
 
 class TaskService {
   // _userFromJson turns a map of values from Firestore into a User class.
@@ -63,5 +64,24 @@ class TaskService {
         return taskFromJson(data);
       }).toList();
     }
+  }
+
+  bool isAvailableWithinDeadline(User user, Task task) {
+    return user.availabledates.any((date) {
+      DateTime availableDate = date!.toDate();
+      DateTime availableDateOnly =
+          DateTime(availableDate.year, availableDate.month, availableDate.day);
+
+      DateTime startDeadline = task.deadline[0]!.toDate();
+      DateTime startDeadlineOnly =
+          DateTime(startDeadline.year, startDeadline.month, startDeadline.day);
+
+      DateTime endDeadline = task.deadline[1]!.toDate();
+      DateTime endDeadlineOnly =
+          DateTime(endDeadline.year, endDeadline.month, endDeadline.day);
+
+      return (availableDateOnly.difference(startDeadlineOnly).inDays >= 0) &&
+          (endDeadlineOnly.difference(availableDateOnly).inDays >= 0);
+    });
   }
 }
