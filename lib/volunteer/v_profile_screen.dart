@@ -55,257 +55,176 @@ class _VProfileScreenState extends State<VProfileScreen> {
             children: [
               Builder(
                 builder: (context) => Expanded(
-                  // Wrap ListView with Expanded widget
-                  child: ListView(
-                    physics: const BouncingScrollPhysics(),
-                    children: [
-                      buildProfile(),
-                      const SizedBox(height: 24),
-                      buildName(),
-                      const SizedBox(height: 24),
-                      Center(child: buildUpgradeButton1()),
-                      Center(child: buildUpgradeButton2()),
-                      const SizedBox(height: 24),
-                      buildAbout(),
-                      const SizedBox(height: 24),
-                      buildPreferences(),
-                      const SizedBox(height: 24),
-                      buildExperiences(),
-                    ],
-                  ),
-                ),
+                    // Wrap ListView with Expanded widget
+                    child: FutureBuilder<User?>(
+                  future: userRepository.findUserByUUID(currentUser.uid),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      // While waiting for the future to complete, show a loading indicator
+                      return const CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      // If an error occurs while fetching the user, display an error message
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      // The future completed successfully
+                      final user = snapshot.data;
+
+                      return (user == null
+                          ? const Text('User not logged in')
+                          : ListView(
+                              physics: const BouncingScrollPhysics(),
+                              children: [
+                                ProfileWidget(
+                                  image: Image.network(user.profilepicture),
+                                  onClicked: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProfilePictureUpdateScreen(
+                                                routetext: 'profile',
+                                                petid: '',
+                                              )),
+                                    );
+                                  },
+                                ),
+                                const SizedBox(height: 24),
+                                Center(
+                                    child: Text("${user.username}",
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 24))),
+                                const SizedBox(height: 24),
+                                Center(
+                                    child: ButtonWidget(
+                                  text: 'Update Profile',
+                                  onClicked: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            VProfileUpdateScreen(
+                                          user: user,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                )),
+                                Center(
+                                    child: ButtonWidget(
+                                  text: 'Update Availability',
+                                  onClicked: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            UpdateAvailability(user: user),
+                                      ),
+                                    );
+                                  },
+                                )),
+                                const SizedBox(height: 24),
+                                Column(children: [
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 48),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          'About',
+                                          style: TextStyle(
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        const SizedBox(height: 16),
+                                        Text(
+                                          "${user.bio}",
+                                          style: const TextStyle(
+                                              fontSize: 16, height: 1.4),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ]),
+                                const SizedBox(height: 24),
+                                Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 60),
+                                        child: const Text(
+                                          'Preferences',
+                                          style: TextStyle(
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 60),
+                                        height: 100,
+                                        child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: user.preferences.length,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 10),
+                                                child: Chip(
+                                                  label: Text(
+                                                      '${user.preferences[index]}'),
+                                                ));
+                                          },
+                                        ),
+                                      )
+                                    ]),
+                                const SizedBox(height: 24),
+                                Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 60),
+                                        child: const Text(
+                                          'Experiences',
+                                          style: TextStyle(
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 60),
+                                        height: 100,
+                                        child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: user.experiences.length,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 10),
+                                                child: Chip(
+                                                  label: Text(
+                                                      '${user.experiences[index]}'),
+                                                ));
+                                          },
+                                        ),
+                                      )
+                                    ]),
+                              ],
+                            ));
+                    }
+                  },
+                )),
               ),
             ],
           ),
         ));
   }
-
-  Widget buildUpgradeButton1() => FutureBuilder<User?>(
-        future: userRepository.findUserByUUID(currentUser.uid),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // While waiting for the future to complete, show a loading indicator
-            return const CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-            // If an error occurs while fetching the user, display an error message
-            return Text('Error: ${snapshot.error}');
-          } else {
-            // The future completed successfully
-            final user = snapshot.data;
-
-            return (user == null
-                ? const Text('User not logged in')
-                : ButtonWidget(
-                    text: 'Update Profile',
-                    onClicked: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => VProfileUpdateScreen(
-                            user: user,
-                          ),
-                        ),
-                      );
-                    },
-                  ));
-          }
-        },
-      );
-
-  Widget buildProfile() => FutureBuilder<User?>(
-        future: userRepository.findUserByUUID(currentUser.uid),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // While waiting for the future to complete, show a loading indicator
-            return const CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-            // If an error occurs while fetching the user, display an error message
-            return Text('Error: ${snapshot.error}');
-          } else {
-            // The future completed successfully
-            final user = snapshot.data;
-
-            return (user == null
-                ? const Text('User not logged in')
-                : ProfileWidget(
-                    image: Image.network(user.profilepicture),
-                    onClicked: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => ProfilePictureUpdateScreen(
-                                  routetext: 'profile',
-                                  petid: '',
-                                )),
-                      );
-                    },
-                  ));
-          }
-        },
-      );
-
-  Widget buildUpgradeButton2() => ButtonWidget(
-        text: 'Update Availability',
-        onClicked: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const UpdateAvailability(),
-            ),
-          );
-        },
-      );
-
-  Widget buildName() => FutureBuilder<User?>(
-        future: userRepository.findUserByUUID(currentUser.uid),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // While waiting for the future to complete, show a loading indicator
-            return const CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-            // If an error occurs while fetching the user, display an error message
-            return Text('Error: ${snapshot.error}');
-          } else {
-            // The future completed successfully
-            final user = snapshot.data;
-
-            return (user == null
-                ? const Text('User not logged in')
-                : Center(
-                    child: Text("${user.username}",
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 24))));
-          }
-        },
-      );
-
-  Widget buildAbout() => FutureBuilder<User?>(
-        future: userRepository.findUserByUUID(currentUser.uid),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // While waiting for the future to complete, show a loading indicator
-            return const CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-            // If an error occurs while fetching the user, display an error message
-            return Text('Error: ${snapshot.error}');
-          } else {
-            // The future completed successfully
-            final user = snapshot.data;
-
-            return (user == null
-                ? const Text('User not logged in')
-                : Column(children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 48),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'About',
-                            style: TextStyle(
-                                fontSize: 24, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            "${user.bio}",
-                            style: const TextStyle(fontSize: 16, height: 1.4),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ]));
-          }
-        },
-      );
-
-  Widget buildPreferences() => FutureBuilder<User?>(
-        future: userRepository.findUserByUUID(currentUser.uid),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // While waiting for the future to complete, show a loading indicator
-            return const CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-            // If an error occurs while fetching the user, display an error message
-            return Text('Error: ${snapshot.error}');
-          } else {
-            // The future completed successfully
-            final user = snapshot.data;
-
-            return (user == null
-                ? const Text('User not logged in')
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 60),
-                          child: const Text(
-                            'Preferences',
-                            style: TextStyle(
-                                fontSize: 24, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 60),
-                          height: 100,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: user.preferences.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Padding(
-                                  padding: const EdgeInsets.only(right: 10),
-                                  child: Chip(
-                                    label: Text('${user.preferences[index]}'),
-                                  ));
-                            },
-                          ),
-                        )
-                      ]));
-          }
-        },
-      );
-
-  Widget buildExperiences() => FutureBuilder<User?>(
-        future: userRepository.findUserByUUID(currentUser.uid),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // While waiting for the future to complete, show a loading indicator
-            return const CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-            // If an error occurs while fetching the user, display an error message
-            return Text('Error: ${snapshot.error}');
-          } else {
-            // The future completed successfully
-            final user = snapshot.data;
-
-            return (user == null
-                ? const Text('User not logged in')
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 60),
-                          child: const Text(
-                            'Experiences',
-                            style: TextStyle(
-                                fontSize: 24, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 60),
-                          height: 100,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: user.experiences.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Padding(
-                                  padding: const EdgeInsets.only(right: 10),
-                                  child: Chip(
-                                    label: Text('${user.experiences[index]}'),
-                                  ));
-                            },
-                          ),
-                        )
-                      ]));
-          }
-        },
-      );
 }

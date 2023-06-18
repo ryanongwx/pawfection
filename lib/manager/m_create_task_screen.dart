@@ -75,8 +75,6 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                     // ignore: avoid_print
                     print('Form changed: ${value.toString()}');
                     _form = value;
-
-                    if (_form['walking']) {}
                   },
                 ),
                 ElevatedButton(
@@ -89,6 +87,18 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                         throw Exception(
                             'Please log into a manager account to create task');
                       }
+                      Timestamp deadlinestart = Timestamp.fromDate(DateTime(
+                          _form['deadlineend'].year,
+                          _form['deadlineend'].month,
+                          _form['deadlineend'].day,
+                          _form['deadlineendtime'].hour,
+                          _form['deadlineendtime'].minute));
+                      Timestamp deadlineend = Timestamp.fromDate(DateTime(
+                          _form['deadlinestart'].year,
+                          _form['deadlinestart'].month,
+                          _form['deadlinestart'].day,
+                          _form['deadlinestarttime'].hour,
+                          _form['deadlinestarttime'].minute));
                       taskRepository.addTask(Task(_form['name'],
                           createdby: user.referenceId,
                           assignedto: _form['user'],
@@ -352,11 +362,19 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
             firstDate: DateTime(2023),
             lastDate: DateTime(2040),
           ),
+          FastTimePicker(
+            name: 'deadlinestarttime',
+            labelText: 'Deadline Start Time',
+          ),
           FastCalendar(
             name: 'deadlineend',
             labelText: 'Deadline End',
             firstDate: DateTime(2023),
             lastDate: DateTime(2040),
+          ),
+          FastTimePicker(
+            name: 'deadlineendtime',
+            labelText: 'Deadline End Time',
           ),
           buildPetList(),
           buildVolunteerList(),
