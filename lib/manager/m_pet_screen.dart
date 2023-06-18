@@ -1,43 +1,38 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:pawfection/models/user.dart';
-import 'package:pawfection/repository/user_repository.dart';
-import 'package:pawfection/service/user_service.dart';
-import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
+import 'package:pawfection/manager/m_create_pet_screen.dart';
+import 'package:pawfection/models/pet.dart';
+import 'package:pawfection/repository/pet_repository.dart';
+import 'package:pawfection/service/pet_service.dart';
 import 'package:searchable_listview/searchable_listview.dart';
-import 'package:pawfection/managerscreens/m_user_dialog.dart' as Dialog;
+import 'package:pawfection/models/pet.dart';
+import 'package:pawfection/manager/m_pet_dialog.dart' as Dialog;
 
-class MVolunteerListScreen extends StatefulWidget {
-  const MVolunteerListScreen({super.key});
+class MPetScreen extends StatefulWidget {
+  const MPetScreen({super.key});
 
   @override
-  State<MVolunteerListScreen> createState() => _MVolunteerListScreenState();
+  State<MPetScreen> createState() => _MPetScreenState();
 }
 
-final userRepository = UserRepository();
-final userService = UserService();
+final petRepository = PetRepository();
+final petService = PetService();
 
-List<User> userList = [];
-
-class _MVolunteerListScreenState extends State<MVolunteerListScreen> {
+class _MPetScreenState extends State<MPetScreen> {
   // @override
   // void initState() {
-  // // TODO: implement initState
-  // super.initState();
-  // Future<void> fetchUserList() async {
-  //   Future<List<User>> userListFuture = repository.getUserList();
-  //   userList = await userListFuture;
+  //   // TODO: implement initState
+  //   super.initState();
+  //   fetchPetList();
   // }
-
-  // fetchUserList();
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: userRepository.users,
+      stream: petRepository.pets,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         // Convert to List
-        List<User> userList = userService.snapshotToUserList(snapshot);
+        List<Pet> petList = petService.snapshotToPetList(snapshot);
 
         if (snapshot.hasError) {
           return const Text('Something went wrong');
@@ -49,24 +44,27 @@ class _MVolunteerListScreenState extends State<MVolunteerListScreen> {
 
         return Scaffold(
             appBar: AppBar(
-              title: const Text('Volunteers'),
-              // actions: <Widget>[
-              //   Padding(
-              //       padding: EdgeInsets.only(right: 20.0),
-              //       child: GestureDetector(
-              //         onTap: () {
-              //           Navigator.push(
-              //             context,
-              //             MaterialPageRoute(
-              //                 builder: (context) => MCreateUserScreen()),
-              //           );
-              //         },
-              //         child: Icon(
-              //           Icons.add,
-              //           size: 26.0,
-              //         ),
-              //       )),
-              // ],
+              title: const Text('Pets'),
+              actions: <Widget>[
+                Padding(
+                    padding: const EdgeInsets.only(right: 20.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MCreatePetScreen(
+                                    imageURL:
+                                        'https://firebasestorage.googleapis.com/v0/b/pawfection-c14ed.appspot.com/o/profilepictures%2FFlFhhBapCZOzattk8mT1CMNxou22?alt=media&token=530bd4b2-95b6-45dc-88f0-9abf64d2a916',
+                                  )),
+                        );
+                      },
+                      child: const Icon(
+                        Icons.add,
+                        size: 26.0,
+                      ),
+                    )),
+              ],
             ),
             body: Stack(children: [
               SizedBox(
@@ -74,17 +72,17 @@ class _MVolunteerListScreenState extends State<MVolunteerListScreen> {
                 child: Padding(
                   padding:
                       const EdgeInsets.only(top: 20.0, left: 20, right: 20),
-                  child: SearchableList<User>(
+                  child: SearchableList<Pet>(
                     autoFocusOnSearch: false,
-                    initialList: userList,
-                    filter: (value) => userList
+                    initialList: petList,
+                    filter: (value) => petList
                         .where((element) =>
-                            element.username.contains(value.toLowerCase()))
+                            element.name.contains(value.toLowerCase()))
                         .toList(),
-                    builder: (User user) => UserItem(user: user),
+                    builder: (Pet pet) => PetItem(pet: pet),
                     emptyWidget: const EmptyView(),
                     inputDecoration: InputDecoration(
-                      labelText: "Search Volunteer",
+                      labelText: "Search Pet",
                       fillColor: Colors.white,
                       focusedBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
@@ -106,10 +104,10 @@ class _MVolunteerListScreenState extends State<MVolunteerListScreen> {
               //             Navigator.push(
               //               context,
               //               MaterialPageRoute(
-              //                   builder: (context) => MCreateUserScreen()),
+              //                   builder: (context) => MCreatePetScreen()),
               //             );
               //           },
-              //           child: Text('Create Volunteer')),
+              //           child: Text('Create Pet')),
               //     )),
             ]));
       },
@@ -117,12 +115,12 @@ class _MVolunteerListScreenState extends State<MVolunteerListScreen> {
   }
 }
 
-class UserItem extends StatelessWidget {
-  final User user;
+class PetItem extends StatelessWidget {
+  final Pet pet;
 
-  const UserItem({
+  const PetItem({
     Key? key,
-    required this.user,
+    required this.pet,
   }) : super(key: key);
 
   @override
@@ -137,7 +135,8 @@ class UserItem extends StatelessWidget {
           ),
           child: InkWell(
             onTap: () {
-              Dialog.displayUserItemDialog(context, user.referenceId!);
+              debugPrint(pet.name);
+              Dialog.displayPetItemDialog(context, pet.referenceId!);
             },
             child: Padding(
               padding: const EdgeInsets.all(10),
@@ -147,7 +146,7 @@ class UserItem extends StatelessWidget {
                     child: Material(
                       color: Colors.transparent,
                       child: Ink.image(
-                        image: Image.network(user.profilepicture).image,
+                        image: Image.network(pet.profilepicture).image,
                         fit: BoxFit.cover,
                         width: 50,
                         height: 50,
@@ -162,7 +161,7 @@ class UserItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '${user.username}',
+                        '${pet.name}',
                         style: const TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -190,7 +189,7 @@ class EmptyView extends StatelessWidget {
           Icons.error,
           color: Colors.red,
         ),
-        Text('No User with this name is found'),
+        Text('No Pet with this name is found'),
       ],
     );
   }

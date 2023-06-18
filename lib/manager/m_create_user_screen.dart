@@ -5,8 +5,8 @@ import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:pawfection/repository/user_repository.dart';
-import 'package:pawfection/volunteerscreens/profile_picture_update_screen.dart';
-import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
+import 'package:pawfection/volunteer/profile_picture_update_screen.dart';
+import 'package:pawfection/volunteer/widgets/profile_widget.dart';
 
 class MCreateUserScreen extends StatefulWidget {
   MCreateUserScreen(
