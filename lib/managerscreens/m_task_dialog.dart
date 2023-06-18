@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pawfection/managerscreens/m_update_task_screen.dart';
 import 'package:pawfection/models/task.dart';
-import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/task_repository.dart';
 import 'package:pawfection/repository/user_repository.dart';
-import 'package:pawfection/volunteerscreens/widgets/profile_widget.dart';
 import 'package:pawfection/managerscreens/m_user_dialog.dart' as UserDialog;
-import 'package:pawfection/managerscreens/m_pet_dialog.dart' as PetDialog;
 
 Future<void> displayTaskItemDialog(BuildContext context, String id) async {
   final taskRepository = TaskRepository();
@@ -34,7 +31,10 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
 
               return (task == null)
                   ? const Text('Error retrieving pet details')
-                  : ListView(
+                  : Stack(
+                  alignment: Alignment.topRight,
+                  children: [
+                    ListView(
                       shrinkWrap: true,
                       physics: const BouncingScrollPhysics(),
                       children: [
@@ -351,7 +351,44 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                           ),
                         )
                       ],
-                    );
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () async {
+                          final confirmed = await showDialog<bool>(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text("Confirm Delete"),
+                              content: const Text(
+                                  "Are you sure you want to delete this user?"),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: const Text("Cancel"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop(false);
+                                  },
+                                ),
+                                TextButton(
+                                  child: const Text("Delete"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop(true);
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+
+                          if (confirmed ?? false) {
+                            taskRepository.deleteTask(task);
+                            Navigator.of(context).pop();
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+              );
             }
           },
         ),
