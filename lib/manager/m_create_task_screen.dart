@@ -107,10 +107,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                               ? 'Open'
                               : 'Pending',
                           resources: [_form['resources']],
-                          deadline: [
-                            Timestamp.fromDate(_form['deadlinestart']),
-                            Timestamp.fromDate(_form['deadlineend'])
-                          ],
+                          deadline: [deadlinestart, deadlineend],
                           pet: _form['pet'],
                           contactperson: user.referenceId,
                           contactpersonnumber: user.contactnumber));
@@ -359,22 +356,26 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
           FastCalendar(
             name: 'deadlinestart',
             labelText: 'Deadline Start',
+            initialValue: DateTime.now(),
             firstDate: DateTime(2023),
             lastDate: DateTime(2040),
           ),
           FastTimePicker(
+            initialValue: TimeOfDay.fromDateTime(DateTime.now()),
             name: 'deadlinestarttime',
             labelText: 'Deadline Start Time',
           ),
           FastCalendar(
             name: 'deadlineend',
             labelText: 'Deadline End',
+            initialValue: DateTime.now(),
             firstDate: DateTime(2023),
             lastDate: DateTime(2040),
           ),
           FastTimePicker(
             name: 'deadlineendtime',
             labelText: 'Deadline End Time',
+            initialValue: TimeOfDay.fromDateTime(DateTime.now()),
           ),
           buildPetList(),
           buildVolunteerList(),
@@ -414,6 +415,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
           ),
           FastDatePicker(
             name: 'deadlinestart',
+            initialValue: DateTime.now(),
             firstDate: DateTime(2023),
             lastDate: DateTime(2040),
             labelText: 'Start',
@@ -421,6 +423,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
           ),
           FastDatePicker(
             name: 'deadlineend',
+            initialValue: DateTime.now(),
             firstDate: DateTime(2023),
             lastDate: DateTime(2040),
             labelText: 'Deadline',
