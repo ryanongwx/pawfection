@@ -135,10 +135,6 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                           content: Text(alertmessage),
                           actions: <Widget>[
                             TextButton(
-                              onPressed: () => Navigator.pop(context, 'Cancel'),
-                              child: const Text('Cancel'),
-                            ),
-                            TextButton(
                               onPressed: () => {
                                 Navigator.pop(context, 'OK'),
                                 if (alertmessage ==
