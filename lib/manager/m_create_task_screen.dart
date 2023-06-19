@@ -134,7 +134,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                     } catch (e) {
                       // If any other type of exception/error is thrown
                       setState(() {
-                        alertmessage = 'Please ensure all fields are filled in';
+                        alertmessage = e.toString();
                       });
                     } finally {
                       showDialog<String>(
