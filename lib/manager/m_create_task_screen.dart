@@ -100,15 +100,17 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                           _form['deadlinestarttime'].hour,
                           _form['deadlinestarttime'].minute));
 
-                      User? assignedUser = null;
-                      _form['user'] != "<No volunteer assigned>"
-                      ? assignedUser = await userRepository.findUserByUsername(_form['user'])
-                      :
+                      String? assignedUserId;
+                      if (_form['user'] != "<No volunteer assigned>") {
+                        User? assignedUser = await userRepository.findUserByUsername(_form['user']);
+                        assignedUserId = assignedUser!.referenceId;
+                      } else {
+                        assignedUserId = null;
+                      }
 
                       taskRepository.addTask(Task(_form['name'],
                           createdby: user.referenceId,
-                          assignedto: assignedUser == null?
-                                      assignedUser.referenceId,
+                          assignedto: assignedUserId,
                           description: _form['description'],
                           status: _form['user'] == "<No volunteer assigned>"
                               ? 'Open'
@@ -201,9 +203,18 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                         throw Exception(
                             'Please log into a manager account to create task');
                       }
+
+                      String? assignedUserId;
+                      if (_form['user'] != "<No volunteer assigned>") {
+                        User? assignedUser = await userRepository.findUserByUsername(_form['user']);
+                        assignedUserId = assignedUser!.referenceId;
+                      } else {
+                        assignedUserId = null;
+                      }
+
                       taskRepository.addTask(Task(_form['name'],
                           createdby: user.referenceId,
-                          assignedto: _form['user'],
+                          assignedto: assignedUserId,
                           description: _form['description'],
                           status: _form['user'] == "<No volunteer assigned>"
                               ? 'Open'
