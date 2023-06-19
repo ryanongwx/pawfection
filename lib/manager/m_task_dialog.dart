@@ -253,138 +253,133 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                               return (user == null
                                                   ? const Text(
                                                       'User not logged in')
-                                                  : user.referenceId ==
-                                                          task.assignedto
-                                                      ? ListTile(
-                                                          onTap: () {
-                                                            UserDialog
-                                                                .displayUserItemDialog(
-                                                                    context,
-                                                                    task.createdby);
-                                                          },
-                                                          tileColor:
-                                                              Colors.grey[200],
-                                                          shape: RoundedRectangleBorder(
-                                                              side:
-                                                                  const BorderSide(
-                                                                      width: 2),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          20)),
-                                                          leading: const Icon(
-                                                            Icons
-                                                                .account_circle,
-                                                            color: Colors.black,
-                                                          ),
-                                                          title: Text(
-                                                            user.username,
-                                                            style:
-                                                                const TextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
-                                                          ),
-                                                          trailing: IconButton(
-                                                            icon: Icon(
-                                                                Icons.close),
-                                                            onPressed: () {
-                                                              task.assignedto =
-                                                                  '';
-                                                              task.status =
-                                                                  'Open';
-                                                              taskRepository
-                                                                  .updateTask(
-                                                                      task);
-                                                            },
-                                                          ),
-                                                        )
-                                                      : ListTile(
-                                                          onTap: () {
-                                                            UserDialog
-                                                                .displayUserItemDialog(
-                                                                    context,
-                                                                    task.createdby);
-                                                          },
-                                                          tileColor:
-                                                              Colors.grey[200],
-                                                          shape: RoundedRectangleBorder(
-                                                              side:
-                                                                  const BorderSide(
-                                                                      width: 2),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          20)),
-                                                          leading: const Icon(
-                                                            Icons
-                                                                .account_circle,
-                                                            color: Colors.black,
-                                                          ),
-                                                          title: Text(
-                                                            user.username,
-                                                            style:
-                                                                const TextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
-                                                          ),
-                                                          trailing: IconButton(
-                                                            icon: Icon(
-                                                                Icons.check),
-                                                            onPressed: () {
-                                                              AlertDialog(
-                                                                title: const Text(
-                                                                    'Assign Task'),
-                                                                content: Text(
-                                                                    'Assign Task to ${user.username}?'),
-                                                                actions: <Widget>[
-                                                                  TextButton(
-                                                                    onPressed: () =>
-                                                                        Navigator.pop(
+                                                  // Can add this logic if need to cancel the assigned person with the cross
+                                                  // : user.referenceId ==
+                                                  //         task.assignedto
+                                                  //     ? ListTile(
+                                                  //         onTap: () {
+                                                  //           UserDialog
+                                                  //               .displayUserItemDialog(
+                                                  //                   context,
+                                                  //                   task.createdby);
+                                                  //         },
+                                                  //         tileColor:
+                                                  //             Colors.grey[200],
+                                                  //         shape: RoundedRectangleBorder(
+                                                  //             side:
+                                                  //                 const BorderSide(
+                                                  //                     width: 2),
+                                                  //             borderRadius:
+                                                  //                 BorderRadius
+                                                  //                     .circular(
+                                                  //                         20)),
+                                                  //         leading: const Icon(
+                                                  //           Icons
+                                                  //               .account_circle,
+                                                  //           color: Colors.black,
+                                                  //         ),
+                                                  //         title: Text(
+                                                  //           user.username,
+                                                  //           style:
+                                                  //               const TextStyle(
+                                                  //             color:
+                                                  //                 Colors.black,
+                                                  //             fontWeight:
+                                                  //                 FontWeight
+                                                  //                     .bold,
+                                                  //           ),
+                                                  //         ),
+                                                  //         trailing: IconButton(
+                                                  //           icon: Icon(
+                                                  //               Icons.close),
+                                                  //           onPressed: () {
+                                                  //             task.assignedto =
+                                                  //                 '';
+                                                  //             task.status =
+                                                  //                 'Open';
+                                                  //             taskRepository
+                                                  //                 .updateTask(
+                                                  //                     task);
+                                                  //           },
+                                                  //         ),
+                                                  //       )
+                                                  : ListTile(
+                                                      onTap: () {
+                                                        UserDialog
+                                                            .displayUserItemDialog(
+                                                                context,
+                                                                task.createdby);
+                                                      },
+                                                      tileColor:
+                                                          Colors.grey[200],
+                                                      shape: RoundedRectangleBorder(
+                                                          side:
+                                                              const BorderSide(
+                                                                  width: 2),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      20)),
+                                                      leading: const Icon(
+                                                        Icons.account_circle,
+                                                        color: Colors.black,
+                                                      ),
+                                                      title: Text(
+                                                        user.username,
+                                                        style: const TextStyle(
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                      trailing: IconButton(
+                                                        icon: Icon(Icons.check),
+                                                        onPressed: () {
+                                                          showDialog<String>(
+                                                              context: context,
+                                                              builder: (BuildContext
+                                                                      context) =>
+                                                                  AlertDialog(
+                                                                    title: const Text(
+                                                                        'Assign Task'),
+                                                                    content: Text(
+                                                                        'Assign Task to ${user.username}?'),
+                                                                    actions: <Widget>[
+                                                                      TextButton(
+                                                                        onPressed: () => Navigator.pop(
                                                                             context,
                                                                             'Cancel'),
-                                                                    child: const Text(
-                                                                        'Cancel'),
-                                                                  ),
-                                                                  TextButton(
-                                                                    onPressed:
-                                                                        () {
-                                                                      Navigator.pop(
-                                                                          context,
-                                                                          'OK');
-                                                                      task.assignedto =
-                                                                          user.referenceId;
-                                                                      task.status =
-                                                                          'Pending';
-                                                                      taskRepository
-                                                                          .updateTask(
-                                                                              task);
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pushReplacement(
-                                                                        MaterialPageRoute(
-                                                                            builder: (context) =>
-                                                                                const ManagerView(
-                                                                                  tab: 1,
-                                                                                )),
-                                                                      );
-                                                                    },
-                                                                    child:
-                                                                        const Text(
+                                                                        child: const Text(
+                                                                            'Cancel'),
+                                                                      ),
+                                                                      TextButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          Navigator.pop(
+                                                                              context,
+                                                                              'OK');
+                                                                          task.assignedto =
+                                                                              user.referenceId;
+                                                                          task.status =
+                                                                              'Pending';
+                                                                          taskRepository
+                                                                              .updateTask(task);
+                                                                          Navigator.of(context)
+                                                                              .pushReplacement(
+                                                                            MaterialPageRoute(
+                                                                                builder: (context) => const ManagerView(
+                                                                                      tab: 1,
+                                                                                    )),
+                                                                          );
+                                                                        },
+                                                                        child: const Text(
                                                                             'OK'),
-                                                                  ),
-                                                                ],
-                                                              );
-                                                            },
-                                                          ),
-                                                        ));
+                                                                      ),
+                                                                    ],
+                                                                  ));
+                                                        },
+                                                      ),
+                                                    ));
                                             },
                                           );
                                         }
