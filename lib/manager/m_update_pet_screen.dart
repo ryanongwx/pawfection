@@ -231,7 +231,7 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
         children: [
           FastTextField(
             name: 'name',
-            placeholder: widget.pet.name,
+            initialValue: widget.pet.name,
             labelText: 'Name',
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
@@ -239,16 +239,16 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
           ),
           FastTextField(
             name: 'breed',
-            placeholder: widget.pet.breed,
+            initialValue: widget.pet.breed,
             labelText: 'Breed',
           ),
           FastTextField(
             name: 'description',
-            placeholder: widget.pet.description,
+            initialValue: widget.pet.description,
             labelText: 'Description',
           ),
           FastTextField(
-            placeholder: widget.pet.thingstonote,
+            initialValue: widget.pet.thingstonote,
             name: 'thingstonote',
             labelText: 'Things to note',
           ),
@@ -280,24 +280,24 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
         children: [
           FastTextField(
             name: 'name',
-            placeholder: widget.pet.name,
+            initialValue: widget.pet.name,
             labelText: 'Name',
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
             ]),
           ),
           FastTextField(
-            placeholder: widget.pet.breed,
+            initialValue: widget.pet.breed,
             name: 'breed',
             labelText: 'Breed',
           ),
           FastTextField(
             name: 'description',
-            placeholder: widget.pet.description,
+            initialValue: widget.pet.description,
             labelText: 'Description',
           ),
           FastTextField(
-            placeholder: widget.pet.thingstonote,
+            initialValue: widget.pet.thingstonote,
             name: 'thingstonote',
             labelText: 'Things to note',
           ),

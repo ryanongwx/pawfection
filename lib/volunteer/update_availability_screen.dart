@@ -34,11 +34,7 @@ class _UpdateAvailabilityState extends State<UpdateAvailability> {
                     widget.user.availabledates =
                         _date.map((e) => Timestamp.fromDate(e!)).toList();
                     userRepository.updateUser(widget.user);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => VolunteerView(tab: 1)),
-                    );
+                    Navigator.of(context).pop();
                   },
                   child: const Icon(
                     Icons.save,

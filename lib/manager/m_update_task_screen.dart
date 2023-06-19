@@ -252,7 +252,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
         children: [
           FastTextField(
             name: 'name',
-            placeholder: widget.task.name,
+            initialValue: widget.task.name,
             labelText: 'Name',
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
@@ -260,7 +260,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
           ),
           FastTextField(
             name: 'description',
-            placeholder: widget.task.description,
+            initialValue: widget.task.description,
             labelText: 'Description',
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
@@ -269,22 +269,6 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
           FastTextField(
             name: 'resources',
             labelText: 'Resources',
-            validator: Validators.compose([
-              Validators.required((value) => 'Field is required'),
-            ]),
-          ),
-          FastTextField(
-            name: 'contactperson',
-            placeholder: widget.task.contactperson,
-            labelText: 'Contact Person',
-            validator: Validators.compose([
-              Validators.required((value) => 'Field is required'),
-            ]),
-          ),
-          FastTextField(
-            name: 'contactnumber',
-            placeholder: widget.task.contactpersonnumber,
-            labelText: 'Contact Number',
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
             ]),
@@ -322,7 +306,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
         children: [
           FastTextField(
             name: 'name',
-            placeholder: widget.task.name,
+            initialValue: widget.task.name,
             labelText: 'Name',
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
@@ -330,7 +314,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
           ),
           FastTextField(
             name: 'description',
-            placeholder: widget.task.description,
+            initialValue: widget.task.description,
             labelText: 'Description',
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
@@ -339,22 +323,6 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
           FastTextField(
             name: 'resources',
             labelText: 'Resources',
-            validator: Validators.compose([
-              Validators.required((value) => 'Field is required'),
-            ]),
-          ),
-          FastTextField(
-            placeholder: widget.task.contactperson,
-            name: 'contactperson',
-            labelText: 'Contact Person',
-            validator: Validators.compose([
-              Validators.required((value) => 'Field is required'),
-            ]),
-          ),
-          FastTextField(
-            placeholder: widget.task.contactpersonnumber,
-            name: 'contactnumber',
-            labelText: 'Contact Number',
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
             ]),

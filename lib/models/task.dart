@@ -7,7 +7,7 @@ class Task {
   String? referenceId;
   String name;
   String createdby;
-  String assignedto;
+  String? assignedto;
   String description;
   String status;
   List<String?> resources;
@@ -22,7 +22,7 @@ class Task {
     this.name, {
     this.referenceId,
     required this.createdby,
-    required this.assignedto,
+    this.assignedto,
     required this.description,
     required this.status,
     required this.resources,

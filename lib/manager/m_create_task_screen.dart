@@ -99,9 +99,18 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                           _form['deadlinestart'].day,
                           _form['deadlinestarttime'].hour,
                           _form['deadlinestarttime'].minute));
+
+                      String? assignedUserId;
+                      if (_form['user'] != "<No volunteer assigned>") {
+                        User? assignedUser = await userRepository.findUserByUsername(_form['user']);
+                        assignedUserId = assignedUser!.referenceId;
+                      } else {
+                        assignedUserId = null;
+                      }
+
                       taskRepository.addTask(Task(_form['name'],
                           createdby: user.referenceId,
-                          assignedto: _form['user'],
+                          assignedto: assignedUserId,
                           description: _form['description'],
                           status: _form['user'] == "<No volunteer assigned>"
                               ? 'Open'
@@ -123,7 +132,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                     } catch (e) {
                       // If any other type of exception/error is thrown
                       setState(() {
-                        alertmessage = 'Please ensure all fields are filled in';
+                        alertmessage = e.toString();
                       });
                     } finally {
                       showDialog<String>(
@@ -132,10 +141,6 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                           title: const Text('Create Task'),
                           content: Text(alertmessage),
                           actions: <Widget>[
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, 'Cancel'),
-                              child: const Text('Cancel'),
-                            ),
                             TextButton(
                               onPressed: () => {
                                 Navigator.pop(context, 'OK'),
@@ -192,9 +197,18 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                         throw Exception(
                             'Please log into a manager account to create task');
                       }
+
+                      String? assignedUserId;
+                      if (_form['user'] != "<No volunteer assigned>") {
+                        User? assignedUser = await userRepository.findUserByUsername(_form['user']);
+                        assignedUserId = assignedUser!.referenceId;
+                      } else {
+                        assignedUserId = null;
+                      }
+
                       taskRepository.addTask(Task(_form['name'],
                           createdby: user.referenceId,
-                          assignedto: _form['user'],
+                          assignedto: assignedUserId,
                           description: _form['description'],
                           status: _form['user'] == "<No volunteer assigned>"
                               ? 'Open'
