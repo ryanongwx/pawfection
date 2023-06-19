@@ -27,6 +27,19 @@ class UserRepository {
     return null;
   }
 
+  Future<User?> findUserByUsername(String username) async {
+    final querySnapshot = await usercollection.get();
+    final userList = userService.snapshotToUserList_modified(querySnapshot);
+
+    for (User user in userList) {
+      if (user.username == username) {
+        return user;
+      }
+    }
+
+    return null;
+  }
+
   // Future<List<User>> getUserList() async {
   //   QuerySnapshot snapshot = await usercollection.get();
   //   return snapshot.docs
