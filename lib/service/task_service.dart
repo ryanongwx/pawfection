@@ -10,7 +10,7 @@ class TaskService {
   Task taskFromJson(Map<String, dynamic> json) {
     return Task(json['name'] as String,
         referenceId: json['referenceId'] as String,
-        assignedto: json['assignedto'] as String,
+        assignedto: json['assignedto'] as String?,
         createdby: json['createdby'] as String,
         description: json['description'] as String,
         status: json['status'] as String,

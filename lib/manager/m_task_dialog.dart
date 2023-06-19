@@ -171,7 +171,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                           final user = snapshot.data;
 
                                           return (user == null
-                                              ? const Text('User not logged in')
+                                              ? const Text('Task not assigned to any volunteers')
                                               : ListTile(
                                                   onTap: () {
                                                     UserDialog
