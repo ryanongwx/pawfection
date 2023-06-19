@@ -20,9 +20,6 @@ final _selectedSegment_04 = ValueNotifier('Pending');
 
 final taskRepository = TaskRepository();
 final taskService = TaskService();
-
-final _auth = FirebaseAuth.FirebaseAuth.instance; // authInstance
-
 // List<Task> taskList = [];
 
 // Future<void> fetchTaskList() async {
@@ -151,17 +148,33 @@ class _VDashboardScreenState extends State<VDashboardScreen> {
   }
 }
 
-class TaskItem extends StatelessWidget {
+class TaskItem extends StatefulWidget {
   final Task task;
 
-  const TaskItem({
+  TaskItem({
     Key? key,
     required this.task,
   }) : super(key: key);
 
   @override
+  State<TaskItem> createState() => _TaskItemState();
+}
+
+class _TaskItemState extends State<TaskItem> {
+  final _auth = FirebaseAuth.FirebaseAuth.instance;
+  // authInstance
+  late FirebaseAuth.User currentUser;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    currentUser = _auth.currentUser!;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (task == null) {
+    if (widget.task == null) {
       return const Column();
     } else {
       return Padding(
@@ -174,8 +187,9 @@ class TaskItem extends StatelessWidget {
             ),
             child: InkWell(
               onTap: () {
-                if (task.referenceId != null) {
-                  taskDialog.displayTaskItemDialog(context, task.referenceId!);
+                if (widget.task.referenceId != null) {
+                  taskDialog.displayTaskItemDialog(
+                      context, widget.task.referenceId!);
                 }
               },
               child: Padding(
@@ -194,7 +208,7 @@ class TaskItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          task.name,
+                          widget.task.name,
                           style: const TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -204,21 +218,40 @@ class TaskItem extends StatelessWidget {
                     ),
                     // To push icon to the right
                     const Expanded(child: SizedBox()),
-                    if (task.status == "Open")
-                      SizedBox(
-                        height: 24.0, // Change as needed
-                        width: 24.0, // Change as needed
-                        child: IconButton(
-                          padding: EdgeInsets.zero, // removes default padding
-                          alignment: Alignment.center, // centers the icon
-                          icon: const Icon(Icons.person_add),
-                          iconSize: 20.0, // Change as needed
-                          onPressed: () async {
-                            volunteerDialog.displayVolunteersDialog(
-                                context, task);
-                          },
-                        ),
-                      )
+                    if (widget.task.status == "Open")
+                      if (widget.task.requests.contains(currentUser.uid))
+                        SizedBox(
+                          height: 24.0, // Change as needed
+                          width: 24.0, // Change as needed
+                          child: IconButton(
+                            padding: EdgeInsets.zero, // removes default padding
+                            alignment: Alignment.center, // centers the icon
+                            icon: const Icon(Icons.person_remove),
+                            iconSize: 20.0, // Change as needed
+                            onPressed: () {
+                              widget.task.requests.remove(currentUser.uid);
+                              taskRepository.updateTask(widget.task);
+                            },
+                          ),
+                        )
+                      else
+                        SizedBox(
+                          height: 24.0, // Change as needed
+                          width: 24.0, // Change as needed
+                          child: IconButton(
+                            padding: EdgeInsets.zero, // removes default padding
+                            alignment: Alignment.center, // centers the icon
+                            icon: const Icon(Icons.person_add),
+                            iconSize: 20.0, // Change as needed
+                            onPressed: () {
+                              if (!widget.task.requests
+                                  .contains(currentUser.uid)) {
+                                widget.task.requests.add(currentUser.uid);
+                                taskRepository.updateTask(widget.task);
+                              }
+                            },
+                          ),
+                        )
                   ],
                 ),
               ),

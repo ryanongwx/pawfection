@@ -102,6 +102,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                           resources: _form['resources'],
                           contactperson: _form['contactperson'],
                           contactpersonnumber: _form['contactpersonnumber'],
+                          requests: [],
                           deadline: [
                             _form['deadlinestart'],
                             _form['deadlineend']
@@ -179,6 +180,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                           description: _form['description'],
                           status: 'Pending',
                           resources: _form['resources'],
+                          requests: [],
                           contactperson: _form['contactperson'],
                           contactpersonnumber: _form['contactnumber'],
                           deadline: [

@@ -108,6 +108,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                               : 'Pending',
                           resources: [_form['resources']],
                           deadline: [deadlinestart, deadlineend],
+                          requests: [],
                           pet: _form['pet'],
                           contactperson: user.referenceId,
                           contactpersonnumber: user.contactnumber));
@@ -199,6 +200,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                               ? 'Open'
                               : 'Pending',
                           resources: [_form['resources']],
+                          requests: [],
                           deadline: [
                             Timestamp.fromDate(_form['deadlinestart']),
                             Timestamp.fromDate(_form['deadlineend'])

@@ -19,6 +19,7 @@ class TaskService {
         contactpersonnumber: json['contactpersonnumber'] as String,
         feedback: json['feedback'] as String?,
         deadline: json['deadline'].cast<Timestamp?>() as List<Timestamp?>,
+        requests: json['requests'].cast<String?>() as List<String?>,
         pet: json['pet'] as String);
   }
 
@@ -30,6 +31,7 @@ class TaskService {
         'description': instance.description,
         'status': instance.status,
         'resources': instance.resources,
+        'requests': instance.requests,
         'contactperson': instance.contactperson,
         'contactpersonnumber': instance.contactpersonnumber,
         'feedback': instance.feedback,
