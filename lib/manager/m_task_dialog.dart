@@ -147,9 +147,9 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                   ),
                                 ),
                                 FutureBuilder(
-                                  future: task != null
+                                  future: task.assignedto != null
                                       ? userRepository
-                                          .findUserByUUID(task.assignedto)
+                                        .findUserByUUID(task.assignedto!)
                                       : null,
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState ==
@@ -164,13 +164,13 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                       final user = snapshot.data;
 
                                       return (user == null
-                                          ? const Text('User not logged in')
+                                          ? const Text('Task not assigned to any volunteers')
                                           : ListTile(
                                               onTap: () {
                                                 UserDialog
                                                     .displayUserItemDialog(
                                                         context,
-                                                        task.assignedto);
+                                                        task.assignedto!);
                                               },
                                               tileColor: Colors.grey[200],
                                               shape: RoundedRectangleBorder(
