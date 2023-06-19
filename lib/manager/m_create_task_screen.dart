@@ -99,9 +99,16 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                           _form['deadlinestart'].day,
                           _form['deadlinestarttime'].hour,
                           _form['deadlinestarttime'].minute));
+
+                      User? assignedUser = null;
+                      _form['user'] != "<No volunteer assigned>"
+                      ? assignedUser = await userRepository.findUserByUsername(_form['user'])
+                      :
+
                       taskRepository.addTask(Task(_form['name'],
                           createdby: user.referenceId,
-                          assignedto: _form['user'],
+                          assignedto: assignedUser == null?
+                                      assignedUser.referenceId,
                           description: _form['description'],
                           status: _form['user'] == "<No volunteer assigned>"
                               ? 'Open'
