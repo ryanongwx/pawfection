@@ -155,7 +155,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                     FutureBuilder(
                                       future: task != null
                                           ? userRepository
-                                              .findUserByUUID(task.assignedto)
+                                              .findUserByUUID(task.assignedto!)
                                           : null,
                                       builder: (context, snapshot) {
                                         if (snapshot.connectionState ==
@@ -177,7 +177,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                                     UserDialog
                                                         .displayUserItemDialog(
                                                             context,
-                                                            task.assignedto);
+                                                            task.assignedto!);
                                                   },
                                                   tileColor: Colors.grey[200],
                                                   shape: RoundedRectangleBorder(
