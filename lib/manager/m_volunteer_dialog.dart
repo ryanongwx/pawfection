@@ -1,12 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:pawfection/manager/m_dashboard_screen.dart';
 import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/task_repository.dart';
 import 'package:pawfection/repository/user_repository.dart';
+import 'package:pawfection/service/task_service.dart';
 import '../models/task.dart';
 
 Future<void> displayVolunteersDialog(BuildContext context, Task task) async {
   final taskRepository = TaskRepository();
   final userRepository = UserRepository();
+  final taskService = TaskService();
   return showDialog(
     context: context,
     builder: (context) {
@@ -27,19 +31,18 @@ Future<void> displayVolunteersDialog(BuildContext context, Task task) async {
               } else {
                 // The future completed successfully
                 final userList = snapshot.data;
-                List<String?> nameList = userList
-                        ?.where(
-                            (user) => user.role.toLowerCase() == "volunteer")
-                        .map((user) => user.username)
-                        .toSet()
-                        .toList() ??
-                    [];
-                nameList.insert(0, "<No volunteer assigned>");
-                List<String> newNameList = nameList.map((e) => e!).toList();
+                List<String?> filteredUserList = userList
+                  ?.where((user) => (user.role.toLowerCase() == "volunteer" &&
+                    // For now time is abstracted out and only date will be compared
+                    taskService.isAvailableWithinDeadline(user, task)))
+                    .map((user) => user.username)
+                    .toList() ?? [];
+                filteredUserList.insert(0, "<No volunteer assigned>");
+                List<String> newNameList = filteredUserList.map((e) => e!).toList();
                 return Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: ListView.builder(
-                    itemCount: nameList.length,
+                    itemCount: filteredUserList.length,
                     itemBuilder: (BuildContext context, int index) {
                       return ListTile(
                         title: Text(newNameList[index]),
