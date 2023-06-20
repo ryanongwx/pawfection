@@ -20,7 +20,7 @@ class TaskService {
         feedback: json['feedback'] as String?,
         deadline: json['deadline'].cast<Timestamp?>() as List<Timestamp?>,
         requests: json['requests'].cast<String?>() as List<String?>,
-        pet: json['pet'] as String);
+        pet: json['pet'] as String?);
   }
 
   Map<String, dynamic> taskToJson(Task instance) => <String, dynamic>{
