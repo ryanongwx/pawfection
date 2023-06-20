@@ -12,6 +12,7 @@ import 'package:pawfection/repository/pet_repository.dart';
 import 'package:pawfection/repository/task_repository.dart';
 import 'package:pawfection/repository/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
+import 'package:pawfection/service/task_service.dart';
 
 class MCreateTaskScreen extends StatefulWidget {
   MCreateTaskScreen(
@@ -30,6 +31,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
   final taskRepository = TaskRepository();
   final petRepository = PetRepository();
   final userRepository = UserRepository();
+  final taskService = TaskService();
 
   late var _form;
   late var alertmessage;
@@ -116,7 +118,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                         assignedPetId = null;
                       }
 
-                      taskRepository.addTask(Task(_form['name'],
+                      taskService.addTask(Task(_form['name'],
                           createdby: user.referenceId,
                           assignedto: assignedUserId,
                           description: _form['description'],
@@ -209,7 +211,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                         assignedUserId = null;
                       }
 
-                      taskRepository.addTask(Task(_form['name'],
+                      taskService.addTask(Task(_form['name'],
                           createdby: user.referenceId,
                           assignedto: assignedUserId,
                           description: _form['description'],

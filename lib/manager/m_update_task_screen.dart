@@ -8,6 +8,7 @@ import 'package:pawfection/manager_view.dart';
 import 'package:pawfection/models/task.dart';
 import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/task_repository.dart';
+import 'package:pawfection/service/task_service.dart';
 import 'package:pawfection/volunteer/profile_picture_update_screen.dart';
 import 'package:pawfection/volunteer/widgets/profile_widget.dart';
 
@@ -24,6 +25,8 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
   final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
   final taskRepository = TaskRepository();
+  final taskService = TaskService();
+
   late var _form;
   late var alertmessage;
   void _showDialog(Widget child) {
@@ -52,7 +55,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
     if (Platform.isAndroid) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Update Task'),
+          title: const Text('Update Task'),
           elevation: 4.0,
         ),
         body: SafeArea(
@@ -94,7 +97,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                   child: const Text('Update'),
                   onPressed: () {
                     try {
-                      taskRepository.updateTask(Task(_form['name'],
+                      taskService.updateTask(Task(_form['name'],
                           createdby: 'soo',
                           assignedto: 'soo',
                           description: _form['description'],
@@ -134,7 +137,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => ManagerView(
+                                          builder: (context) => const ManagerView(
                                                 tab: 1,
                                               )),
                                     )
@@ -155,7 +158,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
       );
     } else if (Platform.isIOS) {
       return CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(middle: Text('Update Task')),
+        navigationBar: const CupertinoNavigationBar(middle: Text('Update Task')),
         child: SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -174,7 +177,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                   child: const Text('Update'),
                   onPressed: () {
                     try {
-                      taskRepository.updateTask(Task(_form['name'],
+                      taskService.updateTask(Task(_form['name'],
                           createdby: 'soo',
                           assignedto: 'soo',
                           description: _form['description'],
@@ -215,7 +218,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => ManagerView(
+                                          builder: (context) => const ManagerView(
                                                 tab: 1,
                                               )),
                                     )
@@ -235,7 +238,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
         ),
       );
     }
-    return Column();
+    return const Column();
   }
 
   List<Widget> _buildForm(BuildContext context) {
@@ -289,8 +292,8 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
             firstDate: DateTime(2023),
             lastDate: DateTime(2040),
           ),
-          ElevatedButton(child: Text('Assign Pet'), onPressed: () {}),
-          ElevatedButton(child: Text('Assign Volunteer'), onPressed: () {}),
+          ElevatedButton(child: const Text('Assign Pet'), onPressed: () {}),
+          ElevatedButton(child: const Text('Assign Volunteer'), onPressed: () {}),
         ],
       ),
     ];
@@ -345,8 +348,8 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
             labelText: 'Deadline',
             mode: CupertinoDatePickerMode.dateAndTime,
           ),
-          CupertinoButton(child: Text('Assign Pet'), onPressed: () {}),
-          CupertinoButton(child: Text('Assign Volunteer'), onPressed: () {}),
+          CupertinoButton(child: const Text('Assign Pet'), onPressed: () {}),
+          CupertinoButton(child: const Text('Assign Volunteer'), onPressed: () {}),
         ],
       ),
     ];

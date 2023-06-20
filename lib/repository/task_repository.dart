@@ -1,57 +1,31 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:pawfection/service/task_service.dart';
 import 'dart:async';
 
-import '../models/task.dart';
-
 class TaskRepository {
-  final CollectionReference taskcollection =
-      FirebaseFirestore.instance.collection('tasks');
-  final taskService = TaskService();
-
-  // Retrieve Task Data
+  final CollectionReference taskCollection =
+  FirebaseFirestore.instance.collection('tasks');
 
   Stream<QuerySnapshot> get tasks {
-    return taskcollection.snapshots();
+    return taskCollection.snapshots();
   }
 
-  Future<void> addTask(Task task) {
-    var newDocRef = taskcollection.doc();
-    task.referenceId = newDocRef.id;
-    return newDocRef.set(taskService.taskToJson(task));
+  void updateTaskRepo(Map<String, dynamic> taskJson, String? referenceId) async {
+    await taskCollection
+        .doc(referenceId)
+        .update(taskJson);
   }
 
-  void updateTask(Task task) async {
-    await taskcollection
-        .doc(task.referenceId)
-        .update(taskService.taskToJson(task));
+  void deleteTaskRepo(String? referenceId) async {
+    await taskCollection.doc(referenceId).delete();
   }
 
-  void deleteTask(Task task) async {
-    await taskcollection.doc(task.referenceId).delete();
+  Future<String> addTaskRepo(Map<String, dynamic> taskJson) async {
+    var newDocRef = taskCollection.doc();
+    await newDocRef.set(taskJson);
+    return newDocRef.id;
   }
 
-  Future<Task?> findTaskByTaskID(String referenceId) async {
-    final querySnapshot = await taskcollection.get();
-    final taskList = taskService.snapshotToTaskList_modified(querySnapshot);
-
-    for (Task task in taskList) {
-      if (task.referenceId == referenceId) {
-        return task;
-      }
-    }
-
-    return null;
-  }
-
-  Future<List<Task>> getTaskList() async {
-    QuerySnapshot snapshot = await taskcollection.get();
-    return snapshot.docs
-        .map((doc) => taskService.taskFromJson(doc.data() as Map<String, dynamic>))
-        .toList()
-        .cast();
+  Future<QuerySnapshot> fetchAllTasks() async {
+    return await taskCollection.get();
   }
 }

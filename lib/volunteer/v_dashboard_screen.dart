@@ -7,7 +7,6 @@ import 'package:pawfection/repository/task_repository.dart';
 import 'package:pawfection/service/task_service.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 import 'package:pawfection/volunteer/v_task_dialog.dart' as taskDialog;
-import 'package:pawfection/manager/m_volunteer_dialog.dart' as volunteerDialog;
 
 class VDashboardScreen extends StatefulWidget {
   const VDashboardScreen({super.key});
@@ -230,7 +229,7 @@ class _TaskItemState extends State<TaskItem> {
                             iconSize: 20.0, // Change as needed
                             onPressed: () {
                               widget.task.requests.remove(currentUser.uid);
-                              taskRepository.updateTask(widget.task);
+                              taskService.updateTask(widget.task);
                             },
                           ),
                         )
@@ -247,7 +246,7 @@ class _TaskItemState extends State<TaskItem> {
                               if (!widget.task.requests
                                   .contains(currentUser.uid)) {
                                 widget.task.requests.add(currentUser.uid);
-                                taskRepository.updateTask(widget.task);
+                                taskService.updateTask(widget.task);
                               }
                             },
                           ),

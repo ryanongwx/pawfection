@@ -3,9 +3,11 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:pawfection/models/task.dart';
 import 'package:pawfection/models/user.dart';
+import 'package:pawfection/repository/task_repository.dart';
 
 class TaskService {
   // _userFromJson turns a map of values from Firestore into a User class.
+  TaskRepository taskRepository = TaskRepository();
 
   Task taskFromJson(Map<String, dynamic> json) {
     return Task(json['name'] as String,
@@ -24,20 +26,20 @@ class TaskService {
   }
 
   Map<String, dynamic> taskToJson(Task instance) => <String, dynamic>{
-        'name': instance.name.toLowerCase(),
-        'createdby': instance.createdby,
-        'referenceId': instance.referenceId,
-        'assignedto': instance.assignedto,
-        'description': instance.description,
-        'status': instance.status,
-        'resources': instance.resources,
-        'requests': instance.requests,
-        'contactperson': instance.contactperson,
-        'contactpersonnumber': instance.contactpersonnumber,
-        'feedback': instance.feedback,
-        'deadline': instance.deadline,
-        'pet': instance.pet,
-      };
+    'name': instance.name.toLowerCase(),
+    'createdby': instance.createdby,
+    'referenceId': instance.referenceId,
+    'assignedto': instance.assignedto,
+    'description': instance.description,
+    'status': instance.status,
+    'resources': instance.resources,
+    'requests': instance.requests,
+    'contactperson': instance.contactperson,
+    'contactpersonnumber': instance.contactpersonnumber,
+    'feedback': instance.feedback,
+    'deadline': instance.deadline,
+    'pet': instance.pet,
+  };
 
   Task fromSnapshot(DocumentSnapshot snapshot) {
     final newTask = taskFromJson(snapshot.data() as Map<String, dynamic>);
@@ -56,16 +58,43 @@ class TaskService {
     }
   }
 
-  List<Task> snapshotToTaskList_modified(QuerySnapshot<Object?> snapshot) {
+  List<Task> snapshotToTaskListModified(QuerySnapshot<Object?> snapshot) {
     if (snapshot.docs.isEmpty) {
       return [];
     } else {
       return snapshot.docs.map((DocumentSnapshot<Object?> document) {
         Map<String, dynamic> data = document.data()
-            as Map<String, dynamic>; // Cast to the correct data type
+        as Map<String, dynamic>; // Cast to the correct data type
         return taskFromJson(data);
       }).toList();
     }
+  }
+
+  void updateTask(Task task) async {
+    taskRepository.updateTaskRepo(taskToJson(task), task.referenceId);
+  }
+
+  void deleteTask(Task task) {
+    taskRepository.deleteTaskRepo(task.referenceId);
+  }
+
+  Future<void> addTask(Task task) async {
+    var taskJson = taskToJson(task);
+    var refId = await taskRepository.addTaskRepo(taskJson);
+    task.referenceId = refId;
+  }
+
+  Future<Task?> findTaskByTaskID(String referenceId) async {
+    final snapshot = await taskRepository.fetchAllTasks();
+    final tasks = snapshotToTaskListModified(snapshot);
+
+    for (Task task in tasks) {
+      if (task.referenceId == referenceId) {
+        return task;
+      }
+    }
+
+    return null;
   }
 
   bool isAvailableWithinDeadline(User user, Task task) {

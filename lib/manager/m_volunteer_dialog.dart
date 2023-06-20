@@ -8,7 +8,6 @@ import 'package:pawfection/service/task_service.dart';
 import '../models/task.dart';
 
 Future<void> displayVolunteersDialog(BuildContext context, Task task) async {
-  final taskRepository = TaskRepository();
   final userRepository = UserRepository();
   final taskService = TaskService();
   return showDialog(
@@ -51,7 +50,7 @@ Future<void> displayVolunteersDialog(BuildContext context, Task task) async {
                           if (newNameList[index] != "<No volunteer assigned>") {
                             task.status = "Pending";
                           }
-                          taskRepository.updateTask(task);
+                          taskService.updateTask(task);
                           Navigator.of(context).pop();
                         },
                       );
