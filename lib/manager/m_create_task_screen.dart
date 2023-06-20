@@ -108,6 +108,14 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                         assignedUserId = null;
                       }
 
+                      String? assignedPetId;
+                      if (_form['pet'] != "<No pet assigned>") {
+                        User? assignedPet = await userRepository.findUserByUsername(_form['pet']);
+                        assignedPetId = assignedPet!.referenceId;
+                      } else {
+                        assignedPetId = null;
+                      }
+
                       taskRepository.addTask(Task(_form['name'],
                           createdby: user.referenceId,
                           assignedto: assignedUserId,
@@ -118,19 +126,14 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                           resources: [_form['resources']],
                           deadline: [deadlinestart, deadlineend],
                           requests: [],
-                          pet: _form['pet'],
+                          pet: assignedPetId,
                           contactperson: user.referenceId,
                           contactpersonnumber: user.contactnumber));
                       setState(() {
                         alertmessage = 'Task has successfully been created';
                       });
-                    } on Exception catch (e) {
-                      // If the exception thrown is a general Exception
-                      setState(() {
-                        alertmessage = e.toString();
-                      });
                     } catch (e) {
-                      // If any other type of exception/error is thrown
+                      // Will need some form of error handling in the future
                       setState(() {
                         alertmessage = e.toString();
                       });

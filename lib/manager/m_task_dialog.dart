@@ -32,7 +32,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
               final task = snapshot.data;
 
               return (task == null)
-                  ? const Text('Error retrieving pet details')
+                  ? const Text('Error task details')
                   : Stack(
                       alignment: Alignment.topRight,
                       children: [
@@ -44,7 +44,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                               padding: const EdgeInsets.all(30),
                               child: Center(
                                 child: Text(
-                                  "${task.name}",
+                                  task.name,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 24,
@@ -60,7 +60,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                 children: [
                                   Center(
                                       child: Text(
-                                    '${task.status}',
+                                    task.status,
                                     style: TextStyle(
                                       color: task.status == 'Pending'
                                           ? const Color.fromARGB(
@@ -107,7 +107,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                       ),
                                     ),
                                     Text(
-                                      "${task.description}",
+                                      task.description,
                                       style: const TextStyle(
                                           fontSize: 16, height: 1.4),
                                     ),
@@ -155,10 +155,8 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                       ),
                                     ),
                                     FutureBuilder(
-                                      future: task != null
-                                          ? userRepository
-                                              .findUserByUUID(task.assignedto!)
-                                          : null,
+                                      future: userRepository
+                                              .findUserByUUID(task.assignedto!),
                                       builder: (context, snapshot) {
                                         if (snapshot.connectionState ==
                                             ConnectionState.waiting) {
@@ -225,10 +223,8 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                       ),
                                     ),
                                     FutureBuilder(
-                                      future: task != null
-                                          ? userRepository
-                                              .findUserByUUIDs(task.requests)
-                                          : null,
+                                      future: userRepository
+                                              .findUserByUUIDs(task.requests),
                                       builder: (context, snapshot) {
                                         if (snapshot.connectionState ==
                                             ConnectionState.waiting) {
@@ -241,15 +237,15 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                         } else {
                                           // The future completed successfully
                                           final users = snapshot.data;
-                                          debugPrint(users.toString());
+
                                           return ListView.builder(
                                             shrinkWrap: true,
                                             itemCount: users!.length,
                                             itemBuilder: (BuildContext context,
                                                 int index) {
-                                              User? user = users![index];
+                                              User? user = users[index];
                                               debugPrint(
-                                                  users![index].toString());
+                                                  users[index].toString());
                                               return (user == null
                                                   ? const Text(
                                                       'User not logged in')
@@ -333,7 +329,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                                         ),
                                                       ),
                                                       trailing: IconButton(
-                                                        icon: Icon(Icons.check),
+                                                        icon: const Icon(Icons.check),
                                                         onPressed: () {
                                                           showDialog<String>(
                                                               context: context,
@@ -405,10 +401,8 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                       ),
                                     ),
                                     FutureBuilder(
-                                      future: task != null
-                                          ? userRepository
-                                              .findUserByUUID(task.createdby)
-                                          : null,
+                                      future: userRepository
+                                              .findUserByUUID(task.createdby),
                                       builder: (context, snapshot) {
                                         if (snapshot.connectionState ==
                                             ConnectionState.waiting) {
@@ -474,10 +468,8 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                       ),
                                     ),
                                     FutureBuilder(
-                                      future: task != null
-                                          ? userRepository.findUserByUUID(
-                                              task.contactperson)
-                                          : null,
+                                      future: userRepository.findUserByUUID(
+                                              task.contactperson),
                                       builder: (context, snapshot) {
                                         if (snapshot.connectionState ==
                                             ConnectionState.waiting) {

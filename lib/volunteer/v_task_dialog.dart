@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pawfection/volunteer/v_complete_task_dialog.dart';
-import 'package:pawfection/manager/m_update_task_screen.dart';
 import 'package:pawfection/models/task.dart';
-import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/task_repository.dart';
 import 'package:pawfection/repository/user_repository.dart';
-import 'package:pawfection/volunteer/widgets/profile_widget.dart';
 import 'package:pawfection/manager/m_user_dialog.dart' as UserDialog;
-import 'package:pawfection/manager/m_pet_dialog.dart' as PetDialog;
 
 Future<void> displayTaskItemDialog(BuildContext context, String id) async {
   final taskRepository = TaskRepository();
@@ -43,7 +39,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                           padding: const EdgeInsets.all(30),
                           child: Center(
                             child: Text(
-                              "${task.name}",
+                              task.name,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 24,
@@ -58,7 +54,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                             children: [
                               Center(
                                   child: Text(
-                                '${task.status}',
+                                task.status,
                                 style: TextStyle(
                                   color: task.status == 'Pending'
                                       ? const Color.fromARGB(255, 194, 173, 77)
@@ -102,7 +98,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                   ),
                                 ),
                                 Text(
-                                  "${task.description}",
+                                  task.description,
                                   style: const TextStyle(fontSize: 16, height: 1.4),
                                 ),
                               ],
@@ -211,10 +207,8 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                   ),
                                 ),
                                 FutureBuilder(
-                                  future: task != null
-                                      ? userRepository
-                                          .findUserByUUID(task.createdby)
-                                      : null,
+                                  future: userRepository
+                                          .findUserByUUID(task.createdby),
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState ==
                                         ConnectionState.waiting) {
@@ -276,10 +270,8 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                   ),
                                 ),
                                 FutureBuilder(
-                                  future: task != null
-                                      ? userRepository
-                                          .findUserByUUID(task.contactperson)
-                                      : null,
+                                  future: userRepository
+                                          .findUserByUUID(task.contactperson),
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState ==
                                         ConnectionState.waiting) {

@@ -5,6 +5,13 @@ class "pawfection::homepage.dart::Homepage" {
   +Widget build()
 }
 
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "pawfection::homepage.dart::Homepage"
+
+class "pawfection::repository::storage_repository.dart::StorageRepository" {
+  -FirebaseStorage _storage
+  +dynamic uploadImageToStorage()
+}
+
 "pawfection::repository::storage_repository.dart::StorageRepository" o-- "firebase_storage::firebase_storage.dart::FirebaseStorage"
 
 class "pawfection::repository::task_repository.dart::TaskRepository" {

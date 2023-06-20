@@ -18,14 +18,6 @@ class TaskRepository {
     return taskcollection.snapshots();
   }
 
-  // Future<List<Task>> getTaskList() async {
-  //   QuerySnapshot snapshot = await taskcollection.get();
-  //   return snapshot.docs
-  //       .map((doc) => Task.fromJson(doc.data() as Map<String, dynamic>))
-  //       .toList()
-  //       .cast();
-  // }
-
   Future<void> addTask(Task task) {
     var newDocRef = taskcollection.doc();
     task.referenceId = newDocRef.id;

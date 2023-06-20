@@ -15,7 +15,7 @@ class Task {
   String contactpersonnumber;
   String? feedback;
   List<Timestamp?> deadline;
-  String pet;
+  String? pet;
   List<String?> requests;
 
   Task(
@@ -31,7 +31,7 @@ class Task {
     this.feedback,
     required this.requests,
     required this.deadline,
-    required this.pet,
+    this.pet,
   });
 
   @override
