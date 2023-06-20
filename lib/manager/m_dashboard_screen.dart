@@ -25,13 +25,6 @@ final taskService = TaskService();
 
 final _auth = FirebaseAuth.FirebaseAuth.instance; // authInstance
 
-// List<Task> taskList = [];
-
-// Future<void> fetchTaskList() async {
-//   Future<List<Task>> taskListFuture = repository.getTaskList();
-//   taskList = await taskListFuture;
-// }
-
 class _MDashboardScreenState extends State<MDashboardScreen> {
   // @override
   // void initState() {

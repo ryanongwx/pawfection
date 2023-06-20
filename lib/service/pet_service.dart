@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:pawfection/repository/pet_repository.dart';
 
 import '../models/pet.dart';
 
 class PetService {
+  PetRepository petRepository = PetRepository();
+
   Pet petFromJson(Map<String, dynamic> json) => Pet(json['name'] as String,
       breed: json['breed'] as String?,
       referenceId: json['referenceId'] as String,
@@ -37,7 +40,7 @@ class PetService {
     }
   }
 
-  List<Pet> snapshotToPetList_modified(QuerySnapshot<Object?> snapshot) {
+  List<Pet> snapshotToPetListModified(QuerySnapshot<Object?> snapshot) {
     if (snapshot.docs.isEmpty) {
       return [];
     } else {
@@ -47,5 +50,39 @@ class PetService {
         return petFromJson(data);
       }).toList();
     }
+  }
+
+  void updatePet(Pet pet) async {
+    petRepository.updatePetRepo(petToJson(pet), pet.referenceId);
+  }
+
+  void deletePet(Pet pet) {
+    petRepository.deletePetRepo(pet.referenceId);
+  }
+
+  Future<void> addPet(Pet pet) async {
+    var petJson = petToJson(pet);
+    var refId = await petRepository.addPetRepo(petJson);
+    pet.referenceId = refId;
+  }
+
+  Future<Pet?> findPetByPetID(String referenceId) async {
+    final snapshot = await petRepository.fetchAllPets();
+    final pets = snapshotToPetListModified(snapshot);
+
+    for (Pet pet in pets) {
+      if (pet.referenceId == referenceId) {
+        return pet;
+      }
+    }
+
+    return null;
+  }
+
+  Future<List<Pet>> getPetList() async {
+    QuerySnapshot snapshot = await petRepository.fetchAllPets();
+    return snapshot.docs
+        .map((doc) => petFromJson(doc.data() as Map<String, dynamic>))
+        .toList();
   }
 }

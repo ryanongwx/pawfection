@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:pawfection/manager_view.dart';
 import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/repository/pet_repository.dart';
+import 'package:pawfection/service/pet_service.dart';
 import 'package:pawfection/volunteer/profile_picture_update_screen.dart';
 import 'package:pawfection/volunteer/widgets/profile_widget.dart';
 
@@ -22,6 +23,8 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
   final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
   final petRepository = PetRepository();
+  final petService = PetService();
+
   late var _form;
   late var alertmessage;
 
@@ -30,7 +33,7 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
     if (Platform.isAndroid) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Create Pet'),
+          title: const Text('Create Pet'),
           elevation: 4.0,
         ),
         body: SafeArea(
@@ -70,7 +73,7 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
                   child: const Text('Create'),
                   onPressed: () {
                     try {
-                      petRepository.addPet(Pet(_form['name'],
+                      petService.addPet(Pet(_form['name'],
                           profilepicture: widget.imageURL,
                           breed: _form['breed'],
                           description: _form['description'],
@@ -99,7 +102,7 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => ManagerView(
+                                          builder: (context) => const ManagerView(
                                                 tab: 1,
                                               )),
                                     )
@@ -120,7 +123,7 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
       );
     } else if (Platform.isIOS) {
       return CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(middle: Text('Create Pet')),
+        navigationBar: const CupertinoNavigationBar(middle: Text('Create Pet')),
         child: SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -139,7 +142,7 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
                   child: const Text('Create'),
                   onPressed: () {
                     try {
-                      petRepository.addPet(Pet(_form['name'],
+                      petService.addPet(Pet(_form['name'],
                           profilepicture: widget.imageURL,
                           breed: _form['breed'],
                           description: _form['description'],
@@ -168,7 +171,7 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => ManagerView(
+                                          builder: (context) => const ManagerView(
                                                 tab: 0,
                                               )),
                                     )
@@ -188,7 +191,7 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
         ),
       );
     }
-    return Column();
+    return const Column();
   }
 
   List<Widget> _buildForm(BuildContext context) {
@@ -220,7 +223,7 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
               Validators.required((value) => 'Field is required'),
             ]),
           ),
-          FastTextField(
+          const FastTextField(
             name: 'breed',
             labelText: 'Breed',
           ),

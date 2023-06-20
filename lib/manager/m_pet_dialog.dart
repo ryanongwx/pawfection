@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:pawfection/manager/m_update_pet_screen.dart';
 import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/repository/pet_repository.dart';
-import 'package:pawfection/volunteer/widgets/profile_widget.dart';
+import 'package:pawfection/service/pet_service.dart';
 
 Future<void> displayPetItemDialog(BuildContext context, String id) async {
-  final petRepository = PetRepository();
+  final petService = PetService();
+
   return showDialog(
     context: context,
     builder: (context) {
@@ -15,7 +16,7 @@ Future<void> displayPetItemDialog(BuildContext context, String id) async {
           borderRadius: BorderRadius.circular(20),
         ),
         child: FutureBuilder<Pet?>(
-          future: petRepository.findPetByPetID(id),
+          future: petService.findPetByPetID(id),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               // While waiting for the future to complete, show a loading indicator
@@ -56,7 +57,7 @@ Future<void> displayPetItemDialog(BuildContext context, String id) async {
                               padding: const EdgeInsets.only(top: 30),
                               child: Center(
                                 child: Text(
-                                  "${pet.name}",
+                                  pet.name,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 24,
@@ -186,7 +187,7 @@ Future<void> displayPetItemDialog(BuildContext context, String id) async {
                               );
 
                               if (confirmed ?? false) {
-                                petRepository.deletePet(pet);
+                                petService.deletePet(pet);
                                 Navigator.of(context).pop();
                               }
                             },

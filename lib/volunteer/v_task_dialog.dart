@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pawfection/service/task_service.dart';
 import 'package:pawfection/volunteer/v_complete_task_dialog.dart';
 import 'package:pawfection/models/task.dart';
-import 'package:pawfection/repository/task_repository.dart';
 import 'package:pawfection/repository/user_repository.dart';
 import 'package:pawfection/manager/m_user_dialog.dart' as UserDialog;
 

@@ -55,14 +55,6 @@ class UserRepository {
     return null;
   }
 
-  // Future<List<User>> getUserList() async {
-  //   QuerySnapshot snapshot = await usercollection.get();
-  //   return snapshot.docs
-  //       .map((doc) => User.fromJson(doc.data() as Map<String, dynamic>))
-  //       .toList()
-  //       .cast();
-  // }
-
   void addUser(User user) {
     usercollection.doc(user.referenceId).set(userService.userToJson(user));
   }

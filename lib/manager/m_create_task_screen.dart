@@ -12,6 +12,7 @@ import 'package:pawfection/repository/pet_repository.dart';
 import 'package:pawfection/repository/task_repository.dart';
 import 'package:pawfection/repository/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
+import 'package:pawfection/service/pet_service.dart';
 import 'package:pawfection/service/task_service.dart';
 
 class MCreateTaskScreen extends StatefulWidget {
@@ -32,6 +33,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
   final petRepository = PetRepository();
   final userRepository = UserRepository();
   final taskService = TaskService();
+  final petService = PetService();
 
   late var _form;
   late var alertmessage;
@@ -285,7 +287,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
 
   // To getPetList
   Widget buildPetList() => FutureBuilder<List<Pet>>(
-        future: petRepository.getPetList(),
+        future: petService.getPetList(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // While waiting for the future to complete, show a loading indicator
