@@ -16,6 +16,7 @@ class Task {
   String? feedback;
   List<Timestamp?> deadline;
   String pet;
+  List<String?> requests;
 
   Task(
     this.name, {
@@ -28,6 +29,7 @@ class Task {
     required this.contactperson,
     required this.contactpersonnumber,
     this.feedback,
+    required this.requests,
     required this.deadline,
     required this.pet,
   });

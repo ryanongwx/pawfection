@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pawfection/manager/m_update_task_screen.dart';
+import 'package:pawfection/manager_view.dart';
 import 'package:pawfection/models/task.dart';
+import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/task_repository.dart';
 import 'package:pawfection/repository/user_repository.dart';
 import 'package:pawfection/manager/m_user_dialog.dart' as UserDialog;
@@ -171,7 +173,8 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                           final user = snapshot.data;
 
                                           return (user == null
-                                              ? const Text('Task not assigned to any volunteers')
+                                              ? const Text(
+                                                  'Task not assigned to any volunteers')
                                               : ListTile(
                                                   onTap: () {
                                                     UserDialog
@@ -199,6 +202,186 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                                     ),
                                                   ),
                                                 ));
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 30),
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 48),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'User Requests',
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    FutureBuilder(
+                                      future: task != null
+                                          ? userRepository
+                                              .findUserByUUIDs(task.requests)
+                                          : null,
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          // While waiting for the future to complete, show a loading indicator
+                                          return const CircularProgressIndicator();
+                                        } else if (snapshot.hasError) {
+                                          // If an error occurs while fetching the user, display an error message
+                                          return Text(
+                                              'Error: ${snapshot.error}');
+                                        } else {
+                                          // The future completed successfully
+                                          final users = snapshot.data;
+                                          debugPrint(users.toString());
+                                          return ListView.builder(
+                                            shrinkWrap: true,
+                                            itemCount: users!.length,
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              User? user = users![index];
+                                              debugPrint(
+                                                  users![index].toString());
+                                              return (user == null
+                                                  ? const Text(
+                                                      'User not logged in')
+                                                  // Can add this logic if need to cancel the assigned person with the cross
+                                                  // : user.referenceId ==
+                                                  //         task.assignedto
+                                                  //     ? ListTile(
+                                                  //         onTap: () {
+                                                  //           UserDialog
+                                                  //               .displayUserItemDialog(
+                                                  //                   context,
+                                                  //                   task.createdby);
+                                                  //         },
+                                                  //         tileColor:
+                                                  //             Colors.grey[200],
+                                                  //         shape: RoundedRectangleBorder(
+                                                  //             side:
+                                                  //                 const BorderSide(
+                                                  //                     width: 2),
+                                                  //             borderRadius:
+                                                  //                 BorderRadius
+                                                  //                     .circular(
+                                                  //                         20)),
+                                                  //         leading: const Icon(
+                                                  //           Icons
+                                                  //               .account_circle,
+                                                  //           color: Colors.black,
+                                                  //         ),
+                                                  //         title: Text(
+                                                  //           user.username,
+                                                  //           style:
+                                                  //               const TextStyle(
+                                                  //             color:
+                                                  //                 Colors.black,
+                                                  //             fontWeight:
+                                                  //                 FontWeight
+                                                  //                     .bold,
+                                                  //           ),
+                                                  //         ),
+                                                  //         trailing: IconButton(
+                                                  //           icon: Icon(
+                                                  //               Icons.close),
+                                                  //           onPressed: () {
+                                                  //             task.assignedto =
+                                                  //                 '';
+                                                  //             task.status =
+                                                  //                 'Open';
+                                                  //             taskRepository
+                                                  //                 .updateTask(
+                                                  //                     task);
+                                                  //           },
+                                                  //         ),
+                                                  //       )
+                                                  : ListTile(
+                                                      onTap: () {
+                                                        UserDialog
+                                                            .displayUserItemDialog(
+                                                                context,
+                                                                task.createdby);
+                                                      },
+                                                      tileColor:
+                                                          Colors.grey[200],
+                                                      shape: RoundedRectangleBorder(
+                                                          side:
+                                                              const BorderSide(
+                                                                  width: 2),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      20)),
+                                                      leading: const Icon(
+                                                        Icons.account_circle,
+                                                        color: Colors.black,
+                                                      ),
+                                                      title: Text(
+                                                        user.username,
+                                                        style: const TextStyle(
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                      trailing: IconButton(
+                                                        icon: Icon(Icons.check),
+                                                        onPressed: () {
+                                                          showDialog<String>(
+                                                              context: context,
+                                                              builder: (BuildContext
+                                                                      context) =>
+                                                                  AlertDialog(
+                                                                    title: const Text(
+                                                                        'Assign Task'),
+                                                                    content: Text(
+                                                                        'Assign Task to ${user.username}?'),
+                                                                    actions: <Widget>[
+                                                                      TextButton(
+                                                                        onPressed: () => Navigator.pop(
+                                                                            context,
+                                                                            'Cancel'),
+                                                                        child: const Text(
+                                                                            'Cancel'),
+                                                                      ),
+                                                                      TextButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          Navigator.pop(
+                                                                              context,
+                                                                              'OK');
+                                                                          task.assignedto =
+                                                                              user.referenceId;
+                                                                          task.status =
+                                                                              'Pending';
+                                                                          taskRepository
+                                                                              .updateTask(task);
+                                                                          Navigator.of(context)
+                                                                              .pushReplacement(
+                                                                            MaterialPageRoute(
+                                                                                builder: (context) => const ManagerView(
+                                                                                      tab: 1,
+                                                                                    )),
+                                                                          );
+                                                                        },
+                                                                        child: const Text(
+                                                                            'OK'),
+                                                                      ),
+                                                                    ],
+                                                                  ));
+                                                        },
+                                                      ),
+                                                    ));
+                                            },
+                                          );
                                         }
                                       },
                                     ),

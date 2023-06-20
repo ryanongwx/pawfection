@@ -27,6 +27,21 @@ class UserRepository {
     return null;
   }
 
+  Future<List<User?>> findUserByUUIDs(List<String?> referenceIds) async {
+    final querySnapshot = await usercollection.get();
+    final userList = userService.snapshotToUserList_modified(querySnapshot);
+
+    List<User> result = [];
+
+    for (User user in userList) {
+      if (referenceIds.contains(user.referenceId)) {
+        result.add(user);
+      }
+    }
+
+    return result;
+  }
+
   Future<User?> findUserByUsername(String username) async {
     final querySnapshot = await usercollection.get();
     final userList = userService.snapshotToUserList_modified(querySnapshot);
@@ -65,7 +80,8 @@ class UserRepository {
   Future<List<User>> getUserList() async {
     QuerySnapshot snapshot = await usercollection.get();
     return snapshot.docs
-        .map((doc) => userService.userFromJson(doc.data() as Map<String, dynamic>))
+        .map((doc) =>
+            userService.userFromJson(doc.data() as Map<String, dynamic>))
         .toList()
         .cast();
   }
