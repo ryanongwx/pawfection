@@ -1,16 +1,14 @@
 import 'dart:core';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:card_settings/card_settings.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:pawfection/manager/m_pet_screen.dart';
 import 'package:pawfection/manager_view.dart';
 import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/repository/pet_repository.dart';
+import 'package:pawfection/service/pet_service.dart';
 import 'package:pawfection/volunteer/profile_picture_update_screen.dart';
 import 'package:pawfection/volunteer/widgets/profile_widget.dart';
-import 'package:pawfection/voluteer_view.dart';
 
 class MUpdatePetScreen extends StatefulWidget {
   MUpdatePetScreen({super.key, required this.imageURL, required this.pet});
@@ -26,6 +24,8 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
   final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
   final petRepository = PetRepository();
+  final petService = PetService();
+
   late var _form;
   late var alertmessage;
 
@@ -43,7 +43,7 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
     if (Platform.isAndroid) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Update Pet'),
+          title: const Text('Update Pet'),
           elevation: 4.0,
         ),
         body: SafeArea(
@@ -83,7 +83,7 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
                   child: const Text('Update'),
                   onPressed: () {
                     try {
-                      petRepository.addPet(Pet(_form['name'],
+                      petService.addPet(Pet(_form['name'],
                           profilepicture: widget.imageURL,
                           breed: _form['breed'],
                           description: _form['description'],
@@ -112,7 +112,7 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => ManagerView(
+                                          builder: (context) => const ManagerView(
                                                 tab: 1,
                                               )),
                                     )
@@ -133,7 +133,7 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
       );
     } else if (Platform.isIOS) {
       return CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(middle: Text('Update Pet')),
+        navigationBar: const CupertinoNavigationBar(middle: Text('Update Pet')),
         child: SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -152,7 +152,7 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
                   child: const Text('Create'),
                   onPressed: () {
                     try {
-                      petRepository.addPet(Pet(_form['name'],
+                      petService.addPet(Pet(_form['name'],
                           profilepicture: widget.imageURL,
                           breed: _form['breed'],
                           description: _form['description'],
@@ -181,7 +181,7 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => ManagerView(
+                                          builder: (context) => const ManagerView(
                                                 tab: 0,
                                               )),
                                     )
@@ -201,13 +201,13 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
         ),
       );
     }
-    return Column();
+    return const Column();
   }
 
   List<Widget> _buildForm(BuildContext context) {
     return [
       Padding(
-        padding: EdgeInsets.only(top: 20),
+        padding: const EdgeInsets.only(top: 20),
         child: ProfileWidget(
           image: Image.network(widget.imageURL),
           onClicked: () {

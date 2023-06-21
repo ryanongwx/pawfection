@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
 import 'package:flutter/material.dart';
 import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/user_repository.dart';
+import 'package:pawfection/service/user_service.dart';
 import 'package:pawfection/volunteer/profile_picture_update_screen.dart';
 import 'package:pawfection/volunteer/profile_update_screen.dart';
 import 'package:pawfection/volunteer/update_availability_screen.dart';
@@ -18,7 +19,9 @@ class VProfileScreen extends StatefulWidget {
 
 class _VProfileScreenState extends State<VProfileScreen> {
   final userRepository = UserRepository();
-  FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
+  final userService = UserService();
+
+  final FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
   late FirebaseAuth.User currentUser;
 
   @override
@@ -57,7 +60,7 @@ class _VProfileScreenState extends State<VProfileScreen> {
                 builder: (context) => Expanded(
                     // Wrap ListView with Expanded widget
                     child: FutureBuilder<User?>(
-                  future: userRepository.findUserByUUID(currentUser.uid),
+                  future: userService.findUserByUUID(currentUser.uid),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       // While waiting for the future to complete, show a loading indicator
@@ -89,7 +92,7 @@ class _VProfileScreenState extends State<VProfileScreen> {
                                 ),
                                 const SizedBox(height: 24),
                                 Center(
-                                    child: Text("${user.username}",
+                                    child: Text(user.username,
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 24))),
@@ -139,7 +142,7 @@ class _VProfileScreenState extends State<VProfileScreen> {
                                         ),
                                         const SizedBox(height: 16),
                                         Text(
-                                          "${user.bio}",
+                                          user.bio,
                                           style: const TextStyle(
                                               fontSize: 16, height: 1.4),
                                         ),

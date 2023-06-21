@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:pawfection/manager_view.dart';
 import 'package:pawfection/repository/user_repository.dart';
+import 'package:pawfection/service/user_service.dart';
 import 'package:pawfection/voluteer_view.dart';
 import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
 import 'package:pawfection/models/user.dart';
 
 class LoginView extends StatelessWidget {
   LoginView({super.key});
-  Duration get loginTime => Duration(milliseconds: 2250);
+  Duration get loginTime => const Duration(milliseconds: 2250);
   final FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
   final userRepository = UserRepository();
+  final userService = UserService();
 
   Future<String?> _authUser(LoginData data) async {
     debugPrint('Name: ${data.name}, Password: ${data.password}');
@@ -28,6 +30,7 @@ class LoginView extends StatelessWidget {
           return e.code;
         }
       }
+      return null;
     });
   }
 
@@ -45,7 +48,7 @@ class LoginView extends StatelessWidget {
                       .authStateChanges()
                       .listen((FirebaseAuth.User? user) async {
                     if (user != null) {
-                      userRepository.addUser(User(user.email!,
+                      userService.addUser(User(user.email!,
                           username: user.email!,
                           bio: '',
                           referenceId: user.uid,
@@ -68,6 +71,7 @@ class LoginView extends StatelessWidget {
       } catch (e) {
         print(e);
       }
+      return null;
     });
   }
 
@@ -95,7 +99,7 @@ class LoginView extends StatelessWidget {
                   'An email will be sent to your email addess for password reset.'),
           onSubmitAnimationCompleted: () async {
             FirebaseAuth.User currentUser = _auth.currentUser!;
-            User? user = await userRepository.findUserByUUID(currentUser.uid);
+            User? user = await userService.findUserByUUID(currentUser.uid);
             if (user != null) {
               if (user.role == 'Manager') {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(

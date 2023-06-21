@@ -7,6 +7,7 @@ import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/storage_repository.dart';
 import 'package:pawfection/repository/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
+import 'package:pawfection/service/user_service.dart';
 import 'package:pawfection/voluteer_view.dart';
 
 class VProfileUpdateScreen extends StatefulWidget {
@@ -27,14 +28,13 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
   final formKey = GlobalKey<FormState>();
   final userRepository = UserRepository();
   final storageRepository = StorageRepository();
+  final userService = UserService();
   final FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
+
   late var _form;
   late var alertmessage;
 
-  var _experiences = [];
   var preferences = [];
-
-  int _selectedFruit = 0;
 
   void _showDialog(Widget child) {
     showCupertinoModalPopup<void>(
@@ -109,7 +109,7 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
                   child: const Text('Update'),
                   onPressed: () {
                     try {
-                      userRepository.updateUser(User(_form['email'],
+                      userService.updateUser(User(_form['email'],
                           referenceId: widget.user.referenceId,
                           username: _form['username'],
                           role: widget.user.role,
@@ -214,7 +214,7 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
                       if (_form['e_training']) {
                         experiences.add('training');
                       }
-                      userRepository.updateUser(User(_form['email'],
+                      userService.updateUser(User(_form['email'],
                           referenceId: widget.user.referenceId,
                           username: _form['username'],
                           role: widget.user.role,
@@ -315,6 +315,7 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
                 } else if (value.length != 8) {
                   return 'Phone number has to be 8 digits long';
                 }
+                return null;
               }),
             ]),
           ),

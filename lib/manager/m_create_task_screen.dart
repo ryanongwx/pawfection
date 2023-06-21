@@ -12,6 +12,9 @@ import 'package:pawfection/repository/pet_repository.dart';
 import 'package:pawfection/repository/task_repository.dart';
 import 'package:pawfection/repository/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
+import 'package:pawfection/service/pet_service.dart';
+import 'package:pawfection/service/task_service.dart';
+import 'package:pawfection/service/user_service.dart';
 
 class MCreateTaskScreen extends StatefulWidget {
   MCreateTaskScreen(
@@ -30,6 +33,9 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
   final taskRepository = TaskRepository();
   final petRepository = PetRepository();
   final userRepository = UserRepository();
+  final taskService = TaskService();
+  final petService = PetService();
+  final userService = UserService();
 
   late var _form;
   late var alertmessage;
@@ -82,7 +88,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                   onPressed: () async {
                     try {
                       final User? user =
-                          await userRepository.currentUser(_auth);
+                          await userService.currentUser(_auth);
                       if (user == null) {
                         throw Exception(
                             'Please log into a manager account to create task');
@@ -102,7 +108,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
 
                       String? assignedUserId;
                       if (_form['user'] != "<No volunteer assigned>") {
-                        User? assignedUser = await userRepository.findUserByUsername(_form['user']);
+                        User? assignedUser = await userService.findUserByUsername(_form['user']);
                         assignedUserId = assignedUser!.referenceId;
                       } else {
                         assignedUserId = null;
@@ -110,13 +116,13 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
 
                       String? assignedPetId;
                       if (_form['pet'] != "<No pet assigned>") {
-                        User? assignedPet = await userRepository.findUserByUsername(_form['pet']);
+                        User? assignedPet = await userService.findUserByUsername(_form['pet']);
                         assignedPetId = assignedPet!.referenceId;
                       } else {
                         assignedPetId = null;
                       }
 
-                      taskRepository.addTask(Task(_form['name'],
+                      taskService.addTask(Task(_form['name'],
                           createdby: user.referenceId,
                           assignedto: assignedUserId,
                           description: _form['description'],
@@ -195,7 +201,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                   onPressed: () async {
                     try {
                       final User? user =
-                          await userRepository.currentUser(_auth);
+                          await userService.currentUser(_auth);
                       if (user == null) {
                         throw Exception(
                             'Please log into a manager account to create task');
@@ -203,13 +209,13 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
 
                       String? assignedUserId;
                       if (_form['user'] != "<No volunteer assigned>") {
-                        User? assignedUser = await userRepository.findUserByUsername(_form['user']);
+                        User? assignedUser = await userService.findUserByUsername(_form['user']);
                         assignedUserId = assignedUser!.referenceId;
                       } else {
                         assignedUserId = null;
                       }
 
-                      taskRepository.addTask(Task(_form['name'],
+                      taskService.addTask(Task(_form['name'],
                           createdby: user.referenceId,
                           assignedto: assignedUserId,
                           description: _form['description'],
@@ -283,7 +289,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
 
   // To getPetList
   Widget buildPetList() => FutureBuilder<List<Pet>>(
-        future: petRepository.getPetList(),
+        future: petService.getPetList(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // While waiting for the future to complete, show a loading indicator
@@ -310,7 +316,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
 
   // To getUserList
   Widget buildVolunteerList() => FutureBuilder<List<User>>(
-        future: userRepository.getUserList(),
+        future: userService.getUserList(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // While waiting for the future to complete, show a loading indicator

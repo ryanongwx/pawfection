@@ -3,11 +3,12 @@ import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:pawfection/models/task.dart';
 import 'package:pawfection/repository/task_repository.dart';
 import 'package:pawfection/repository/user_repository.dart';
+import 'package:pawfection/service/task_service.dart';
 import 'package:pawfection/voluteer_view.dart';
 
 Future<void> displayCompleteTaskDialog(BuildContext context, String id) async {
-  final taskRepository = TaskRepository();
-  final userRepository = UserRepository();
+  final taskService = TaskService();
+
   final formKey = GlobalKey<FormState>();
   late var _form;
 
@@ -16,15 +17,15 @@ Future<void> displayCompleteTaskDialog(BuildContext context, String id) async {
     builder: (context) {
       return Dialog(
         shape: RoundedRectangleBorder(
-          side: BorderSide(width: 2),
+          side: const BorderSide(width: 2),
           borderRadius: BorderRadius.circular(20),
         ),
         child: FutureBuilder<Task?>(
-          future: taskRepository.findTaskByTaskID(id),
+          future: taskService.findTaskByTaskID(id),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               // While waiting for the future to complete, show a loading indicator
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             } else if (snapshot.hasError) {
               // If an error occurs while fetching the user, display an error message
               return Text('Error: ${snapshot.error}');
@@ -36,14 +37,14 @@ Future<void> displayCompleteTaskDialog(BuildContext context, String id) async {
                   ? const Text('Error retrieving pet details')
                   : ListView(
                       shrinkWrap: true,
-                      physics: BouncingScrollPhysics(),
+                      physics: const BouncingScrollPhysics(),
                       children: [
                         Padding(
-                          padding: EdgeInsets.all(30),
+                          padding: const EdgeInsets.all(30),
                           child: Center(
                             child: Text(
-                              "${task.name}",
-                              style: TextStyle(
+                              task.name,
+                              style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 24,
                               ),
@@ -51,13 +52,13 @@ Future<void> displayCompleteTaskDialog(BuildContext context, String id) async {
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 48),
+                          padding: const EdgeInsets.symmetric(horizontal: 48),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 '${task.deadline.map((timestamp) => DateTime.fromMicrosecondsSinceEpoch(timestamp!.microsecondsSinceEpoch)).elementAt(0)} - ${task.deadline.map((timestamp) => DateTime.fromMicrosecondsSinceEpoch(timestamp!.microsecondsSinceEpoch)).elementAt(1)}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -66,13 +67,13 @@ Future<void> displayCompleteTaskDialog(BuildContext context, String id) async {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top: 30),
+                          padding: const EdgeInsets.only(top: 30),
                           child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 48),
+                            padding: const EdgeInsets.symmetric(horizontal: 48),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                const Text(
                                   'Description',
                                   style: TextStyle(
                                     fontSize: 24,
@@ -80,21 +81,21 @@ Future<void> displayCompleteTaskDialog(BuildContext context, String id) async {
                                   ),
                                 ),
                                 Text(
-                                  "${task.description}",
-                                  style: TextStyle(fontSize: 16, height: 1.4),
+                                  task.description,
+                                  style: const TextStyle(fontSize: 16, height: 1.4),
                                 ),
                               ],
                             ),
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top: 30),
+                          padding: const EdgeInsets.only(top: 30),
                           child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 48),
+                            padding: const EdgeInsets.symmetric(horizontal: 48),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                const Text(
                                   'Feedback',
                                   style: TextStyle(
                                     fontSize: 24,
@@ -116,7 +117,7 @@ Future<void> displayCompleteTaskDialog(BuildContext context, String id) async {
                                     filled: true,
                                     fillColor: Colors.white,
                                   ),
-                                  children: [
+                                  children: const [
                                     FastTextField(
                                       name: 'feedback',
                                       minLines: 1,
@@ -131,12 +132,12 @@ Future<void> displayCompleteTaskDialog(BuildContext context, String id) async {
                         ),
                         Padding(
                           padding:
-                              EdgeInsets.only(right: 30, left: 30, top: 10),
+                              const EdgeInsets.only(right: 30, left: 30, top: 10),
                           child: ElevatedButton(
                             onPressed: () {
                               task.feedback = _form['feedback'];
                               task.status = 'Completed';
-                              taskRepository.updateTask(task);
+                              taskService.updateTask(task);
 
                               Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
@@ -145,17 +146,17 @@ Future<void> displayCompleteTaskDialog(BuildContext context, String id) async {
                                         )),
                               );
                             },
-                            child: Text('Complete'),
+                            child: const Text('Complete'),
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(
+                          padding: const EdgeInsets.only(
                               right: 30, left: 30, top: 10, bottom: 30),
                           child: ElevatedButton(
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: Text('Return'),
+                            child: const Text('Return'),
                           ),
                         )
                       ],

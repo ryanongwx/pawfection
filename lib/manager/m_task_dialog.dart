@@ -3,13 +3,14 @@ import 'package:pawfection/manager/m_update_task_screen.dart';
 import 'package:pawfection/manager_view.dart';
 import 'package:pawfection/models/task.dart';
 import 'package:pawfection/models/user.dart';
-import 'package:pawfection/repository/task_repository.dart';
-import 'package:pawfection/repository/user_repository.dart';
 import 'package:pawfection/manager/m_user_dialog.dart' as UserDialog;
+import 'package:pawfection/service/task_service.dart';
+import 'package:pawfection/service/user_service.dart';
 
 Future<void> displayTaskItemDialog(BuildContext context, String id) async {
-  final taskRepository = TaskRepository();
-  final userRepository = UserRepository();
+  final taskService = TaskService();
+  final userService = UserService();
+
   return showDialog(
     context: context,
     builder: (context) {
@@ -19,7 +20,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
           borderRadius: BorderRadius.circular(20),
         ),
         child: FutureBuilder<Task?>(
-          future: taskRepository.findTaskByTaskID(id),
+          future: taskService.findTaskByTaskID(id),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               // While waiting for the future to complete, show a loading indicator
@@ -155,7 +156,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                       ),
                                     ),
                                     FutureBuilder(
-                                      future: userRepository
+                                      future: userService
                                               .findUserByUUID(task.assignedto!),
                                       builder: (context, snapshot) {
                                         if (snapshot.connectionState ==
@@ -223,7 +224,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                       ),
                                     ),
                                     FutureBuilder(
-                                      future: userRepository
+                                      future: userService
                                               .findUserByUUIDs(task.requests),
                                       builder: (context, snapshot) {
                                         if (snapshot.connectionState ==
@@ -358,7 +359,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                                                               user.referenceId;
                                                                           task.status =
                                                                               'Pending';
-                                                                          taskRepository
+                                                                          taskService
                                                                               .updateTask(task);
                                                                           Navigator.of(context)
                                                                               .pushReplacement(
@@ -401,7 +402,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                       ),
                                     ),
                                     FutureBuilder(
-                                      future: userRepository
+                                      future: userService
                                               .findUserByUUID(task.createdby),
                                       builder: (context, snapshot) {
                                         if (snapshot.connectionState ==
@@ -468,7 +469,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                       ),
                                     ),
                                     FutureBuilder(
-                                      future: userRepository.findUserByUUID(
+                                      future: userService.findUserByUUID(
                                               task.contactperson),
                                       builder: (context, snapshot) {
                                         if (snapshot.connectionState ==
@@ -575,7 +576,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                               );
 
                               if (confirmed ?? false) {
-                                taskRepository.deleteTask(task);
+                                taskService.deleteTask(task);
                                 Navigator.of(context).pop();
                               }
                             },
