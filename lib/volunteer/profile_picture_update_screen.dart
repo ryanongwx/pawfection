@@ -5,11 +5,11 @@ import 'dart:io';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:pawfection/manager/m_create_pet_screen.dart';
 import 'package:pawfection/manager/m_create_user_screen.dart';
-import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/pet_repository.dart';
 import 'package:pawfection/repository/storage_repository.dart';
 import 'package:pawfection/repository/user_repository.dart';
+import 'package:pawfection/service/user_service.dart';
 import 'package:pawfection/voluteer_view.dart';
 
 class ProfilePictureUpdateScreen extends StatefulWidget {
@@ -35,6 +35,7 @@ class _ProfilePictureUpdateScreenState
   final userRepository = UserRepository();
   final petRepository = PetRepository();
   final storageRepository = StorageRepository();
+  final userService = UserService();
 
   final FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
   late FirebaseAuth.User currentUser;
@@ -81,8 +82,8 @@ class _ProfilePictureUpdateScreenState
       _isLoading = true; // Set loading state
     });
 
-    final ImagePicker _picker = ImagePicker();
-    final XFile? pickedFile = await _picker.pickImage(source: source);
+    final ImagePicker picker = ImagePicker();
+    final XFile? pickedFile = await picker.pickImage(source: source);
 
     if (pickedFile != null) {
       File originalImageFile = File(pickedFile.path);
@@ -177,7 +178,7 @@ class _ProfilePictureUpdateScreenState
                           filecheck = true;
                           if (widget.routetext == 'profile') {
                             return FutureBuilder<User?>(
-                              future: userRepository
+                              future: userService
                                   .findUserByUUID(currentUser.uid),
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
@@ -203,7 +204,7 @@ class _ProfilePictureUpdateScreenState
                                                               file,
                                                               user.referenceId);
 
-                                                  userRepository.addUser(User(
+                                                  userService.addUser(User(
                                                       user.email,
                                                       username: user.email,
                                                       bio: user.bio,
@@ -262,10 +263,6 @@ class _ProfilePictureUpdateScreenState
                                       );
                                     }
                                   : null,
-                              child: Padding(
-                                padding: EdgeInsets.all(15.0),
-                                child: Text('Update Profile Picture'),
-                              ),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue,
                                 foregroundColor: Colors.white,
@@ -273,10 +270,14 @@ class _ProfilePictureUpdateScreenState
                                   borderRadius: BorderRadius.circular(32.0),
                                 ),
                               ),
+                              child: const Padding(
+                                padding: EdgeInsets.all(15.0),
+                                child: Text('Update Profile Picture'),
+                              ),
                             );
                           } else {
                             return FutureBuilder<User?>(
-                              future: userRepository
+                              future: userService
                                   .findUserByUUID(currentUser.uid),
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
@@ -301,7 +302,7 @@ class _ProfilePictureUpdateScreenState
                                                           .uploadImageToStorage(
                                                               file,
                                                               user.referenceId);
-                                                  userRepository.addUser(User(
+                                                  userService.addUser(User(
                                                       user.email,
                                                       username: user.email,
                                                       bio: user.bio,

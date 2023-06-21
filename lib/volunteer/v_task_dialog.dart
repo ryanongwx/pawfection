@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:pawfection/service/task_service.dart';
+import 'package:pawfection/service/user_service.dart';
 import 'package:pawfection/volunteer/v_complete_task_dialog.dart';
 import 'package:pawfection/models/task.dart';
 import 'package:pawfection/repository/user_repository.dart';
 import 'package:pawfection/manager/m_user_dialog.dart' as UserDialog;
 
 Future<void> displayTaskItemDialog(BuildContext context, String id) async {
-  final userRepository = UserRepository();
   final taskService = TaskService();
+  final userService = UserService();
 
   return showDialog(
     context: context,
@@ -144,7 +145,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                 ),
                                 FutureBuilder(
                                   future: task.assignedto != null
-                                      ? userRepository
+                                      ? userService
                                           .findUserByUUID(task.assignedto!)
                                       : null,
                                   builder: (context, snapshot) {
@@ -208,7 +209,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                   ),
                                 ),
                                 FutureBuilder(
-                                  future: userRepository
+                                  future: userService
                                           .findUserByUUID(task.createdby),
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState ==
@@ -271,7 +272,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                   ),
                                 ),
                                 FutureBuilder(
-                                  future: userRepository
+                                  future: userService
                                           .findUserByUUID(task.contactperson),
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState ==

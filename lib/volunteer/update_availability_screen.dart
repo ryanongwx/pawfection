@@ -1,11 +1,9 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
-import 'package:card_settings/widgets/information_fields/card_settings_header.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/user_repository.dart';
-import 'package:pawfection/voluteer_view.dart';
+import 'package:pawfection/service/user_service.dart';
 
 class UpdateAvailability extends StatefulWidget {
   UpdateAvailability({Key? key, required this.user}) : super(key: key);
@@ -20,6 +18,7 @@ class _UpdateAvailabilityState extends State<UpdateAvailability> {
   final GlobalKey<FormState> _dateKey = GlobalKey<FormState>();
   List<DateTime?> _date = [DateTime.now()];
   final userRepository = UserRepository();
+  final userService = UserService();
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +32,7 @@ class _UpdateAvailabilityState extends State<UpdateAvailability> {
                   onTap: () {
                     widget.user.availabledates =
                         _date.map((e) => Timestamp.fromDate(e!)).toList();
-                    userRepository.updateUser(widget.user);
+                    userService.updateUser(widget.user);
                     Navigator.of(context).pop();
                   },
                   child: const Icon(

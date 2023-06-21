@@ -1,15 +1,13 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:pawfection/manager/m_dashboard_screen.dart';
 import 'package:pawfection/models/user.dart';
-import 'package:pawfection/repository/task_repository.dart';
-import 'package:pawfection/repository/user_repository.dart';
 import 'package:pawfection/service/task_service.dart';
+import 'package:pawfection/service/user_service.dart';
 import '../models/task.dart';
 
 Future<void> displayVolunteersDialog(BuildContext context, Task task) async {
-  final userRepository = UserRepository();
   final taskService = TaskService();
+  final userService = UserService();
+
   return showDialog(
     context: context,
     builder: (context) {
@@ -19,7 +17,7 @@ Future<void> displayVolunteersDialog(BuildContext context, Task task) async {
             borderRadius: BorderRadius.circular(20),
           ),
           child: FutureBuilder<List<User>>(
-            future: userRepository.getUserList(),
+            future: userService.getUserList(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 // While waiting for the future to complete, show a loading indicator

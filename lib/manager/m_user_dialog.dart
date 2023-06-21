@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/user_repository.dart';
+import 'package:pawfection/service/user_service.dart';
 
 Future<void> displayUserItemDialog(BuildContext context, String id) async {
   final userRepository = UserRepository();
+  final userService = UserService();
   return showDialog(
     context: context,
     builder: (context) {
@@ -13,7 +15,7 @@ Future<void> displayUserItemDialog(BuildContext context, String id) async {
           borderRadius: BorderRadius.circular(20),
         ),
         child: FutureBuilder<User?>(
-          future: userRepository.findUserByUUID(id),
+          future: userService.findUserByUUID(id),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
@@ -52,7 +54,7 @@ Future<void> displayUserItemDialog(BuildContext context, String id) async {
                           padding: const EdgeInsets.all(30),
                           child: Center(
                             child: Text(
-                              "${user.username}",
+                              user.username,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 24,
@@ -106,7 +108,7 @@ Future<void> displayUserItemDialog(BuildContext context, String id) async {
                                   ),
                                 ),
                                 Text(
-                                  "${user.bio}",
+                                  user.bio,
                                   style: const TextStyle(
                                       fontSize: 16, height: 1.4),
                                 ),
@@ -222,7 +224,7 @@ Future<void> displayUserItemDialog(BuildContext context, String id) async {
                           );
 
                           if (confirmed ?? false) {
-                            userRepository.deleteUser(user);
+                            userService.deleteUser(user);
                             Navigator.of(context).pop();
                           }
                         },
