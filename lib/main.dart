@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pawfection/homepage.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:pawfection/login_view.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: Colors.white,
       //backgroundColor: const Color(0xff3F1845),
 
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
       //   title: const Text('First Screen'),
       // ),
 
-      body: Homepage(),
+      body: LoginView(),
     );
   }
 }
