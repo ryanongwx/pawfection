@@ -83,12 +83,12 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
                   child: const Text('Update'),
                   onPressed: () {
                     try {
-                      petService.addPet(Pet(_form['name'],
+                      petService.updatePet(Pet(_form['name'],
                           profilepicture: widget.imageURL,
                           breed: _form['breed'],
                           description: _form['description'],
                           thingstonote: _form['thingstonote']));
-                      alertmessage == 'Pet has successfully been created';
+                      alertmessage == 'Pet has successfully been updated';
                     } catch (e) {
                       setState(() {
                         alertmessage = 'Please ensure all fields are filled in';
@@ -101,10 +101,6 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
                           content: Text(alertmessage),
                           actions: <Widget>[
                             TextButton(
-                              onPressed: () => Navigator.pop(context, 'Cancel'),
-                              child: const Text('Cancel'),
-                            ),
-                            TextButton(
                               onPressed: () => {
                                 Navigator.pop(context, 'OK'),
                                 if (alertmessage ==
@@ -112,7 +108,8 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => const ManagerView(
+                                          builder: (context) =>
+                                              const ManagerView(
                                                 tab: 1,
                                               )),
                                     )
@@ -152,12 +149,12 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
                   child: const Text('Create'),
                   onPressed: () {
                     try {
-                      petService.addPet(Pet(_form['name'],
+                      petService.updatePet(Pet(_form['name'],
                           profilepicture: widget.imageURL,
                           breed: _form['breed'],
                           description: _form['description'],
                           thingstonote: _form['thingstonote']));
-                      alertmessage == 'Pet has successfully been created';
+                      alertmessage == 'Pet has successfully been updated';
                     } catch (e) {
                       setState(() {
                         alertmessage = 'Please ensure all fields are filled in';
@@ -170,10 +167,6 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
                           content: Text(alertmessage),
                           actions: <Widget>[
                             TextButton(
-                              onPressed: () => Navigator.pop(context, 'Cancel'),
-                              child: const Text('Cancel'),
-                            ),
-                            TextButton(
                               onPressed: () => {
                                 Navigator.pop(context, 'OK'),
                                 if (alertmessage ==
@@ -181,7 +174,8 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => const ManagerView(
+                                          builder: (context) =>
+                                              const ManagerView(
                                                 tab: 0,
                                               )),
                                     )

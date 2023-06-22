@@ -87,7 +87,6 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
               ),
               body: Stack(children: [
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.7,
                   child: Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Align(
@@ -130,34 +129,36 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
                 ValueListenableBuilder(
                   valueListenable: _selectedSegment_04,
                   builder: (context, value, child) {
-                    return Padding(
-                        padding: const EdgeInsets.only(
-                            top: 75.0, left: 20, right: 20),
-                        child: SearchableList<Task>(
-                            autoFocusOnSearch: false,
-                            initialList: taskList
-                                .where((element) => element.status
-                                    .contains(_selectedSegment_04.value))
-                                .toList(),
-                            builder: (Task task) => TaskItem(task: task),
-                            filter: (value) => taskList
-                                .where((element) => element.name
-                                    .toLowerCase()
-                                    .contains(value.toLowerCase()))
-                                .where((element) => element.status
-                                    .contains(_selectedSegment_04.value))
-                                .toList(),
-                            emptyWidget: const EmptyView(),
-                            inputDecoration: const InputDecoration(
-                              labelText: "Search Task",
-                              fillColor: Colors.white,
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.blue,
-                                  width: 1.0,
-                                ),
-                              ),
-                            )));
+                    return SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.75,
+                        child: Padding(
+                            padding: const EdgeInsets.only(
+                                top: 75.0, left: 20, right: 20),
+                            child: SearchableList<Task>(
+                                autoFocusOnSearch: false,
+                                initialList: taskList
+                                    .where((element) => element.status
+                                        .contains(_selectedSegment_04.value))
+                                    .toList(),
+                                builder: (Task task) => TaskItem(task: task),
+                                filter: (value) => taskList
+                                    .where((element) => element.name
+                                        .toLowerCase()
+                                        .contains(value.toLowerCase()))
+                                    .where((element) => element.status
+                                        .contains(_selectedSegment_04.value))
+                                    .toList(),
+                                emptyWidget: const EmptyView(),
+                                inputDecoration: const InputDecoration(
+                                  labelText: "Search Task",
+                                  fillColor: Colors.white,
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.blue,
+                                      width: 1.0,
+                                    ),
+                                  ),
+                                ))));
                   },
                 ),
                 // Padding(

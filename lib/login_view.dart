@@ -13,6 +13,8 @@ class LoginView extends StatelessWidget {
   final FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
   final userRepository = UserRepository();
   final userService = UserService();
+  late var accesscode;
+  bool signup = false;
 
   Future<String?> _authUser(LoginData data) async {
     debugPrint('Name: ${data.name}, Password: ${data.password}');
@@ -21,6 +23,7 @@ class LoginView extends StatelessWidget {
         debugPrint('gone to firebase');
         final credential = await _auth.signInWithEmailAndPassword(
             email: data.name, password: data.password);
+        accesscode = credential.user!.uid;
       } on FirebaseAuth.FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
           return 'No user found for that email';
@@ -38,30 +41,21 @@ class LoginView extends StatelessWidget {
     // Check for whether email has been registered
     return Future.delayed(loginTime).then((_) async {
       try {
-        final credential = await FirebaseAuth.FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-              email: data.name!,
-              password: data.password!,
-            )
-            .then((Null) => {
-                  FirebaseAuth.FirebaseAuth.instance
-                      .authStateChanges()
-                      .listen((FirebaseAuth.User? user) async {
-                    if (user != null) {
-                      userService.addUser(User(user.email!,
-                          username: user.email!,
-                          bio: '',
-                          referenceId: user.uid,
-                          role: 'Volunteer',
-                          availabledates: [],
-                          preferences: [],
-                          experiences: [],
-                          profilepicture:
-                              'https://firebasestorage.googleapis.com/v0/b/pawfection-c14ed.appspot.com/o/profilepictures%2FFlFhhBapCZOzattk8mT1CMNxou22?alt=media&token=530bd4b2-95b6-45dc-88f0-9abf64d2a916',
-                          contactnumber: ''));
-                    }
-                  }),
-                });
+        signup = true;
+        debugPrint(data.additionalSignupData!['accesscode']!);
+        User? user = await userService
+            .findUserByUUID(data.additionalSignupData!['accesscode']!);
+
+        if (user == null) {
+          return 'Invalid Access Code';
+        } else if (user.email == data.name) {
+          accesscode = data.additionalSignupData!['accesscode']!;
+          await FirebaseAuth.FirebaseAuth.instance
+              .createUserWithEmailAndPassword(
+            email: data.name!,
+            password: data.password!,
+          );
+        }
       } on FirebaseAuth.FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           return 'The password provided is too weak.';
@@ -92,16 +86,27 @@ class LoginView extends StatelessWidget {
           logo: const AssetImage('assets/images/logo.png'),
           onLogin: _authUser,
           onSignup: _signupUser,
+          additionalSignupFields: [
+            UserFormField(
+                keyName: 'accesscode',
+                displayName: 'Access Code',
+                icon: Icon(Icons.lock))
+          ],
           onRecoverPassword: _recoverPassword,
           messages: LoginMessages(
+              additionalSignUpFormDescription: 'Enter Access Code',
+              signUpSuccess: 'Sign In Successful',
               recoverPasswordIntro: 'Enter your recovery email here',
               recoverPasswordDescription:
                   'An email will be sent to your email addess for password reset.'),
           onSubmitAnimationCompleted: () async {
+            User? user = await userService.findUserByUUID(accesscode);
             FirebaseAuth.User currentUser = _auth.currentUser!;
-            User? user = await userService.findUserByUUID(currentUser.uid);
             if (user != null) {
-              if (user.role == 'Manager') {
+              if (signup) {
+                userService.updateUserUid(user, currentUser.uid);
+              }
+              if (user.role == 'manager') {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                   builder: (context) => const ManagerView(
                     tab: 1,

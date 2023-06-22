@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:pawfection/manager/m_create_user_screen.dart';
 import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/user_repository.dart';
 import 'package:pawfection/service/user_service.dart';
@@ -50,23 +51,23 @@ class _MVolunteerListScreenState extends State<MVolunteerListScreen> {
         return Scaffold(
             appBar: AppBar(
               title: const Text('Volunteers'),
-              // actions: <Widget>[
-              //   Padding(
-              //       padding: EdgeInsets.only(right: 20.0),
-              //       child: GestureDetector(
-              //         onTap: () {
-              //           Navigator.push(
-              //             context,
-              //             MaterialPageRoute(
-              //                 builder: (context) => MCreateUserScreen()),
-              //           );
-              //         },
-              //         child: Icon(
-              //           Icons.add,
-              //           size: 26.0,
-              //         ),
-              //       )),
-              // ],
+              actions: <Widget>[
+                Padding(
+                    padding: EdgeInsets.only(right: 20.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MCreateUserScreen()),
+                        );
+                      },
+                      child: Icon(
+                        Icons.add,
+                        size: 26.0,
+                      ),
+                    )),
+              ],
             ),
             body: Stack(children: [
               SizedBox(

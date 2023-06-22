@@ -68,7 +68,7 @@ class _MPetScreenState extends State<MPetScreen> {
             ),
             body: Stack(children: [
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.7,
+                height: MediaQuery.of(context).size.height * 0.75,
                 child: Padding(
                   padding:
                       const EdgeInsets.only(top: 20.0, left: 20, right: 20),
