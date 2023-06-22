@@ -9,16 +9,14 @@ class PetRepository {
     return petCollection.snapshots();
   }
 
-  Future<String> addPetRepo(Map<String, dynamic> petJson) async {
+  Future<void> addPetRepo(Map<String, dynamic> petJson) async {
     var newDocRef = petCollection.doc();
+    petJson['referenceId'] = newDocRef.id;
     await newDocRef.set(petJson);
-    return newDocRef.id;
   }
 
   void updatePetRepo(Map<String, dynamic> taskJson, String? referenceId) async {
-    await petCollection
-        .doc(referenceId)
-        .update(taskJson);
+    await petCollection.doc(referenceId).update(taskJson);
   }
 
   void deletePetRepo(String? referenceId) async {

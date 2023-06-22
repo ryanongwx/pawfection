@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pawfection/repository/pet_repository.dart';
@@ -62,8 +64,7 @@ class PetService {
 
   Future<void> addPet(Pet pet) async {
     var petJson = petToJson(pet);
-    var refId = await petRepository.addPetRepo(petJson);
-    pet.referenceId = refId;
+    await petRepository.addPetRepo(petJson);
   }
 
   Future<Pet?> findPetByPetID(String referenceId) async {
