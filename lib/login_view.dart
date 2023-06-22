@@ -35,7 +35,7 @@ class LoginView extends StatelessWidget {
   }
 
   Future<String?> _signupUser(SignupData data) async {
-    debugPrint('Signup Name: ${data.name}, Password: ${data.password}');
+    // Check for whether email has been registered
     return Future.delayed(loginTime).then((_) async {
       try {
         final credential = await FirebaseAuth.FirebaseAuth.instance

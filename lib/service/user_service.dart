@@ -71,9 +71,9 @@ class UserService {
     userRepository.deleteUserRepo(user.referenceId);
   }
 
-  void addUser(User user) {
+  Future<void> addUser(User user) async {
     var userJson = userToJson(user);
-    userRepository.addUserRepo(userJson, user.referenceId);
+    await userRepository.addUserRepo(userJson);
   }
 
   Future<List<User>> getUserList() async {

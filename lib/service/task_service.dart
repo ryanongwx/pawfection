@@ -26,20 +26,20 @@ class TaskService {
   }
 
   Map<String, dynamic> taskToJson(Task instance) => <String, dynamic>{
-    'name': instance.name.toLowerCase(),
-    'createdby': instance.createdby,
-    'referenceId': instance.referenceId,
-    'assignedto': instance.assignedto,
-    'description': instance.description,
-    'status': instance.status,
-    'resources': instance.resources,
-    'requests': instance.requests,
-    'contactperson': instance.contactperson,
-    'contactpersonnumber': instance.contactpersonnumber,
-    'feedback': instance.feedback,
-    'deadline': instance.deadline,
-    'pet': instance.pet,
-  };
+        'name': instance.name.toLowerCase(),
+        'createdby': instance.createdby,
+        'referenceId': instance.referenceId,
+        'assignedto': instance.assignedto,
+        'description': instance.description,
+        'status': instance.status,
+        'resources': instance.resources,
+        'requests': instance.requests,
+        'contactperson': instance.contactperson,
+        'contactpersonnumber': instance.contactpersonnumber,
+        'feedback': instance.feedback,
+        'deadline': instance.deadline,
+        'pet': instance.pet,
+      };
 
   Task fromSnapshot(DocumentSnapshot snapshot) {
     final newTask = taskFromJson(snapshot.data() as Map<String, dynamic>);
@@ -64,7 +64,7 @@ class TaskService {
     } else {
       return snapshot.docs.map((DocumentSnapshot<Object?> document) {
         Map<String, dynamic> data = document.data()
-        as Map<String, dynamic>; // Cast to the correct data type
+            as Map<String, dynamic>; // Cast to the correct data type
         return taskFromJson(data);
       }).toList();
     }
@@ -80,8 +80,7 @@ class TaskService {
 
   Future<void> addTask(Task task) async {
     var taskJson = taskToJson(task);
-    var refId = await taskRepository.addTaskRepo(taskJson);
-    task.referenceId = refId;
+    await taskRepository.addTaskRepo(taskJson);
   }
 
   Future<Task?> findTaskByTaskID(String referenceId) async {

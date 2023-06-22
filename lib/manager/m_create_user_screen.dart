@@ -90,8 +90,6 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
                     // ignore: avoid_print
                     print('Form changed: ${value.toString()}');
                     _form = value;
-
-                    if (_form['walking']) {}
                   },
                 ),
                 // ElevatedButton(
