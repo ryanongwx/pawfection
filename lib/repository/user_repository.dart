@@ -5,10 +5,11 @@ class UserRepository {
   final CollectionReference userCollection =
       FirebaseFirestore.instance.collection('users');
 
-  Future<void> addUserRepo(Map<String, dynamic> userJson) async {
+  Future<String> addUserRepo(Map<String, dynamic> userJson) async {
     var newDocRef = userCollection.doc();
     userJson['referenceId'] = newDocRef.id;
     await newDocRef.set(userJson);
+    return newDocRef.id;
   }
 
   Stream<QuerySnapshot> get users {
@@ -16,6 +17,12 @@ class UserRepository {
   }
 
   void updateUserRepo(Map<String, dynamic> userJson, String referenceId) async {
+    await userCollection.doc(referenceId).update(userJson);
+  }
+
+  void updateUserRepoReferenceId(Map<String, dynamic> userJson,
+      String referenceId, String newReferenceId) async {
+    userJson['referenceId'] = newReferenceId;
     await userCollection.doc(referenceId).update(userJson);
   }
 

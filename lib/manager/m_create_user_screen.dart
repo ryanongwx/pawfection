@@ -1,10 +1,14 @@
 import 'dart:core';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:pawfection/manager_view.dart';
+import 'package:pawfection/models/user.dart';
 
 import 'package:pawfection/repository/user_repository.dart';
+import 'package:pawfection/service/user_service.dart';
 import 'package:pawfection/volunteer/profile_picture_update_screen.dart';
 import 'package:pawfection/volunteer/widgets/profile_widget.dart';
 
@@ -21,7 +25,7 @@ class MCreateUserScreen extends StatefulWidget {
 class _MCreateUserScreenState extends State<MCreateUserScreen> {
   final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
-  final userRepository = UserRepository();
+  final userService = UserService();
   late var _form;
   late var alertmessage;
 
@@ -53,6 +57,7 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String accesscode = '';
     if (Platform.isAndroid) {
       return Scaffold(
         appBar: AppBar(
@@ -92,58 +97,75 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
                     _form = value;
                   },
                 ),
-                // ElevatedButton(
-                //   child: const Text('Create'),
-                //   onPressed: () {
-                //     try {
-                //       userRepository.addUser(User(_form['email'],
-                //           username: _form['username'],
-                //           role: _form['role'],
-                //           availabledates: [],
-                //           preferences: [],
-                //           experiences: [],
-                //           profilepicture: widget.imagePath,
-                //           contactnumber: _form['contactnumber']));
-                //       setState(() {
-                //         alertmessage = 'User has successfully been created';
-                //       });
-                //     } catch (e) {
-                //       setState(() {
-                //         alertmessage = 'Please ensure all fields are filled in';
-                //       });
-                //     } finally {
-                //       showDialog<String>(
-                //         context: context,
-                //         builder: (BuildContext context) => AlertDialog(
-                //           title: const Text('Create User'),
-                //           content: Text(alertmessage),
-                //           actions: <Widget>[
-                //             TextButton(
-                //               onPressed: () => Navigator.pop(context, 'Cancel'),
-                //               child: const Text('Cancel'),
-                //             ),
-                //             TextButton(
-                //               onPressed: () => {
-                //                 Navigator.pop(context, 'OK'),
-                //                 if (alertmessage ==
-                //                     'User has successfully been created')
-                //                   {
-                //                     Navigator.of(context).pushReplacement(
-                //                       MaterialPageRoute(
-                //                           builder: (context) => ManagerView(
-                //                                 tab: 2,
-                //                               )),
-                //                     )
-                //                   }
-                //               },
-                //               child: const Text('OK'),
-                //             ),
-                //           ],
-                //         ),
-                //       );
-                //     }
-                //   },
-                // ),
+                ElevatedButton(
+                  child: const Text('Create'),
+                  onPressed: () async {
+                    try {
+                      accesscode = await userService.addUser(User(
+                          _form['email'],
+                          username: _form['username'],
+                          role: _form['role'],
+                          availabledates: [],
+                          preferences: [],
+                          experiences: [],
+                          profilepicture:
+                              'https://firebasestorage.googleapis.com/v0/b/pawfection-c14ed.appspot.com/o/profilepictures%2FFlFhhBapCZOzattk8mT1CMNxou22?alt=media&token=530bd4b2-95b6-45dc-88f0-9abf64d2a916',
+                          contactnumber: _form['contactnumber'],
+                          referenceId: '',
+                          bio: ''));
+                      setState(() {
+                        alertmessage =
+                            'User has successfully been created. \n Access Code: $accesscode';
+                      });
+                    } catch (e) {
+                      setState(() {
+                        alertmessage = 'Please ensure all fields are filled in';
+                      });
+                    } finally {
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: const Text('Create User'),
+                          content: Text(
+                            alertmessage,
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () async {
+                                debugPrint(accesscode);
+                                await Clipboard.setData(
+                                        ClipboardData(text: accesscode))
+                                    .then((_) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text(
+                                              "Access code copied to clipboard")));
+                                });
+                              },
+                              child: const Text('Copy Access Code'),
+                            ),
+                            TextButton(
+                              onPressed: () => {
+                                Navigator.pop(context, 'OK'),
+                                if (alertmessage ==
+                                    'User has successfully been created. \n Access Code: $accesscode')
+                                  {
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                          builder: (context) => ManagerView(
+                                                tab: 2,
+                                              )),
+                                    )
+                                  }
+                              },
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                  },
+                ),
               ],
             ),
           ),
@@ -166,58 +188,72 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
                     _form = value;
                   },
                 ),
-                // CupertinoButton(
-                //   child: const Text('Create'),
-                //   onPressed: () {
-                //     try {
-                //       userRepository.addUser(User(_form['email'],
-                //           username: _form['username'],
-                //           role: _form['role'],
-                //           availabledates: [],
-                //           preferences: [],
-                //           experiences: [],
-                //           profilepicture: widget.imagePath,
-                //           contactnumber: _form['contactnumber']));
-                //       setState(() {
-                //         alertmessage = 'User has successfully been created';
-                //       });
-                //     } catch (e) {
-                //       setState(() {
-                //         alertmessage = 'Please ensure all fields are filled in';
-                //       });
-                //     } finally {
-                //       showDialog<String>(
-                //         context: context,
-                //         builder: (BuildContext context) => AlertDialog(
-                //           title: const Text('Create User'),
-                //           content: Text(alertmessage),
-                //           actions: <Widget>[
-                //             TextButton(
-                //               onPressed: () => Navigator.pop(context, 'Cancel'),
-                //               child: const Text('Cancel'),
-                //             ),
-                //             TextButton(
-                //               onPressed: () => {
-                //                 Navigator.pop(context, 'OK'),
-                //                 if (alertmessage ==
-                //                     'User has successfully been created')
-                //                   {
-                //                     Navigator.of(context).pushReplacement(
-                //                       MaterialPageRoute(
-                //                           builder: (context) => ManagerView(
-                //                                 tab: 2,
-                //                               )),
-                //                     )
-                //                   }
-                //               },
-                //               child: const Text('OK'),
-                //             ),
-                //           ],
-                //         ),
-                //       );
-                //     }
-                //   },
-                // ),
+                CupertinoButton(
+                  child: const Text('Create'),
+                  onPressed: () async {
+                    try {
+                      accesscode = await userService.addUser(User(
+                          _form['email'],
+                          username: _form['username'],
+                          role: _form['role'],
+                          availabledates: [],
+                          preferences: [],
+                          experiences: [],
+                          profilepicture:
+                              'https://firebasestorage.googleapis.com/v0/b/pawfection-c14ed.appspot.com/o/profilepictures%2FFlFhhBapCZOzattk8mT1CMNxou22?alt=media&token=530bd4b2-95b6-45dc-88f0-9abf64d2a916',
+                          contactnumber: _form['contactnumber'],
+                          referenceId: '',
+                          bio: ''));
+                      setState(() {
+                        alertmessage =
+                            'User has successfully been created. \n Access Code: $accesscode';
+                      });
+                    } catch (e) {
+                      setState(() {
+                        alertmessage = 'Please ensure all fields are filled in';
+                      });
+                    } finally {
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: const Text('Create User'),
+                          content: Text(alertmessage),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () async {
+                                await Clipboard.setData(
+                                        ClipboardData(text: accesscode))
+                                    .then((_) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text(
+                                              "Access code copied to clipboard")));
+                                });
+                              },
+                              child: const Text('Copy Access Code'),
+                            ),
+                            TextButton(
+                              onPressed: () => {
+                                Navigator.pop(context, 'OK'),
+                                if (alertmessage ==
+                                    'User has successfully been created. \n Access Code: $accesscode')
+                                  {
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                          builder: (context) => ManagerView(
+                                                tab: 2,
+                                              )),
+                                    )
+                                  }
+                              },
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                  },
+                ),
               ],
             ),
           ),
@@ -229,19 +265,6 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
 
   List<Widget> _buildForm(BuildContext context) {
     return [
-      SizedBox(
-        height: 200,
-        child: ProfileWidget(
-          image: Image.asset(widget.imagePath),
-          onClicked: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ProfilePictureUpdateScreen(
-                      routetext: 'user',
-                      petid: '',
-                    )));
-          },
-        ),
-      ),
       FastFormSection(
         padding: const EdgeInsets.all(16.0),
         header: const Padding(
@@ -330,19 +353,6 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
 
   List<Widget> _buildCupertinoForm(BuildContext context) {
     return [
-      SizedBox(
-        height: 200,
-        child: ProfileWidget(
-          image: Image.asset(widget.imagePath),
-          onClicked: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ProfilePictureUpdateScreen(
-                      routetext: 'user',
-                      petid: '',
-                    )));
-          },
-        ),
-      ),
       FastFormSection(
         adaptive: true,
         insetGrouped: true,
