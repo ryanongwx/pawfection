@@ -4,8 +4,15 @@ import 'dart:async';
 class PetRepository {
   final CollectionReference petCollection;
 
-  PetRepository(FirebaseFirestore firestore)
-    : petCollection = firestore.collection('pets');
+  // The factory method checks if a parameter is passed into the constructor or
+  // not. By default, no parameter means the original DB is used.
+  factory PetRepository([FirebaseFirestore? firestore]) {
+    firestore ??= FirebaseFirestore.instance;
+    return PetRepository._internal(firestore.collection('pets'));
+  }
+
+  // PetRepository constructor
+  PetRepository._internal(this.petCollection);
 
   Stream<QuerySnapshot> get pets {
     return petCollection.snapshots();
