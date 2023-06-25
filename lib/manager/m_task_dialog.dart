@@ -155,55 +155,59 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    FutureBuilder(
-                                      future: userService
-                                              .findUserByUUID(task.assignedto!),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.connectionState ==
-                                            ConnectionState.waiting) {
-                                          // While waiting for the future to complete, show a loading indicator
-                                          return const CircularProgressIndicator();
-                                        } else if (snapshot.hasError) {
-                                          // If an error occurs while fetching the user, display an error message
-                                          return Text(
-                                              'Error: ${snapshot.error}');
-                                        } else {
-                                          // The future completed successfully
-                                          final user = snapshot.data;
+                                    if (task.assignedto != null)
+                                      FutureBuilder(
+                                        future: userService
+                                            .findUserByUUID(task.assignedto!),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            // While waiting for the future to complete, show a loading indicator
+                                            return const CircularProgressIndicator();
+                                          } else if (snapshot.hasError) {
+                                            // If an error occurs while fetching the user, display an error message
+                                            return Text(
+                                                'Error: ${snapshot.error}');
+                                          } else {
+                                            // The future completed successfully
+                                            final user = snapshot.data;
 
-                                          return (user == null
-                                              ? const Text(
-                                                  'Task not assigned to any volunteers')
-                                              : ListTile(
-                                                  onTap: () {
-                                                    UserDialog
-                                                        .displayUserItemDialog(
-                                                            context,
-                                                            task.assignedto!);
-                                                  },
-                                                  tileColor: Colors.grey[200],
-                                                  shape: RoundedRectangleBorder(
-                                                      side: const BorderSide(
-                                                          width: 2),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              20)),
-                                                  leading: const Icon(
-                                                    Icons.account_circle,
-                                                    color: Colors.black,
-                                                  ),
-                                                  title: Text(
-                                                    user.username,
-                                                    style: const TextStyle(
+                                            return (user == null
+                                                ? const Text(
+                                                    'Task not assigned to any volunteers')
+                                                : ListTile(
+                                                    onTap: () {
+                                                      UserDialog
+                                                          .displayUserItemDialog(
+                                                              context,
+                                                              task.assignedto!);
+                                                    },
+                                                    tileColor: Colors.grey[200],
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                            side:
+                                                                const BorderSide(
+                                                                    width: 2),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20)),
+                                                    leading: const Icon(
+                                                      Icons.account_circle,
                                                       color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.bold,
                                                     ),
-                                                  ),
-                                                ));
-                                        }
-                                      },
-                                    ),
+                                                    title: Text(
+                                                      user.username,
+                                                      style: const TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ));
+                                          }
+                                        },
+                                      ),
                                   ],
                                 ),
                               ),
@@ -225,7 +229,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                     ),
                                     FutureBuilder(
                                       future: userService
-                                              .findUserByUUIDs(task.requests),
+                                          .findUserByUUIDs(task.requests),
                                       builder: (context, snapshot) {
                                         if (snapshot.connectionState ==
                                             ConnectionState.waiting) {
@@ -330,7 +334,8 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                                         ),
                                                       ),
                                                       trailing: IconButton(
-                                                        icon: const Icon(Icons.check),
+                                                        icon: const Icon(
+                                                            Icons.check),
                                                         onPressed: () {
                                                           showDialog<String>(
                                                               context: context,
@@ -403,7 +408,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                     ),
                                     FutureBuilder(
                                       future: userService
-                                              .findUserByUUID(task.createdby),
+                                          .findUserByUUID(task.createdby),
                                       builder: (context, snapshot) {
                                         if (snapshot.connectionState ==
                                             ConnectionState.waiting) {
@@ -469,8 +474,8 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                       ),
                                     ),
                                     FutureBuilder(
-                                      future: userService.findUserByUUID(
-                                              task.contactperson),
+                                      future: userService
+                                          .findUserByUUID(task.contactperson),
                                       builder: (context, snapshot) {
                                         if (snapshot.connectionState ==
                                             ConnectionState.waiting) {
