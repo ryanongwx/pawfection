@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 
 class PetRepository {
-  final CollectionReference petCollection =
-      FirebaseFirestore.instance.collection('pets');
+  final CollectionReference petCollection;
+
+  PetRepository(FirebaseFirestore firestore)
+    : petCollection = firestore.collection('pets');
 
   Stream<QuerySnapshot> get pets {
     return petCollection.snapshots();

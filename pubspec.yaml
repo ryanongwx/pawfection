@@ -51,6 +51,8 @@ dependencies:
   flutter_fast_forms: ^11.0.0
   firebase_storage: ^11.2.2
   flutter_native_splash: ^2.3.0
+  fake_cloud_firestore: ^2.4.1+1
+  mockito: ^5.4.2
 
 
 flutter_native_splash:

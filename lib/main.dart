@@ -12,6 +12,7 @@ void main() async {
   runApp(const MaterialApp(
     title: 'Pawfection',
     home: MyApp(),
+    debugShowCheckedModeBanner: false,
   ));
 }
 

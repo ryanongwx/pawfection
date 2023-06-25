@@ -86,7 +86,7 @@ class LoginView extends StatelessWidget {
           logo: const AssetImage('assets/images/logo.png'),
           onLogin: _authUser,
           onSignup: _signupUser,
-          additionalSignupFields: [
+          additionalSignupFields: const [
             UserFormField(
                 keyName: 'accesscode',
                 displayName: 'Access Code',
