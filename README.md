@@ -24,18 +24,19 @@ IOS (Debug and Release)
 - Open xcode simulator
 - Run flutter run
 
-App Login Details can be found in the MS1 submission.
+Manager account
+  email: ryan@gmail.com
+  pw: ryanongwx
+  
+Volunteer account
+  email: admin@pawfection.com
+  pw: pawefection
+
+If cloning to local device does not work, you may use this link to test the app. However, please note that the code is rendered online which will result in some delays in ap interaction. Link: https://appetize.io/app/ytoxssglwc3m4ckvfzbmmpyg5e?device=iphone14pro&osVersion=16.2&scale=75
 
 Disclaimer: While testing, kindly refrain from sending in multiple queries to the database by limiting the number of times you click on the create user/pet/task as well as the signup functionality.
 
 
-Features
-- Login
-- Volunteer Task Dashboard
-- Volunteer Profile
-- Manager Task Dashboard
-- Manager Pet Dashboard
-- Manager Manager Dashboard
-- Create Pet Interface
-- Create User Interface
-- Create Task Interface
+Disclaimer: While testing, kindly refrain from sending in multiple queries to the database by limiting the number of times you click on the create user/pet/task as well as the signup functionality.
+
+
