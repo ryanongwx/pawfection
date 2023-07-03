@@ -19,6 +19,7 @@ final _selectedSegment_04 = ValueNotifier('Pending');
 
 final taskRepository = TaskRepository();
 final taskService = TaskService();
+
 // List<Task> taskList = [];
 
 // Future<void> fetchTaskList() async {
@@ -32,6 +33,16 @@ class _VDashboardScreenState extends State<VDashboardScreen> {
   //   // TODO: implement initState
   //   fetchTaskList();
   // }
+
+  final FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
+  late FirebaseAuth.User currentUser;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    currentUser = _auth.currentUser!;
+  }
 
   @override
   Widget build(BuildContext context) {
