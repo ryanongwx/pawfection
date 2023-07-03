@@ -7,13 +7,24 @@ import 'package:pawfection/voluteer_view.dart';
 import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
 import 'package:pawfection/models/user.dart';
 
-class LoginView extends StatelessWidget {
+class LoginView extends StatefulWidget {
   LoginView({super.key});
+
+  @override
+  State<LoginView> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
   Duration get loginTime => const Duration(milliseconds: 2250);
+
   final FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
+
   final userRepository = UserRepository();
+
   final userService = UserService();
-  late var accesscode;
+
+  var accesscode = '';
+
   bool signup = false;
 
   Future<String?> _authUser(LoginData data) async {
@@ -23,7 +34,6 @@ class LoginView extends StatelessWidget {
         debugPrint('gone to firebase');
         final credential = await _auth.signInWithEmailAndPassword(
             email: data.name, password: data.password);
-        accesscode = credential.user!.uid;
       } on FirebaseAuth.FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
           return 'No user found for that email';
@@ -42,19 +52,22 @@ class LoginView extends StatelessWidget {
     return Future.delayed(loginTime).then((_) async {
       try {
         signup = true;
-        debugPrint(data.additionalSignupData!['accesscode']!);
-        User? user = await userService
-            .findUserByUUID(data.additionalSignupData!['accesscode']!);
+        if (data.additionalSignupData != null) {
+          User? user = await userService
+              .findUserByUUID(data.additionalSignupData!['accesscode']!);
 
-        if (user == null) {
-          return 'Invalid Access Code';
-        } else if (user.email == data.name) {
-          accesscode = data.additionalSignupData!['accesscode']!;
-          await FirebaseAuth.FirebaseAuth.instance
-              .createUserWithEmailAndPassword(
-            email: data.name!,
-            password: data.password!,
-          );
+          if (user == null) {
+            return 'Invalid Access Code';
+          } else if (user.email == data.name) {
+            setState(() {
+              accesscode = data.additionalSignupData!['accesscode']!;
+            });
+            await FirebaseAuth.FirebaseAuth.instance
+                .createUserWithEmailAndPassword(
+              email: data.name!,
+              password: data.password!,
+            );
+          }
         }
       } on FirebaseAuth.FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
@@ -76,6 +89,13 @@ class LoginView extends StatelessWidget {
           .sendPasswordResetEmail(email: name);
       return null;
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    accesscode = '';
   }
 
   @override
@@ -104,7 +124,20 @@ class LoginView extends StatelessWidget {
             FirebaseAuth.User currentUser = _auth.currentUser!;
             if (user != null) {
               if (signup) {
+                // Create new user in User Firestore Database and delete current user
+
                 userService.updateUserUid(user, currentUser.uid);
+                userService.addUserWithId(User(user.email,
+                    referenceId: currentUser.uid,
+                    username: user.username,
+                    role: user.role,
+                    availabledates: user.availabledates,
+                    preferences: user.preferences,
+                    experiences: user.experiences,
+                    profilepicture: user.profilepicture,
+                    contactnumber: user.contactnumber,
+                    bio: user.bio));
+                userService.deleteUser(user);
               }
               if (user.role == 'manager') {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
