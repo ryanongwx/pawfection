@@ -107,21 +107,30 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
                 ),
                 ElevatedButton(
                   child: const Text('Update'),
-                  onPressed: () {
+                  onPressed: () async {
                     try {
-                      userService.updateUser(User(_form['email'],
-                          referenceId: widget.user.referenceId,
-                          username: _form['username'],
-                          role: widget.user.role,
-                          bio: _form['bio'],
-                          availabledates: widget.user.availabledates,
-                          preferences: _form['preferences'],
-                          experiences: _form['experiences'],
-                          profilepicture: widget.user.profilepicture,
-                          contactnumber: _form['contactnumber']));
-                      setState(() {
-                        alertmessage = 'User has successfully been updated';
-                      });
+                      User? findusername = await userService
+                          .findUserByUsername(_form['username']);
+                      if (findusername == null ||
+                          findusername.username == widget.user.username) {
+                        userService.updateUser(User(_form['email'],
+                            referenceId: widget.user.referenceId,
+                            username: _form['username'],
+                            role: widget.user.role,
+                            bio: _form['bio'],
+                            availabledates: widget.user.availabledates,
+                            preferences: _form['preferences'],
+                            experiences: _form['experiences'],
+                            profilepicture: widget.user.profilepicture,
+                            contactnumber: _form['contactnumber']));
+                        setState(() {
+                          alertmessage = 'User has successfully been updated';
+                        });
+                      } else {
+                        setState(() {
+                          alertmessage = 'Username has been taken';
+                        });
+                      }
                     } catch (e) {
                       setState(() {
                         alertmessage = 'Please ensure all fields are filled in';
@@ -185,7 +194,7 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
                 ),
                 CupertinoButton(
                   child: const Text('Update'),
-                  onPressed: () {
+                  onPressed: () async {
                     try {
                       List<String> preferences = [];
                       if (_form['p_walking']) {
@@ -214,19 +223,28 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
                       if (_form['e_training']) {
                         experiences.add('training');
                       }
-                      userService.updateUser(User(_form['email'],
-                          referenceId: widget.user.referenceId,
-                          username: _form['username'],
-                          role: widget.user.role,
-                          bio: _form['bio'],
-                          availabledates: widget.user.availabledates,
-                          preferences: preferences,
-                          experiences: experiences,
-                          profilepicture: widget.user.profilepicture,
-                          contactnumber: _form['contactnumber']));
-                      setState(() {
-                        alertmessage = 'User has successfully been updated';
-                      });
+                      User? findusername = await userService
+                          .findUserByUsername(_form['username']);
+                      if (findusername == null ||
+                          findusername.username == widget.user.username) {
+                        userService.updateUser(User(_form['email'],
+                            referenceId: widget.user.referenceId,
+                            username: _form['username'],
+                            role: widget.user.role,
+                            bio: _form['bio'],
+                            availabledates: widget.user.availabledates,
+                            preferences: preferences,
+                            experiences: experiences,
+                            profilepicture: widget.user.profilepicture,
+                            contactnumber: _form['contactnumber']));
+                        setState(() {
+                          alertmessage = 'User has successfully been updated';
+                        });
+                      } else {
+                        setState(() {
+                          alertmessage = 'Username has been taken';
+                        });
+                      }
                     } catch (e) {
                       setState(() {
                         alertmessage = '$e';
