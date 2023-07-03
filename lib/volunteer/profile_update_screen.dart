@@ -289,7 +289,7 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
           FastTextField(
             name: 'username',
             labelText: 'Username',
-            placeholder: widget.user.username,
+            initialValue: widget.user.username,
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
             ]),
@@ -298,7 +298,7 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
             name: 'email',
             labelText: 'Email',
             keyboardType: TextInputType.emailAddress,
-            placeholder: widget.user.email,
+            initialValue: widget.user.email,
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
             ]),
@@ -307,7 +307,7 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
             name: 'contactnumber',
             labelText: 'Contact Number',
             keyboardType: TextInputType.phone,
-            placeholder: widget.user.contactnumber,
+            initialValue: widget.user.contactnumber,
             validator: Validators.compose([
               Validators.required((value) {
                 if (value == null) {
@@ -322,7 +322,7 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
           FastTextField(
             name: 'bio',
             labelText: 'Bio',
-            placeholder: widget.user.bio,
+            initialValue: widget.user.bio,
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
             ]),
@@ -334,7 +334,6 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
             chipPadding: const EdgeInsets.all(8.0),
             chips: [
               FastChoiceChip(
-                selected: true,
                 value: 'Walking',
               ),
               FastChoiceChip(
@@ -355,7 +354,6 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
             chipPadding: const EdgeInsets.all(8.0),
             chips: [
               FastChoiceChip(
-                selected: true,
                 value: 'Walking',
               ),
               FastChoiceChip(
@@ -385,7 +383,7 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
           FastTextField(
             name: 'username',
             labelText: 'Username',
-            placeholder: widget.user.username,
+            initialValue: widget.user.username,
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
             ]),
@@ -394,7 +392,7 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
             name: 'email',
             labelText: 'Email',
             keyboardType: TextInputType.emailAddress,
-            placeholder: widget.user.email,
+            initialValue: widget.user.email,
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
             ]),
@@ -403,7 +401,7 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
             name: 'contactnumber',
             labelText: 'Contact Number',
             keyboardType: TextInputType.phone,
-            placeholder: widget.user.contactnumber,
+            initialValue: widget.user.contactnumber,
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
             ]),
@@ -411,7 +409,7 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
           FastTextField(
             name: 'bio',
             labelText: 'Bio',
-            placeholder: widget.user.bio,
+            initialValue: widget.user.bio,
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
             ]),
