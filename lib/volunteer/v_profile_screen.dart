@@ -40,11 +40,10 @@ class _VProfileScreenState extends State<VProfileScreen> {
             onPressed: () async {
               try {
                 _auth.signOut();
-                Navigator.push(
+                Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => LoginView(),
-                  ),
+                  MaterialPageRoute(builder: (context) => LoginView()),
+                  (Route<dynamic> route) => false,
                 );
               } catch (e) {
                 debugPrint(e.toString());

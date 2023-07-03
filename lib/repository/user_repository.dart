@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 
@@ -10,6 +12,10 @@ class UserRepository {
     userJson['referenceId'] = newDocRef.id;
     await newDocRef.set(userJson);
     return newDocRef.id;
+  }
+
+  void addUserRepoWithRepoId(Map<String, dynamic> userJson) async {
+    userCollection.doc(userJson['referenceId']).set(userJson);
   }
 
   Stream<QuerySnapshot> get users {

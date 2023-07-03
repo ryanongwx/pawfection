@@ -19,6 +19,7 @@ final _selectedSegment_04 = ValueNotifier('Pending');
 
 final taskRepository = TaskRepository();
 final taskService = TaskService();
+
 // List<Task> taskList = [];
 
 // Future<void> fetchTaskList() async {
@@ -32,6 +33,16 @@ class _VDashboardScreenState extends State<VDashboardScreen> {
   //   // TODO: implement initState
   //   fetchTaskList();
   // }
+
+  final FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
+  late FirebaseAuth.User currentUser;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    currentUser = _auth.currentUser!;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,16 +117,22 @@ class _VDashboardScreenState extends State<VDashboardScreen> {
                             child: SearchableList<Task>(
                                 autoFocusOnSearch: false,
                                 initialList: taskList
-                                    .where((element) => element.status
-                                        .contains(_selectedSegment_04.value))
+                                    .where((element) =>
+                                        (element.assignedto == currentUser.uid ||
+                                            element.assignedto == null) &&
+                                        element.status.contains(
+                                            _selectedSegment_04.value))
                                     .toList(),
                                 builder: (Task task) => TaskItem(task: task),
                                 filter: (value) => taskList
                                     .where((element) => element.name
                                         .toLowerCase()
                                         .contains(value.toLowerCase()))
-                                    .where((element) => element.status
-                                        .contains(_selectedSegment_04.value))
+                                    .where((element) =>
+                                        (element.assignedto == currentUser.uid ||
+                                            element.assignedto == null) &&
+                                        element.status.contains(
+                                            _selectedSegment_04.value))
                                     .toList(),
                                 emptyWidget: const EmptyView(),
                                 inputDecoration: const InputDecoration(
@@ -274,7 +291,7 @@ class EmptyView extends StatelessWidget {
           Icons.error,
           color: Colors.red,
         ),
-        Text('No Task with this name is found'),
+        Text('No Task was found'),
       ],
     );
   }
