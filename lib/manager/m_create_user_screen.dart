@@ -101,22 +101,30 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
                   child: const Text('Create'),
                   onPressed: () async {
                     try {
-                      accesscode = await userService.addUser(User(
-                          _form['email'],
-                          username: _form['username'],
-                          role: _form['role'],
-                          availabledates: [],
-                          preferences: [],
-                          experiences: [],
-                          profilepicture:
-                              'https://firebasestorage.googleapis.com/v0/b/pawfection-c14ed.appspot.com/o/profilepictures%2FFlFhhBapCZOzattk8mT1CMNxou22?alt=media&token=530bd4b2-95b6-45dc-88f0-9abf64d2a916',
-                          contactnumber: _form['contactnumber'],
-                          referenceId: '',
-                          bio: ''));
-                      setState(() {
-                        alertmessage =
-                            'User has successfully been created. \n Access Code: $accesscode';
-                      });
+                      User? findusername = await userService
+                          .findUserByUsername(_form['username']);
+                      if (findusername == null) {
+                        accesscode = await userService.addUser(User(
+                            _form['email'],
+                            username: _form['username'],
+                            role: _form['role'],
+                            availabledates: [],
+                            preferences: [],
+                            experiences: [],
+                            profilepicture:
+                                'https://firebasestorage.googleapis.com/v0/b/pawfection-c14ed.appspot.com/o/profilepictures%2FFlFhhBapCZOzattk8mT1CMNxou22?alt=media&token=530bd4b2-95b6-45dc-88f0-9abf64d2a916',
+                            contactnumber: _form['contactnumber'],
+                            referenceId: '',
+                            bio: ''));
+                        setState(() {
+                          alertmessage =
+                              'User has successfully been created. \n Access Code: $accesscode';
+                        });
+                      } else {
+                        setState(() {
+                          alertmessage = 'Username has been taken';
+                        });
+                      }
                     } catch (e) {
                       setState(() {
                         alertmessage = 'Please ensure all fields are filled in';
@@ -192,22 +200,30 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
                   child: const Text('Create'),
                   onPressed: () async {
                     try {
-                      accesscode = await userService.addUser(User(
-                          _form['email'],
-                          username: _form['username'],
-                          role: _form['role'],
-                          availabledates: [],
-                          preferences: [],
-                          experiences: [],
-                          profilepicture:
-                              'https://firebasestorage.googleapis.com/v0/b/pawfection-c14ed.appspot.com/o/profilepictures%2FFlFhhBapCZOzattk8mT1CMNxou22?alt=media&token=530bd4b2-95b6-45dc-88f0-9abf64d2a916',
-                          contactnumber: _form['contactnumber'],
-                          referenceId: '',
-                          bio: ''));
-                      setState(() {
-                        alertmessage =
-                            'User has successfully been created. \n Access Code: $accesscode';
-                      });
+                      User? findusername = await userService
+                          .findUserByUsername(_form['username']);
+                      if (findusername == null) {
+                        accesscode = await userService.addUser(User(
+                            _form['email'],
+                            username: _form['username'],
+                            role: _form['role'],
+                            availabledates: [],
+                            preferences: [],
+                            experiences: [],
+                            profilepicture:
+                                'https://firebasestorage.googleapis.com/v0/b/pawfection-c14ed.appspot.com/o/profilepictures%2FFlFhhBapCZOzattk8mT1CMNxou22?alt=media&token=530bd4b2-95b6-45dc-88f0-9abf64d2a916',
+                            contactnumber: _form['contactnumber'],
+                            referenceId: '',
+                            bio: ''));
+                        setState(() {
+                          alertmessage =
+                              'User has successfully been created. \n Access Code: $accesscode';
+                        });
+                      } else {
+                        setState(() {
+                          alertmessage = 'Username has been taken';
+                        });
+                      }
                     } catch (e) {
                       setState(() {
                         alertmessage = 'Please ensure all fields are filled in';

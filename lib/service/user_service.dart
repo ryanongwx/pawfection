@@ -82,6 +82,11 @@ class UserService {
     return id;
   }
 
+  void addUserWithId(User user) async {
+    var userJson = userToJson(user);
+    userRepository.addUserRepoWithRepoId(userJson);
+  }
+
   Future<List<User>> getUserList() async {
     QuerySnapshot snapshot = await userRepository.fetchAllUsers();
     return snapshot.docs
