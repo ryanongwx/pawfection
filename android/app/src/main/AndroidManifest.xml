@@ -3,6 +3,7 @@
     <application
         android:label="pawfection"
         android:name="${applicationName}"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
@@ -39,3 +40,4 @@
     <package android:name="com.google.android.apps.nbu.paisa.user" />
 </queries>
 </manifest>
+

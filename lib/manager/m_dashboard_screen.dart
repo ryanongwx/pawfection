@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_advanced_segment/flutter_advanced_segment.dart';
 import 'package:pawfection/models/task.dart';
 import 'package:pawfection/repository/task_repository.dart';
+import 'package:pawfection/service/functions_service.dart';
 import 'package:pawfection/service/task_service.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 import 'package:pawfection/manager/m_create_task_screen.dart';
 import 'package:pawfection/manager/m_task_dialog.dart' as taskDialog;
 import 'package:pawfection/manager/m_volunteer_dialog.dart' as volunteerDialog;
+import 'package:pawfection/manager/m_auto_assign_dialog.dart' as autoAssignDialog;
 import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
 import 'package:pawfection/login_view.dart';
 
@@ -22,6 +24,7 @@ final _selectedSegment_04 = ValueNotifier('Pending');
 
 final taskRepository = TaskRepository();
 final taskService = TaskService();
+final functionService = FunctionService();
 
 final _auth = FirebaseAuth.FirebaseAuth.instance; // authInstance
 
@@ -52,8 +55,19 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
               appBar: AppBar(
                 title: const Text('Tasks'),
                 actions: <Widget>[
+                  IconButton(
+                    icon: const Icon(Icons.person),
+                    onPressed: () async {
+                      try {
+                        autoAssignDialog.displayAutoAssignDialog(
+                            context);
+                      } catch (e) {
+                        debugPrint(e.toString());
+                      }
+                    },
+                  ),
                   Padding(
-                      padding: const EdgeInsets.only(right: 20.0),
+                      padding: const EdgeInsets.only(left: 20.0, right: 20.0),
                       child: GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -160,20 +174,6 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
                                 ))));
                   },
                 ),
-                // Padding(
-                //     padding: EdgeInsets.only(bottom: 100),
-                //     child: Align(
-                //       alignment: Alignment.bottomCenter,
-                //       child: ElevatedButton(
-                //           onPressed: () {
-                //             Navigator.push(
-                //               context,
-                //               MaterialPageRoute(
-                //                   builder: (context) => MCreateTaskScreen()),
-                //             );
-                //           },
-                //           child: Text('Create Tasks')),
-                //     )),
               ]));
         });
   }
