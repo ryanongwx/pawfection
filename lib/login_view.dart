@@ -104,61 +104,60 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
         body: FlutterLogin(
-          logo: const AssetImage('assets/images/logo.png'),
-          onLogin: _authUser,
-          onSignup: _signupUser,
-          additionalSignupFields: [
-            UserFormField(
-                keyName: 'accesscode',
-                displayName: 'Access Code',
-                icon: Icon(Icons.lock))
-          ],
-          onRecoverPassword: _recoverPassword,
-          messages: LoginMessages(
-              additionalSignUpFormDescription: 'Enter Access Code',
-              signUpSuccess: 'Sign In Successful',
-              recoverPasswordIntro: 'Enter your recovery email here',
-              recoverPasswordDescription:
-                  'An email will be sent to your email addess for password reset.'),
-          onSubmitAnimationCompleted: () async {
-            User? user = await userService.findUserByUUID(accesscode);
-            FirebaseAuth.User currentUser = _auth.currentUser!;
-            if (user != null) {
-              if (signup) {
-                // Create new user in User Firestore Database and delete current user
+      logo: const AssetImage('assets/images/logo.png'),
+      onLogin: _authUser,
+      onSignup: _signupUser,
+      additionalSignupFields: [
+        UserFormField(
+            keyName: 'accesscode',
+            displayName: 'Access Code',
+            icon: Icon(Icons.lock))
+      ],
+      onRecoverPassword: _recoverPassword,
+      messages: LoginMessages(
+          additionalSignUpFormDescription: 'Enter Access Code',
+          signUpSuccess: 'Sign In Successful',
+          recoverPasswordIntro: 'Enter your recovery email here',
+          recoverPasswordDescription:
+              'An email will be sent to your email addess for password reset.'),
+      onSubmitAnimationCompleted: () async {
+        User? user = await userService.findUserByUUID(accesscode);
+        FirebaseAuth.User currentUser = _auth.currentUser!;
+        if (user != null) {
+          if (signup) {
+            // Create new user in User Firestore Database and delete current user
 
-                userService.updateUserUid(user, currentUser.uid);
-                userService.addUserWithId(User(user.email,
-                    referenceId: currentUser.uid,
-                    username: user.username,
-                    role: user.role,
-                    availabledates: user.availabledates,
-                    preferences: user.preferences,
-                    experiences: user.experiences,
-                    profilepicture: user.profilepicture,
-                    contactnumber: user.contactnumber,
-                    bio: user.bio));
-                userService.deleteUser(user);
-              }
-              if (user.role == 'manager') {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => const ManagerView(
-                    tab: 1,
-                  ),
-                ));
-              } else {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => const VolunteerView(
-                    tab: 0,
-                  ),
-                ));
-              }
-            } else {
-              null;
-            }
-          },
-        ));
+            userService.updateUserUid(user, currentUser.uid);
+            userService.addUserWithId(User(user.email,
+                referenceId: currentUser.uid,
+                username: user.username,
+                role: user.role,
+                availabledates: user.availabledates,
+                preferences: user.preferences,
+                experiences: user.experiences,
+                profilepicture: user.profilepicture,
+                contactnumber: user.contactnumber,
+                bio: user.bio));
+            userService.deleteUser(user);
+          }
+          if (user.role == 'manager') {
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (context) => const ManagerView(
+                tab: 1,
+              ),
+            ));
+          } else {
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (context) => const VolunteerView(
+                tab: 0,
+              ),
+            ));
+          }
+        } else {
+          null;
+        }
+      },
+    ));
   }
 }

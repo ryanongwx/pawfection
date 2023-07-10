@@ -78,9 +78,9 @@ class TaskService {
     taskRepository.deleteTaskRepo(task.referenceId);
   }
 
-  Future<void> addTask(Task task) async {
+  Future<String> addTask(Task task) async {
     var taskJson = taskToJson(task);
-    await taskRepository.addTaskRepo(taskJson);
+    return await taskRepository.addTaskRepo(taskJson);
   }
 
   Future<Task?> findTaskByTaskID(String referenceId) async {

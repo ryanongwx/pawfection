@@ -86,4 +86,17 @@ class PetService {
         .map((doc) => petFromJson(doc.data() as Map<String, dynamic>))
         .toList();
   }
+
+  Future<Pet?> findPetByPetname(String petname) async {
+    final querySnapshot = await petRepository.fetchAllPets();
+    final petList = snapshotToPetListModified(querySnapshot);
+
+    for (Pet pet in petList) {
+      if (pet.name == petname) {
+        return pet;
+      }
+    }
+
+    return null;
+  }
 }
