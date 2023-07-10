@@ -1,15 +1,21 @@
 import 'dart:core';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:card_settings/card_settings.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pawfection/manager_view.dart';
+import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/models/task.dart';
 import 'package:pawfection/models/user.dart';
+import 'package:pawfection/repository/pet_repository.dart';
 import 'package:pawfection/repository/storage_repository.dart';
 import 'package:pawfection/repository/task_repository.dart';
+import 'package:pawfection/repository/user_repository.dart';
+import 'package:pawfection/service/pet_service.dart';
 import 'package:pawfection/service/task_service.dart';
+import 'package:pawfection/service/user_service.dart';
 import 'package:pawfection/volunteer/profile_picture_update_screen.dart';
 import 'package:pawfection/volunteer/widgets/profile_widget.dart';
 import 'package:image_picker/image_picker.dart';
@@ -30,6 +36,10 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
   final taskRepository = TaskRepository();
   final taskService = TaskService();
   final storageRepository = StorageRepository();
+  final userRepository = UserRepository();
+  final petRepository = PetRepository();
+  final petService = PetService();
+  final userService = UserService();
 
   bool _isLoading = false;
   List<String?> resources = [];
@@ -43,6 +53,82 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
     super.initState();
     resources = widget.task.resources;
   }
+
+  Widget buildPetList() => FutureBuilder<List<Pet>>(
+        future: petService.getPetList(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // While waiting for the future to complete, show a loading indicator
+            return const CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            // If an error occurs while fetching the user, display an error message
+            return Text('Error: ${snapshot.error}');
+          } else {
+            // The future completed successfully
+            final petList = snapshot.data;
+            List<String> nameList =
+                petList?.map((pet) => pet.name).toSet().toList() ?? [];
+            nameList.insert(0, "<No pet assigned>");
+            return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: FastDropdown(
+                    name: 'pet',
+                    labelText: 'Pet',
+                    items: nameList,
+                    initialValue: widget.task.pet ?? nameList[0]));
+          }
+        },
+      );
+
+  // To getUserList
+  Widget buildVolunteerList() => FutureBuilder<List<User>>(
+        future: userService.getUserList(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else {
+            final userList = snapshot.data;
+            List<String?> nameList = userList
+                    ?.where((user) => user.role.toLowerCase() == "volunteer")
+                    .map((user) => user.username)
+                    .toSet()
+                    .toList() ??
+                [];
+            nameList.insert(0, "<No volunteer assigned>");
+
+            String? initialValue = widget.task.assignedto != null
+                ? nameList.contains(widget.task.assignedto!)
+                    ? widget.task.assignedto
+                    : null
+                : null;
+
+            return FutureBuilder<User?>(
+              future: userService.findUserByUUID(widget.task.assignedto!),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  final user = snapshot.data;
+
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: FastDropdown(
+                      name: 'user',
+                      labelText: 'Volunteer',
+                      items: nameList,
+                      initialValue: user!.username,
+                    ),
+                  );
+                }
+              },
+            );
+          }
+        },
+      );
 
   void _showDialog(Widget child) {
     showCupertinoModalPopup<void>(
@@ -121,20 +207,37 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                           resources[i] = imageURL;
                         }
                       }
+                      User? updateduser =
+                          await userService.findUserByUsername(_form['user']);
+                      String updateduserID = updateduser!.referenceId;
+                      Pet? updatedpet =
+                          await petService.findPetByPetname(_form['pet']);
+                      String updatedpetID = updatedpet!.referenceId!;
+
+                      Timestamp deadlinestart = Timestamp.fromDate(DateTime(
+                          _form['deadlineend'].year,
+                          _form['deadlineend'].month,
+                          _form['deadlineend'].day,
+                          _form['deadlineendtime'].hour,
+                          _form['deadlineendtime'].minute));
+                      Timestamp deadlineend = Timestamp.fromDate(DateTime(
+                          _form['deadlinestart'].year,
+                          _form['deadlinestart'].month,
+                          _form['deadlinestart'].day,
+                          _form['deadlinestarttime'].hour,
+                          _form['deadlinestarttime'].minute));
+
                       taskService.updateTask(Task(_form['name'],
-                          createdby: 'soo',
-                          assignedto: 'soo',
+                          createdby: widget.task.createdby,
+                          assignedto: updateduserID,
                           description: _form['description'],
-                          status: 'Pending',
-                          resources: _form['resources'],
+                          status: widget.task.status,
+                          resources: resources,
                           contactperson: _form['contactperson'],
                           contactpersonnumber: _form['contactpersonnumber'],
-                          requests: [],
-                          deadline: [
-                            _form['deadlinestart'],
-                            _form['deadlineend']
-                          ],
-                          pet: 'Truffle'));
+                          requests: widget.task.requests,
+                          deadline: [deadlinestart, deadlineend],
+                          pet: updatedpetID));
                       setState(() {
                         alertmessage = 'Task has successfully been updated';
                       });
@@ -211,20 +314,26 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                           resources[i] = imageURL;
                         }
                       }
+                      User? updateduser =
+                          await userService.findUserByUsername(_form['user']);
+                      String updateduserID = updateduser!.referenceId;
+                      Pet? updatedpet =
+                          await petService.findPetByPetname(_form['pet']);
+                      String updatedpetID = updatedpet!.referenceId!;
                       taskService.updateTask(Task(_form['name'],
-                          createdby: 'soo',
-                          assignedto: 'soo',
+                          createdby: widget.task.createdby,
+                          assignedto: updateduserID,
                           description: _form['description'],
-                          status: 'Pending',
+                          status: widget.task.status,
                           resources: resources,
-                          requests: [],
                           contactperson: _form['contactperson'],
-                          contactpersonnumber: _form['contactnumber'],
+                          contactpersonnumber: _form['contactpersonnumber'],
+                          requests: widget.task.requests,
                           deadline: [
                             _form['deadlinestart'],
                             _form['deadlineend']
                           ],
-                          pet: 'Truffle'));
+                          pet: updatedpetID));
                       setState(() {
                         alertmessage = 'Task has successfully been updated';
                       });
@@ -421,6 +530,11 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
             firstDate: DateTime(2023),
             lastDate: DateTime(2040),
           ),
+          FastTimePicker(
+            initialValue: TimeOfDay.fromDateTime(DateTime.now()),
+            name: 'deadlinestarttime',
+            labelText: 'Deadline Start Time',
+          ),
           FastCalendar(
             name: 'deadlineend',
             initialValue: DateTime.fromMicrosecondsSinceEpoch(
@@ -429,9 +543,13 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
             firstDate: DateTime(2023),
             lastDate: DateTime(2040),
           ),
-          ElevatedButton(child: const Text('Assign Pet'), onPressed: () {}),
-          ElevatedButton(
-              child: const Text('Assign Volunteer'), onPressed: () {}),
+          FastTimePicker(
+            name: 'deadlineendtime',
+            labelText: 'Deadline End Time',
+            initialValue: TimeOfDay.fromDateTime(DateTime.now()),
+          ),
+          buildPetList(),
+          buildVolunteerList(),
         ],
       ),
     ];
@@ -588,9 +706,8 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
             labelText: 'Deadline',
             mode: CupertinoDatePickerMode.dateAndTime,
           ),
-          CupertinoButton(child: const Text('Assign Pet'), onPressed: () {}),
-          CupertinoButton(
-              child: const Text('Assign Volunteer'), onPressed: () {}),
+          buildPetList(),
+          buildVolunteerList(),
         ],
       ),
     ];
