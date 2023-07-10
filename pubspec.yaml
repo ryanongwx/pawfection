@@ -40,7 +40,7 @@ dependencies:
   flutter_advanced_segment: ^3.0.2
   card_settings: ^3.3.0
   calendar_date_picker2: ^0.5.2
-  image_picker: ^0.8.7+5
+  image_picker: ^1.0.0
   image: ^4.0.17
   image_cropper: ^4.0.1
   animated_theme_switcher: ^2.0.8
@@ -51,6 +51,9 @@ dependencies:
   flutter_fast_forms: ^11.0.0
   firebase_storage: ^11.2.2
   flutter_native_splash: ^2.3.0
+  mime: ^1.0.4
+  video_player: ^2.7.0
+  chewie: ^1.6.0+1
 
 
 flutter_native_splash:

@@ -178,8 +178,8 @@ class _ProfilePictureUpdateScreenState
                           filecheck = true;
                           if (widget.routetext == 'profile') {
                             return FutureBuilder<User?>(
-                              future: userService
-                                  .findUserByUUID(currentUser.uid),
+                              future:
+                                  userService.findUserByUUID(currentUser.uid),
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
@@ -204,22 +204,10 @@ class _ProfilePictureUpdateScreenState
                                                               file,
                                                               user.referenceId);
 
-                                                  userService.addUser(User(
-                                                      user.email,
-                                                      username: user.email,
-                                                      bio: user.bio,
-                                                      referenceId:
-                                                          user.referenceId,
-                                                      role: user.role,
-                                                      availabledates:
-                                                          user.availabledates,
-                                                      preferences:
-                                                          user.preferences,
-                                                      experiences:
-                                                          user.experiences,
-                                                      profilepicture: imageURL,
-                                                      contactnumber:
-                                                          user.contactnumber));
+                                                  user.profilepicture =
+                                                      imageURL;
+
+                                                  userService.updateUser(user);
                                                   Navigator.of(context)
                                                       .pushReplacement(
                                                     MaterialPageRoute(
@@ -277,8 +265,8 @@ class _ProfilePictureUpdateScreenState
                             );
                           } else {
                             return FutureBuilder<User?>(
-                              future: userService
-                                  .findUserByUUID(currentUser.uid),
+                              future:
+                                  userService.findUserByUUID(currentUser.uid),
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {

@@ -10,6 +10,8 @@
 	<string>Pawfection</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleName</key>
@@ -22,10 +24,20 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppleMusicUsageDescription</key>
 	<string></string>
+	<key>NSCameraUsageDescription</key>
+	<string>6.0</string>
+	<key>NSHumanReadableCopyright</key>
+	<string></string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>6.0</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>6.0</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>6.0</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>

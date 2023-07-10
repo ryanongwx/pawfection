@@ -9,16 +9,20 @@ import 'package:pawfection/models/task.dart';
 import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/pet_repository.dart';
+import 'package:pawfection/repository/storage_repository.dart';
 import 'package:pawfection/repository/task_repository.dart';
 import 'package:pawfection/repository/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
 import 'package:pawfection/service/pet_service.dart';
 import 'package:pawfection/service/task_service.dart';
 import 'package:pawfection/service/user_service.dart';
+import 'package:image_picker/image_picker.dart';
 
 class MCreateTaskScreen extends StatefulWidget {
-  MCreateTaskScreen(
-      {super.key, this.imagePath = 'assets/images/user_profile.png'});
+  MCreateTaskScreen({
+    super.key,
+    this.imagePath = 'assets/images/user_profile.png',
+  });
 
   String imagePath;
 
@@ -33,12 +37,15 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
   final taskRepository = TaskRepository();
   final petRepository = PetRepository();
   final userRepository = UserRepository();
+  final storageRepository = StorageRepository();
   final taskService = TaskService();
   final petService = PetService();
   final userService = UserService();
+  bool _isLoading = false;
 
   late var _form;
   late var alertmessage;
+  List<File?> resources = [];
 
   final _auth = FirebaseAuth.FirebaseAuth.instance; // authInstance
 
@@ -87,8 +94,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                   child: const Text('Create'),
                   onPressed: () async {
                     try {
-                      final User? user =
-                          await userService.currentUser(_auth);
+                      final User? user = await userService.currentUser(_auth);
                       if (user == null) {
                         throw Exception(
                             'Please log into a manager account to create task');
@@ -108,7 +114,8 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
 
                       String? assignedUserId;
                       if (_form['user'] != "<No volunteer assigned>") {
-                        User? assignedUser = await userService.findUserByUsername(_form['user']);
+                        User? assignedUser =
+                            await userService.findUserByUsername(_form['user']);
                         assignedUserId = assignedUser!.referenceId;
                       } else {
                         assignedUserId = null;
@@ -116,25 +123,56 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
 
                       String? assignedPetId;
                       if (_form['pet'] != "<No pet assigned>") {
-                        User? assignedPet = await userService.findUserByUsername(_form['pet']);
+                        User? assignedPet =
+                            await userService.findUserByUsername(_form['pet']);
                         assignedPetId = assignedPet!.referenceId;
                       } else {
                         assignedPetId = null;
                       }
+                      if (resources == []) {
+                        taskService.addTask(Task(_form['name'],
+                            createdby: user.referenceId,
+                            assignedto: assignedUserId,
+                            description: _form['description'],
+                            status: _form['user'] == "<No volunteer assigned>"
+                                ? 'Open'
+                                : 'Pending',
+                            resources: [],
+                            deadline: [deadlinestart, deadlineend],
+                            requests: [],
+                            pet: assignedPetId,
+                            contactperson: user.referenceId,
+                            contactpersonnumber: user.contactnumber));
+                      } else {
+                        Task newtask = Task(_form['name'],
+                            createdby: user.referenceId,
+                            assignedto: assignedUserId,
+                            description: _form['description'],
+                            status: _form['user'] == "<No volunteer assigned>"
+                                ? 'Open'
+                                : 'Pending',
+                            resources: [],
+                            deadline: [deadlinestart, deadlineend],
+                            requests: [],
+                            pet: assignedPetId,
+                            contactperson: user.referenceId,
+                            contactpersonnumber: user.contactnumber);
+                        String refId = await taskService.addTask(newtask);
+                        List<String> resourcesList = [];
+                        for (var i = 0; i < resources.length; i++) {
+                          var newrefId = refId + i.toString();
+                          String imageURL = await storageRepository
+                              .uploadImageToStorage(resources[i]!, newrefId);
+                          resourcesList.add(imageURL);
+                        }
 
-                      taskService.addTask(Task(_form['name'],
-                          createdby: user.referenceId,
-                          assignedto: assignedUserId,
-                          description: _form['description'],
-                          status: _form['user'] == "<No volunteer assigned>"
-                              ? 'Open'
-                              : 'Pending',
-                          resources: [_form['resources']],
-                          deadline: [deadlinestart, deadlineend],
-                          requests: [],
-                          pet: assignedPetId,
-                          contactperson: user.referenceId,
-                          contactpersonnumber: user.contactnumber));
+                        Task? t = await taskService.findTaskByTaskID(refId);
+                        if (t != null) {
+                          t.resources = resourcesList;
+                          taskService.updateTask(t);
+                        }
+                      }
+
                       setState(() {
                         alertmessage = 'Task has successfully been created';
                       });
@@ -179,10 +217,9 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
         ),
       );
     } else if (Platform.isIOS) {
-      return CupertinoPageScaffold(
-        navigationBar:
-            const CupertinoNavigationBar(middle: Text('Create Task')),
-        child: SafeArea(
+      return Scaffold(
+        appBar: const CupertinoNavigationBar(middle: Text('Create Task')),
+        body: SafeArea(
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -200,8 +237,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                   child: const Text('Create'),
                   onPressed: () async {
                     try {
-                      final User? user =
-                          await userService.currentUser(_auth);
+                      final User? user = await userService.currentUser(_auth);
                       if (user == null) {
                         throw Exception(
                             'Please log into a manager account to create task');
@@ -209,28 +245,62 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
 
                       String? assignedUserId;
                       if (_form['user'] != "<No volunteer assigned>") {
-                        User? assignedUser = await userService.findUserByUsername(_form['user']);
+                        User? assignedUser =
+                            await userService.findUserByUsername(_form['user']);
                         assignedUserId = assignedUser!.referenceId;
                       } else {
                         assignedUserId = null;
                       }
+                      if (resources == []) {
+                        taskService.addTask(Task(_form['name'],
+                            createdby: user.referenceId,
+                            assignedto: assignedUserId,
+                            description: _form['description'],
+                            status: _form['user'] == "<No volunteer assigned>"
+                                ? 'Open'
+                                : 'Pending',
+                            resources: [],
+                            deadline: [
+                              Timestamp.fromDate(_form['deadlinestart']),
+                              Timestamp.fromDate(_form['deadlineend'])
+                            ],
+                            requests: [],
+                            pet: _form['pet'],
+                            contactperson: user.referenceId,
+                            contactpersonnumber: user.contactnumber));
+                      } else {
+                        Task newtask = Task(_form['name'],
+                            createdby: user.referenceId,
+                            assignedto: assignedUserId,
+                            description: _form['description'],
+                            status: _form['user'] == "<No volunteer assigned>"
+                                ? 'Open'
+                                : 'Pending',
+                            resources: [],
+                            deadline: [
+                              Timestamp.fromDate(_form['deadlinestart']),
+                              Timestamp.fromDate(_form['deadlineend'])
+                            ],
+                            requests: [],
+                            pet: _form['pet'],
+                            contactperson: user.referenceId,
+                            contactpersonnumber: user.contactnumber);
+                        String refId = await taskService.addTask(newtask);
+                        List<String> resourcesList = [];
+                        for (var i = 0; i < resources.length; i++) {
+                          var newrefId = refId + i.toString();
+                          String imageURL = await storageRepository
+                              .uploadImageToStorage(resources[i]!, newrefId);
+                          resourcesList.add(imageURL);
+                        }
 
-                      taskService.addTask(Task(_form['name'],
-                          createdby: user.referenceId,
-                          assignedto: assignedUserId,
-                          description: _form['description'],
-                          status: _form['user'] == "<No volunteer assigned>"
-                              ? 'Open'
-                              : 'Pending',
-                          resources: [_form['resources']],
-                          requests: [],
-                          deadline: [
-                            Timestamp.fromDate(_form['deadlinestart']),
-                            Timestamp.fromDate(_form['deadlineend'])
-                          ],
-                          pet: _form['pet'],
-                          contactperson: user.referenceId,
-                          contactpersonnumber: user.contactnumber));
+                        Task? t = await taskService.findTaskByTaskID(refId);
+                        if (t != null) {
+                          t.resources = resourcesList;
+                          taskService.updateTask(t);
+                        }
+                      }
+
                       setState(() {
                         alertmessage = 'Task has successfully been created';
                       });
@@ -357,6 +427,39 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
           ),
         ),
         children: [
+          ElevatedButton(
+            child: const Text('Add Resources'),
+            onPressed: () => pickVideo(ImageSource.gallery),
+          ),
+          Column(
+            children: resources.asMap().entries.map((entry) {
+              final index = entry.key;
+              final file = entry.value!;
+              final filePath = file.path;
+              final wordLimit = 30; // Reduce the text limit by 10 letters
+              final displayedText = filePath.length <= wordLimit
+                  ? filePath
+                  : filePath.substring(0, wordLimit) + '...';
+
+              return Padding(
+                padding: const EdgeInsets.only(
+                    bottom: 10), // Adjust the spacing between chips
+                child: Chip(
+                  label: Text(
+                    displayedText,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  deleteIcon: Icon(Icons.close), // Add the 'x' icon
+                  onDeleted: () {
+                    setState(() {
+                      resources
+                          .removeAt(index); // Remove the item from the list
+                    });
+                  },
+                ),
+              );
+            }).toList(),
+          ),
           FastTextField(
             name: 'name',
             labelText: 'Name',
@@ -367,13 +470,6 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
           FastTextField(
             name: 'description',
             labelText: 'Description',
-            validator: Validators.compose([
-              Validators.required((value) => 'Field is required'),
-            ]),
-          ),
-          FastTextField(
-            name: 'resources',
-            labelText: 'Resources',
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
             ]),
@@ -417,6 +513,120 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
         padding: const EdgeInsets.symmetric(vertical: 12.0),
         header: const Text('Task Details'),
         children: [
+          CupertinoButton(
+              child: const Text('Add Resources'),
+              onPressed: () => pickVideo(ImageSource.gallery)),
+          Padding(
+            padding: const EdgeInsets.only(top: 30),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 48),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  resources.isEmpty
+                      ? Container(
+                          height: 0,
+                        ) // No empty space when the list is empty
+                      : Container(
+                          height:
+                              200, // Set the desired height for the scroll view
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: resources.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final imageUrl = resources[index];
+
+                              return GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      final screenSize =
+                                          MediaQuery.of(context).size;
+                                      final dialogWidth =
+                                          screenSize.width * 0.7;
+                                      final dialogHeight =
+                                          screenSize.height * 0.7;
+
+                                      return Dialog(
+                                        child: Stack(
+                                          children: [
+                                            FittedBox(
+                                              fit: BoxFit.cover,
+                                              child: Image.file(
+                                                imageUrl,
+                                              ),
+                                            ),
+                                            Positioned(
+                                              top: 10,
+                                              right: 10,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Colors.red,
+                                                ),
+                                                child: IconButton(
+                                                  icon: Icon(Icons.close),
+                                                  color: Colors.white,
+                                                  iconSize:
+                                                      18, // Adjust the size as desired
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                                child: Stack(
+                                  alignment: Alignment.topRight,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 10),
+                                      child: Image.file(
+                                        imageUrl!,
+                                        width:
+                                            150, // Set the desired width for the photos
+                                        height:
+                                            200, // Set the desired height for the photos
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: 10,
+                                      right: 20,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.red,
+                                        ),
+                                        child: IconButton(
+                                          icon: Icon(Icons.close),
+                                          color: Colors.white,
+                                          iconSize:
+                                              18, // Adjust the size as desired
+                                          onPressed: () {
+                                            setState(() {
+                                              resources.removeAt(index);
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                ],
+              ),
+            ),
+          ),
           FastTextField(
             name: 'name',
             labelText: 'Name',
@@ -427,13 +637,6 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
           FastTextField(
             name: 'description',
             labelText: 'Description',
-            validator: Validators.compose([
-              Validators.required((value) => 'Field is required'),
-            ]),
-          ),
-          FastTextField(
-            name: 'resources',
-            labelText: 'Resources',
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
             ]),
@@ -459,5 +662,40 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
         ],
       ),
     ];
+  }
+
+  void _handleResourcesAdded(List<File?> resources) {
+    // Handle the selected resources
+    // Show the SnackBar or perform any other actions
+    var count = 0;
+    for (var i = 0; i < resources.length; i++) {
+      count++;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("$count images added"),
+      ),
+    );
+    // Update the necessary state variables if needed
+  }
+
+  Future<void> pickVideo(ImageSource source) async {
+    setState(() {
+      _isLoading = true; // Set loading state
+    });
+
+    final ImagePicker picker = ImagePicker();
+    final List<XFile> pickedFiles = await picker.pickMultiImage();
+    if (pickedFiles.isNotEmpty) {
+      final List<File?> filepaths =
+          pickedFiles.map((e) => File(e.path)).toList();
+      setState(() {
+        resources.addAll(filepaths);
+      });
+    }
+
+    setState(() {
+      _isLoading = false; // Set loading state
+    });
   }
 }
