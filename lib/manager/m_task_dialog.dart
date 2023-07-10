@@ -131,11 +131,101 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    Text(
-                                      "${task.resources}",
-                                      style: const TextStyle(
-                                          fontSize: 16, height: 1.4),
-                                    ),
+                                    task.resources.isEmpty
+                                        ? Container(
+                                            height: 20,
+                                            child: Text('None'),
+                                          ) // No empty space when the list is empty
+                                        : Container(
+                                            height:
+                                                200, // Set the desired height for the scroll view
+                                            child: ListView.builder(
+                                              scrollDirection: Axis.horizontal,
+                                              itemCount: task.resources.length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                final imageUrl =
+                                                    task.resources[index];
+
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        final screenSize =
+                                                            MediaQuery.of(
+                                                                    context)
+                                                                .size;
+                                                        final dialogWidth =
+                                                            screenSize.width *
+                                                                0.7;
+                                                        final dialogHeight =
+                                                            screenSize.height *
+                                                                0.7;
+
+                                                        return Dialog(
+                                                          child: Stack(
+                                                            children: [
+                                                              FittedBox(
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                                child: Image
+                                                                    .network(
+                                                                  imageUrl!,
+                                                                ),
+                                                              ),
+                                                              Positioned(
+                                                                top: 10,
+                                                                right: 10,
+                                                                child:
+                                                                    Container(
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    shape: BoxShape
+                                                                        .circle,
+                                                                    color: Colors
+                                                                        .red,
+                                                                  ),
+                                                                  child:
+                                                                      IconButton(
+                                                                    icon: Icon(Icons
+                                                                        .close),
+                                                                    color: Colors
+                                                                        .white,
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 10),
+                                                    child: Image.network(
+                                                      imageUrl!,
+                                                      width:
+                                                          150, // Set the desired width for the photos
+                                                      height:
+                                                          200, // Set the desired height for the photos
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
                                   ],
                                 ),
                               ),
