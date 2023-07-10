@@ -1,4 +1,5 @@
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:pawfection/service/task_service.dart';
 import '../models/task.dart';
 
@@ -17,7 +18,7 @@ class FunctionService {
     Map<String, dynamic> response = Map<String, dynamic>.from(resp.data);
 
     // Access the openTasks field.
-    List<dynamic> openTasks = response["openTasks"];
+    List<dynamic> openTasks = response["availableTasks"];
     List<Task> tasks = [];
 
     for (var taskData in openTasks) {
