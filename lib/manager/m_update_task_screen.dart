@@ -69,13 +69,28 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
             List<String> nameList =
                 petList?.map((pet) => pet.name).toSet().toList() ?? [];
             nameList.insert(0, "<No pet assigned>");
-            return Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: FastDropdown(
-                    name: 'pet',
-                    labelText: 'Pet',
-                    items: nameList,
-                    initialValue: widget.task.pet ?? nameList[0]));
+            return FutureBuilder<Pet?>(
+              future: petService.findPetByPetID(widget.task.pet!),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  final pet = snapshot.data;
+
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: FastDropdown(
+                      name: 'pet',
+                      labelText: 'Pet',
+                      items: nameList,
+                      initialValue: pet!.name,
+                    ),
+                  );
+                }
+              },
+            );
           }
         },
       );
@@ -226,18 +241,13 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                           _form['deadlinestart'].day,
                           _form['deadlinestarttime'].hour,
                           _form['deadlinestarttime'].minute));
-
-                      taskService.updateTask(Task(_form['name'],
-                          createdby: widget.task.createdby,
-                          assignedto: updateduserID,
-                          description: _form['description'],
-                          status: widget.task.status,
-                          resources: resources,
-                          contactperson: _form['contactperson'],
-                          contactpersonnumber: _form['contactpersonnumber'],
-                          requests: widget.task.requests,
-                          deadline: [deadlinestart, deadlineend],
-                          pet: updatedpetID));
+                      widget.task.name = _form['name'];
+                      widget.task.description = _form['description'];
+                      widget.task.resources = resources;
+                      widget.task.deadline = [deadlinestart, deadlineend];
+                      widget.task.pet = updatedpetID;
+                      widget.task.assignedto = updateduserID;
+                      taskService.updateTask(widget.task);
                       setState(() {
                         alertmessage = 'Task has successfully been updated';
                       });
@@ -320,20 +330,17 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                       Pet? updatedpet =
                           await petService.findPetByPetname(_form['pet']);
                       String updatedpetID = updatedpet!.referenceId!;
-                      taskService.updateTask(Task(_form['name'],
-                          createdby: widget.task.createdby,
-                          assignedto: updateduserID,
-                          description: _form['description'],
-                          status: widget.task.status,
-                          resources: resources,
-                          contactperson: _form['contactperson'],
-                          contactpersonnumber: _form['contactpersonnumber'],
-                          requests: widget.task.requests,
-                          deadline: [
-                            _form['deadlinestart'],
-                            _form['deadlineend']
-                          ],
-                          pet: updatedpetID));
+                      widget.task.name = _form['name'];
+                      widget.task.assignedto = updateduserID;
+                      widget.task.description = _form['description'];
+                      widget.task.resources = resources;
+                      widget.task.deadline = [
+                        Timestamp.fromDate(_form['deadlinestart']),
+                        Timestamp.fromDate(_form['deadlineend'])
+                      ];
+                      widget.task.pet = updatedpetID;
+
+                      taskService.updateTask(widget.task);
                       setState(() {
                         alertmessage = 'Task has successfully been updated';
                       });
