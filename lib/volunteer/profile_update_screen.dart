@@ -122,7 +122,8 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
                             preferences: _form['preferences'],
                             experiences: _form['experiences'],
                             profilepicture: widget.user.profilepicture,
-                            contactnumber: _form['contactnumber']));
+                            contactnumber: _form['contactnumber'],
+                            taskcount: widget.user.taskcount));
                         setState(() {
                           alertmessage = 'User has successfully been updated';
                         });
@@ -236,7 +237,8 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
                             preferences: preferences,
                             experiences: experiences,
                             profilepicture: widget.user.profilepicture,
-                            contactnumber: _form['contactnumber']));
+                            contactnumber: _form['contactnumber'],
+                            taskcount: widget.user.taskcount));
                         setState(() {
                           alertmessage = 'User has successfully been updated';
                         });

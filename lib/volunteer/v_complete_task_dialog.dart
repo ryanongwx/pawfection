@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:pawfection/models/task.dart';
+import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/task_repository.dart';
 import 'package:pawfection/repository/user_repository.dart';
 import 'package:pawfection/service/task_service.dart';
+import 'package:pawfection/service/user_service.dart';
 import 'package:pawfection/voluteer_view.dart';
 
 Future<void> displayCompleteTaskDialog(BuildContext context, String id) async {
   final taskService = TaskService();
+  final userService = UserService();
 
   final formKey = GlobalKey<FormState>();
   late var _form;
@@ -82,7 +85,8 @@ Future<void> displayCompleteTaskDialog(BuildContext context, String id) async {
                                 ),
                                 Text(
                                   task.description,
-                                  style: const TextStyle(fontSize: 16, height: 1.4),
+                                  style: const TextStyle(
+                                      fontSize: 16, height: 1.4),
                                 ),
                               ],
                             ),
@@ -131,13 +135,21 @@ Future<void> displayCompleteTaskDialog(BuildContext context, String id) async {
                           ),
                         ),
                         Padding(
-                          padding:
-                              const EdgeInsets.only(right: 30, left: 30, top: 10),
+                          padding: const EdgeInsets.only(
+                              right: 30, left: 30, top: 10),
                           child: ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               task.feedback = _form['feedback'];
                               task.status = 'Completed';
                               taskService.updateTask(task);
+
+                              // Subtract one from the taskcounter of the previous user assigned
+                              User? prevassigneduser = await userService
+                                  .findUserByUUID(task.assignedto!);
+                              if (prevassigneduser != null) {
+                                prevassigneduser.taskcount -= 1;
+                                userService.updateUser(prevassigneduser);
+                              }
 
                               Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
