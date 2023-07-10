@@ -427,39 +427,6 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
           ),
         ),
         children: [
-          ElevatedButton(
-            child: const Text('Add Resources'),
-            onPressed: () => pickVideo(ImageSource.gallery),
-          ),
-          Column(
-            children: resources.asMap().entries.map((entry) {
-              final index = entry.key;
-              final file = entry.value!;
-              final filePath = file.path;
-              final wordLimit = 30; // Reduce the text limit by 10 letters
-              final displayedText = filePath.length <= wordLimit
-                  ? filePath
-                  : filePath.substring(0, wordLimit) + '...';
-
-              return Padding(
-                padding: const EdgeInsets.only(
-                    bottom: 10), // Adjust the spacing between chips
-                child: Chip(
-                  label: Text(
-                    displayedText,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  deleteIcon: Icon(Icons.close), // Add the 'x' icon
-                  onDeleted: () {
-                    setState(() {
-                      resources
-                          .removeAt(index); // Remove the item from the list
-                    });
-                  },
-                ),
-              );
-            }).toList(),
-          ),
           FastTextField(
             name: 'name',
             labelText: 'Name',
@@ -473,6 +440,121 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
             ]),
+          ),
+          ElevatedButton(
+            child: const Text('Add Resources'),
+            onPressed: () => pickVideo(ImageSource.gallery),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 30),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 48),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  resources.isEmpty
+                      ? Container(
+                          height: 0,
+                        ) // No empty space when the list is empty
+                      : Container(
+                          height:
+                              200, // Set the desired height for the scroll view
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: resources.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final imageUrl = resources[index];
+
+                              return GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      final screenSize =
+                                          MediaQuery.of(context).size;
+                                      final dialogWidth =
+                                          screenSize.width * 0.7;
+                                      final dialogHeight =
+                                          screenSize.height * 0.7;
+
+                                      return Dialog(
+                                        child: Stack(
+                                          children: [
+                                            FittedBox(
+                                              fit: BoxFit.cover,
+                                              child: Image.file(
+                                                imageUrl,
+                                              ),
+                                            ),
+                                            Positioned(
+                                              top: 10,
+                                              right: 10,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Colors.red,
+                                                ),
+                                                child: IconButton(
+                                                  icon: Icon(Icons.close),
+                                                  color: Colors.white,
+                                                  iconSize:
+                                                      18, // Adjust the size as desired
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                                child: Stack(
+                                  alignment: Alignment.topRight,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 10),
+                                      child: Image.file(
+                                        imageUrl!,
+                                        width:
+                                            150, // Set the desired width for the photos
+                                        height:
+                                            200, // Set the desired height for the photos
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: 10,
+                                      right: 20,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.red,
+                                        ),
+                                        child: IconButton(
+                                          icon: Icon(Icons.close),
+                                          color: Colors.white,
+                                          iconSize:
+                                              18, // Adjust the size as desired
+                                          onPressed: () {
+                                            setState(() {
+                                              resources.removeAt(index);
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                ],
+              ),
+            ),
           ),
           FastCalendar(
             name: 'deadlinestart',
@@ -513,6 +595,20 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
         padding: const EdgeInsets.symmetric(vertical: 12.0),
         header: const Text('Task Details'),
         children: [
+          FastTextField(
+            name: 'name',
+            labelText: 'Name',
+            validator: Validators.compose([
+              Validators.required((value) => 'Field is required'),
+            ]),
+          ),
+          FastTextField(
+            name: 'description',
+            labelText: 'Description',
+            validator: Validators.compose([
+              Validators.required((value) => 'Field is required'),
+            ]),
+          ),
           CupertinoButton(
               child: const Text('Add Resources'),
               onPressed: () => pickVideo(ImageSource.gallery)),
@@ -626,20 +722,6 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                 ],
               ),
             ),
-          ),
-          FastTextField(
-            name: 'name',
-            labelText: 'Name',
-            validator: Validators.compose([
-              Validators.required((value) => 'Field is required'),
-            ]),
-          ),
-          FastTextField(
-            name: 'description',
-            labelText: 'Description',
-            validator: Validators.compose([
-              Validators.required((value) => 'Field is required'),
-            ]),
           ),
           FastDatePicker(
             name: 'deadlinestart',

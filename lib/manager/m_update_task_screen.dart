@@ -7,10 +7,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:pawfection/manager_view.dart';
 import 'package:pawfection/models/task.dart';
 import 'package:pawfection/models/user.dart';
+import 'package:pawfection/repository/storage_repository.dart';
 import 'package:pawfection/repository/task_repository.dart';
 import 'package:pawfection/service/task_service.dart';
 import 'package:pawfection/volunteer/profile_picture_update_screen.dart';
 import 'package:pawfection/volunteer/widgets/profile_widget.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:image/image.dart' as img;
 
 class MUpdateTaskScreen extends StatefulWidget {
   MUpdateTaskScreen({super.key, required this.task});
@@ -26,9 +29,21 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
   final formKey = GlobalKey<FormState>();
   final taskRepository = TaskRepository();
   final taskService = TaskService();
+  final storageRepository = StorageRepository();
+
+  bool _isLoading = false;
+  List<String?> resources = [];
 
   late var _form;
   late var alertmessage;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    resources = widget.task.resources;
+  }
+
   void _showDialog(Widget child) {
     showCupertinoModalPopup<void>(
       context: context,
@@ -95,8 +110,17 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                 ),
                 ElevatedButton(
                   child: const Text('Update'),
-                  onPressed: () {
+                  onPressed: () async {
                     try {
+                      for (var i = 0; i < resources.length; i++) {
+                        var newrefId = widget.task.referenceId! + i.toString();
+                        if (!resources[i]!.startsWith('http')) {
+                          String imageURL =
+                              await storageRepository.uploadImageToStorage(
+                                  File(resources[i]!), newrefId);
+                          resources[i] = imageURL;
+                        }
+                      }
                       taskService.updateTask(Task(_form['name'],
                           createdby: 'soo',
                           assignedto: 'soo',
@@ -137,7 +161,8 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => const ManagerView(
+                                          builder: (context) =>
+                                              const ManagerView(
                                                 tab: 1,
                                               )),
                                     )
@@ -157,9 +182,9 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
         ),
       );
     } else if (Platform.isIOS) {
-      return CupertinoPageScaffold(
-        navigationBar: const CupertinoNavigationBar(middle: Text('Update Task')),
-        child: SafeArea(
+      return Scaffold(
+        appBar: const CupertinoNavigationBar(middle: Text('Update Task')),
+        body: SafeArea(
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -175,14 +200,23 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                 ),
                 CupertinoButton(
                   child: const Text('Update'),
-                  onPressed: () {
+                  onPressed: () async {
                     try {
+                      for (var i = 0; i < resources.length; i++) {
+                        var newrefId = widget.task.referenceId! + i.toString();
+                        if (!resources[i]!.startsWith('http')) {
+                          String imageURL =
+                              await storageRepository.uploadImageToStorage(
+                                  File(resources[i]!), newrefId);
+                          resources[i] = imageURL;
+                        }
+                      }
                       taskService.updateTask(Task(_form['name'],
                           createdby: 'soo',
                           assignedto: 'soo',
                           description: _form['description'],
                           status: 'Pending',
-                          resources: _form['resources'],
+                          resources: resources,
                           requests: [],
                           contactperson: _form['contactperson'],
                           contactpersonnumber: _form['contactnumber'],
@@ -218,7 +252,8 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => const ManagerView(
+                                          builder: (context) =>
+                                              const ManagerView(
                                                 tab: 1,
                                               )),
                                     )
@@ -269,12 +304,114 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
               Validators.required((value) => 'Field is required'),
             ]),
           ),
-          FastTextField(
-            name: 'resources',
-            labelText: 'Resources',
-            validator: Validators.compose([
-              Validators.required((value) => 'Field is required'),
-            ]),
+          ElevatedButton(
+            child: const Text('Add Resources'),
+            onPressed: () => pickVideo(ImageSource.gallery),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 30),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 48),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  resources.isEmpty
+                      ? Container(
+                          height: 0,
+                        ) // No empty space when the list is empty
+                      : Container(
+                          height:
+                              200, // Set the desired height for the scroll view
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: resources.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final image = resources[index];
+
+                              return GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      final screenSize =
+                                          MediaQuery.of(context).size;
+                                      final dialogWidth =
+                                          screenSize.width * 0.7;
+                                      final dialogHeight =
+                                          screenSize.height * 0.7;
+
+                                      return Dialog(
+                                        child: Stack(
+                                          children: [
+                                            FittedBox(
+                                                fit: BoxFit.cover,
+                                                child: image.startsWith('http')
+                                                    ? Image.network(image)
+                                                    : Image.file(File(image))),
+                                            Positioned(
+                                              top: 10,
+                                              right: 10,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Colors.red,
+                                                ),
+                                                child: IconButton(
+                                                  icon: Icon(Icons.close),
+                                                  color: Colors.white,
+                                                  iconSize:
+                                                      18, // Adjust the size as desired
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                                child: Stack(
+                                  alignment: Alignment.topRight,
+                                  children: [
+                                    Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 10),
+                                        child: image!.startsWith('http')
+                                            ? Image.network(image)
+                                            : Image.file(File(image))),
+                                    Positioned(
+                                      top: 10,
+                                      right: 20,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.red,
+                                        ),
+                                        child: IconButton(
+                                          icon: Icon(Icons.close),
+                                          color: Colors.white,
+                                          iconSize:
+                                              18, // Adjust the size as desired
+                                          onPressed: () {
+                                            setState(() {
+                                              resources.removeAt(index);
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                ],
+              ),
+            ),
           ),
           FastCalendar(
             name: 'deadlinestart',
@@ -293,7 +430,8 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
             lastDate: DateTime(2040),
           ),
           ElevatedButton(child: const Text('Assign Pet'), onPressed: () {}),
-          ElevatedButton(child: const Text('Assign Volunteer'), onPressed: () {}),
+          ElevatedButton(
+              child: const Text('Assign Volunteer'), onPressed: () {}),
         ],
       ),
     ];
@@ -323,12 +461,114 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
               Validators.required((value) => 'Field is required'),
             ]),
           ),
-          FastTextField(
-            name: 'resources',
-            labelText: 'Resources',
-            validator: Validators.compose([
-              Validators.required((value) => 'Field is required'),
-            ]),
+          CupertinoButton(
+            child: const Text('Add Resources'),
+            onPressed: () => pickVideo(ImageSource.gallery),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 30),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 48),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  resources.isEmpty
+                      ? Container(
+                          height: 0,
+                        ) // No empty space when the list is empty
+                      : Container(
+                          height:
+                              200, // Set the desired height for the scroll view
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: resources.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final image = resources[index];
+
+                              return GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      final screenSize =
+                                          MediaQuery.of(context).size;
+                                      final dialogWidth =
+                                          screenSize.width * 0.7;
+                                      final dialogHeight =
+                                          screenSize.height * 0.7;
+
+                                      return Dialog(
+                                        child: Stack(
+                                          children: [
+                                            FittedBox(
+                                                fit: BoxFit.cover,
+                                                child: image.startsWith('http')
+                                                    ? Image.network(image)
+                                                    : Image.file(File(image))),
+                                            Positioned(
+                                              top: 10,
+                                              right: 10,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Colors.red,
+                                                ),
+                                                child: IconButton(
+                                                  icon: Icon(Icons.close),
+                                                  color: Colors.white,
+                                                  iconSize:
+                                                      18, // Adjust the size as desired
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                                child: Stack(
+                                  alignment: Alignment.topRight,
+                                  children: [
+                                    Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 10),
+                                        child: image!.startsWith('http')
+                                            ? Image.network(image)
+                                            : Image.file(File(image))),
+                                    Positioned(
+                                      top: 10,
+                                      right: 20,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.red,
+                                        ),
+                                        child: IconButton(
+                                          icon: Icon(Icons.close),
+                                          color: Colors.white,
+                                          iconSize:
+                                              18, // Adjust the size as desired
+                                          onPressed: () {
+                                            setState(() {
+                                              resources.removeAt(index);
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                ],
+              ),
+            ),
           ),
           FastDatePicker(
             name: 'deadlinestart',
@@ -349,9 +589,43 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
             mode: CupertinoDatePickerMode.dateAndTime,
           ),
           CupertinoButton(child: const Text('Assign Pet'), onPressed: () {}),
-          CupertinoButton(child: const Text('Assign Volunteer'), onPressed: () {}),
+          CupertinoButton(
+              child: const Text('Assign Volunteer'), onPressed: () {}),
         ],
       ),
     ];
+  }
+
+  Future<void> pickVideo(ImageSource source) async {
+    setState(() {
+      _isLoading = true; // Set loading state
+    });
+
+    final ImagePicker picker = ImagePicker();
+    final List<XFile> pickedFiles = await picker.pickMultiImage();
+    if (pickedFiles.isNotEmpty) {
+      final List<File?> filepaths =
+          pickedFiles.map((e) => File(e.path)).toList();
+      setState(() {
+        resources.addAll(filepaths.map((e) => e!.path).toList());
+      });
+    }
+
+    setState(() {
+      _isLoading = false; // Set loading state
+    });
+  }
+
+  File convertImageToFile(img.Image image) {
+    final tempDir = Directory.systemTemp;
+    final tempFile = File('${tempDir.path}/image.png');
+
+    // Encode the image as PNG bytes
+    final pngBytes = img.encodePng(image);
+
+    // Write the bytes to the file
+    tempFile.writeAsBytesSync(pngBytes);
+
+    return tempFile;
   }
 }
