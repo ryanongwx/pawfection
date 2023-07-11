@@ -87,11 +87,21 @@ class _LoginViewState extends State<LoginView> {
 
   Future<String?> _recoverPassword(String name) async {
     debugPrint('Name: $name');
-    return Future.delayed(loginTime).then((_) async {
+
+    try {
+      final fetchMethodsResult = await FirebaseAuth.FirebaseAuth.instance
+          .fetchSignInMethodsForEmail(name);
+
+      if (fetchMethodsResult.isEmpty) {
+        return "Invalid email";
+      }
+
       await FirebaseAuth.FirebaseAuth.instance
           .sendPasswordResetEmail(email: name);
       return null;
-    });
+    } catch (error) {
+      return error.toString();
+    }
   }
 
   @override
