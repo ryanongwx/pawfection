@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:core';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pawfection/manager_view.dart';
 import 'package:pawfection/models/user.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:pawfection/repository/user_repository.dart';
 import 'package:pawfection/service/user_service.dart';
@@ -53,6 +55,29 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
         ),
       ),
     );
+  }
+
+  Future sendEmail(
+      {required String to_email, required String accesscode}) async {
+    const service_id = 'service_u10dyfq';
+    const template_id = 'template_ieilxnr';
+    const user_id = '2KNsSyfb3iimQC2k1';
+
+    final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+    final response = await http.post(url,
+        headers: {
+          'origin': 'http://localhost',
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'service_id': service_id,
+          'template_id': template_id,
+          'user_id': user_id,
+          'template_params': {
+            'to_email': to_email,
+            'accesscode': accesscode,
+          }
+        }));
   }
 
   @override
@@ -117,6 +142,8 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
                             referenceId: '',
                             bio: '',
                             taskcount: 0));
+                        sendEmail(
+                            to_email: _form['email'], accesscode: accesscode);
                         setState(() {
                           alertmessage =
                               'User has successfully been created. \n Access Code: $accesscode';
@@ -217,6 +244,10 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
                             referenceId: '',
                             bio: '',
                             taskcount: 0));
+
+                        sendEmail(
+                            to_email: _form['email'], accesscode: accesscode);
+
                         setState(() {
                           alertmessage =
                               'User has successfully been created. \n Access Code: $accesscode';
@@ -228,6 +259,7 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
                       }
                     } catch (e) {
                       setState(() {
+                        debugPrint(e.toString());
                         alertmessage = 'Please ensure all fields are filled in';
                       });
                     } finally {
