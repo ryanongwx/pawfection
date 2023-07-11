@@ -138,7 +138,8 @@ class _LoginViewState extends State<LoginView> {
                 experiences: user.experiences,
                 profilepicture: user.profilepicture,
                 contactnumber: user.contactnumber,
-                bio: user.bio));
+                bio: user.bio,
+                taskcount: 0));
             userService.deleteUser(user);
           }
           if (user.role == 'manager') {

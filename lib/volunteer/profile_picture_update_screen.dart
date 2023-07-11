@@ -305,7 +305,9 @@ class _ProfilePictureUpdateScreenState
                                                           user.experiences,
                                                       profilepicture: imageURL,
                                                       contactnumber:
-                                                          user.contactnumber));
+                                                          user.contactnumber,
+                                                      taskcount:
+                                                          user.taskcount));
                                                   Navigator.of(context)
                                                       .pushReplacement(
                                                     MaterialPageRoute(

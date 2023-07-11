@@ -101,7 +101,8 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                 ),
                                 Text(
                                   task.description,
-                                  style: const TextStyle(fontSize: 16, height: 1.4),
+                                  style: const TextStyle(
+                                      fontSize: 16, height: 1.4),
                                 ),
                               ],
                             ),
@@ -121,10 +122,92 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                Text(
-                                  "${task.resources}",
-                                  style: const TextStyle(fontSize: 16, height: 1.4),
-                                ),
+                                task.resources.isEmpty
+                                    ? Container(
+                                        height: 20,
+                                        child: Text('None'),
+                                      ) // No empty space when the list is empty
+                                    : Container(
+                                        height:
+                                            200, // Set the desired height for the scroll view
+                                        child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: task.resources.length,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            final imageUrl =
+                                                task.resources[index];
+
+                                            return GestureDetector(
+                                              onTap: () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    final screenSize =
+                                                        MediaQuery.of(context)
+                                                            .size;
+                                                    final dialogWidth =
+                                                        screenSize.width * 0.7;
+                                                    final dialogHeight =
+                                                        screenSize.height * 0.7;
+
+                                                    return Dialog(
+                                                      child: Stack(
+                                                        children: [
+                                                          FittedBox(
+                                                            fit: BoxFit.cover,
+                                                            child:
+                                                                Image.network(
+                                                              imageUrl!,
+                                                            ),
+                                                          ),
+                                                          Positioned(
+                                                            top: 10,
+                                                            right: 10,
+                                                            child: Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                shape: BoxShape
+                                                                    .circle,
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
+                                                              child: IconButton(
+                                                                icon: Icon(Icons
+                                                                    .close),
+                                                                color: Colors
+                                                                    .white,
+                                                                onPressed: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 10),
+                                                child: Image.network(
+                                                  imageUrl!,
+                                                  width:
+                                                      150, // Set the desired width for the photos
+                                                  height:
+                                                      200, // Set the desired height for the photos
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
                               ],
                             ),
                           ),
@@ -161,7 +244,8 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                       final user = snapshot.data;
 
                                       return (user == null
-                                          ? const Text('Task not assigned to any volunteers')
+                                          ? const Text(
+                                              'Task not assigned to any volunteers')
                                           : ListTile(
                                               onTap: () {
                                                 UserDialog
@@ -171,7 +255,8 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                               },
                                               tileColor: Colors.grey[200],
                                               shape: RoundedRectangleBorder(
-                                                  side: const BorderSide(width: 2),
+                                                  side: const BorderSide(
+                                                      width: 2),
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           20)),
@@ -210,7 +295,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                 ),
                                 FutureBuilder(
                                   future: userService
-                                          .findUserByUUID(task.createdby),
+                                      .findUserByUUID(task.createdby),
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState ==
                                         ConnectionState.waiting) {
@@ -234,7 +319,8 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                               },
                                               tileColor: Colors.grey[200],
                                               shape: RoundedRectangleBorder(
-                                                  side: const BorderSide(width: 2),
+                                                  side: const BorderSide(
+                                                      width: 2),
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           20)),
@@ -273,7 +359,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                 ),
                                 FutureBuilder(
                                   future: userService
-                                          .findUserByUUID(task.contactperson),
+                                      .findUserByUUID(task.contactperson),
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState ==
                                         ConnectionState.waiting) {
@@ -297,7 +383,8 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                               },
                                               tileColor: Colors.grey[200],
                                               shape: RoundedRectangleBorder(
-                                                  side: const BorderSide(width: 2),
+                                                  side: const BorderSide(
+                                                      width: 2),
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           20)),
@@ -321,8 +408,8 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                           ),
                         ),
                         Padding(
-                          padding:
-                              const EdgeInsets.only(right: 30, left: 30, top: 10),
+                          padding: const EdgeInsets.only(
+                              right: 30, left: 30, top: 10),
                           child: ElevatedButton(
                             onPressed: () {
                               displayCompleteTaskDialog(

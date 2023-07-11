@@ -115,7 +115,8 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
                                 'https://firebasestorage.googleapis.com/v0/b/pawfection-c14ed.appspot.com/o/profilepictures%2FFlFhhBapCZOzattk8mT1CMNxou22?alt=media&token=530bd4b2-95b6-45dc-88f0-9abf64d2a916',
                             contactnumber: _form['contactnumber'],
                             referenceId: '',
-                            bio: ''));
+                            bio: '',
+                            taskcount: 0));
                         setState(() {
                           alertmessage =
                               'User has successfully been created. \n Access Code: $accesscode';
@@ -214,7 +215,8 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
                                 'https://firebasestorage.googleapis.com/v0/b/pawfection-c14ed.appspot.com/o/profilepictures%2FFlFhhBapCZOzattk8mT1CMNxou22?alt=media&token=530bd4b2-95b6-45dc-88f0-9abf64d2a916',
                             contactnumber: _form['contactnumber'],
                             referenceId: '',
-                            bio: ''));
+                            bio: '',
+                            taskcount: 0));
                         setState(() {
                           alertmessage =
                               'User has successfully been created. \n Access Code: $accesscode';
