@@ -167,20 +167,6 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
                           ),
                           actions: <Widget>[
                             TextButton(
-                              onPressed: () async {
-                                debugPrint(accesscode);
-                                await Clipboard.setData(
-                                        ClipboardData(text: accesscode))
-                                    .then((_) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content: Text(
-                                              "Access code copied to clipboard")));
-                                });
-                              },
-                              child: const Text('Copy Access Code'),
-                            ),
-                            TextButton(
                               onPressed: () => {
                                 Navigator.pop(context, 'OK'),
                                 if (alertmessage ==
