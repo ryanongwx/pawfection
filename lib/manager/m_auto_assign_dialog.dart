@@ -67,13 +67,37 @@ Future<void> displayAutoAssignDialog(BuildContext context) async {
                         itemCount: tasks.length,
                         itemBuilder: (context, index) {
                           final task = tasks[index];
-                          var assign = task!.assignedto;
                           if (task!.assignedto == null) {
-                            return const Text("null");
+                            return const SizedBox.shrink(); // Return an empty SizedBox for tasks with assignedto == null
                           } else {
-                            return Text(task.assignedto!);
+                            return Text('${task.name}: ${task.assignedto}');
                           }
                         },
+                      ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: tasks.length,
+                        itemBuilder: (context, index) {
+                          final task = tasks[index];
+                          if (task!.assignedto == null) {
+                            return Text('${task.name} (null)');
+                          } else {
+                            return const SizedBox.shrink(); // Return an empty SizedBox for tasks with assignedto != null
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: () {
+                          // Update the task in the database
+                          for (final task in tasks) {
+                            if (task!.assignedto != null) {
+                              taskService.updateTask(task);
+                            }
+                          }
+                          Navigator.of(context).pop(); // Close the dialog
+                        },
+                        child: const Text('Confirm'),
                       ),
                     ],
                   ),
