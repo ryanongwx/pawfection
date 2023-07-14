@@ -117,29 +117,16 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                 ? nameList.contains(widget.task.assignedto!)
                     ? widget.task.assignedto
                     : null
-                : null;
+                : "<No volunteer assigned>";
 
-            return FutureBuilder<User?>(
-              future: userService.findUserByUUID(widget.task.assignedto!),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  final user = snapshot.data;
-
-                  return Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: FastDropdown(
-                      name: 'user',
-                      labelText: 'Volunteer',
-                      items: nameList,
-                      initialValue: user!.username,
-                    ),
-                  );
-                }
-              },
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: FastDropdown(
+                name: 'user',
+                labelText: 'Volunteer',
+                items: nameList,
+                initialValue: initialValue,
+              ),
             );
           }
         },
@@ -222,16 +209,25 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                           resources[i] = imageURL;
                         }
                       }
+
+                      var updateduserID;
                       User? updateduser =
                           await userService.findUserByUsername(_form['user']);
-                      String updateduserID = updateduser!.referenceId;
+                      if (updateduser != null) {
+                        updateduserID = updateduser.referenceId;
+                      }
+
+                      var updatedpetID;
                       Pet? updatedpet =
                           await petService.findPetByPetname(_form['pet']);
-                      String updatedpetID = updatedpet!.referenceId!;
+                      if (updatedpet != null) {
+                        updatedpetID = updatedpet.referenceId!;
+                      }
 
                       // Subtract one from the taskcounter of the previous user assigned
                       User? prevassigneduser = await userService
                           .findUserByUUID(widget.task.assignedto!);
+                      // If task was previously assigned to another user
                       if (prevassigneduser != null) {
                         prevassigneduser.taskcount -= 1;
                         userService.updateUser(prevassigneduser);
@@ -341,11 +337,19 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                           resources[i] = imageURL;
                         }
                       }
+                      var updateduserID;
                       User? updateduser =
                           await userService.findUserByUsername(_form['user']);
-                      String updateduserID = updateduser!.referenceId;
+                      if (updateduser != null) {
+                        updateduserID = updateduser.referenceId;
+                      }
+
+                      var updatedpetID;
                       Pet? updatedpet =
                           await petService.findPetByPetname(_form['pet']);
+                      if (updatedpet != null) {
+                        updatedpetID = updatedpet.referenceId!;
+                      }
 
                       // Subtract one from the taskcounter of the previous user assigned
                       User? prevassigneduser = await userService
@@ -355,7 +359,6 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                         userService.updateUser(prevassigneduser);
                       }
 
-                      String updatedpetID = updatedpet!.referenceId!;
                       widget.task.name = _form['name'];
                       widget.task.assignedto = updateduserID;
                       widget.task.description = _form['description'];
