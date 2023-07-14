@@ -115,7 +115,8 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                       String? assignedUserId;
                       if (_form['user'] != "<No volunteer assigned>") {
                         User? assignedUser =
-                            await userService.findUserByUsername(_form['user']);
+                            await userService.findUserByUsername(
+                                _form['user'].toString().split(' ')[0]);
                         assignedUserId = assignedUser!.referenceId;
                       } else {
                         assignedUserId = null;
@@ -255,9 +256,9 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
 
                       String? assignedUserId;
                       if (_form['user'] != "<No volunteer assigned>") {
-                        debugPrint('ji');
                         User? assignedUser =
-                            await userService.findUserByUsername(_form['user']);
+                            await userService.findUserByUsername(
+                                _form['user'].toString().split(' ')[0]);
                         assignedUserId = assignedUser!.referenceId;
                       } else {
                         assignedUserId = null;
@@ -268,7 +269,6 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                         Pet? assignedPet =
                             await petService.findPetByPetname(_form['pet']);
                         if (assignedPet == null) {
-                          debugPrint('GGGGGG');
                         } else {
                           debugPrint(assignedPet.referenceId);
                         }
@@ -435,11 +435,12 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
             final userList = snapshot.data;
             List<String?> nameList = userList
                     ?.where((user) => user.role.toLowerCase() == "volunteer")
-                    .map((user) => user.username)
+                    .map((user) => '${user.username} (${user.taskcount})')
                     .toSet()
                     .toList() ??
                 [];
             nameList.insert(0, "<No volunteer assigned>");
+
             return Padding(
               padding: const EdgeInsets.all(16.0),
               child: FastDropdown(

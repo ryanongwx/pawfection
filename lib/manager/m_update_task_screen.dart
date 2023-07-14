@@ -69,27 +69,25 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
             List<String> nameList =
                 petList?.map((pet) => pet.name).toSet().toList() ?? [];
             nameList.insert(0, "<No pet assigned>");
-            return FutureBuilder<Pet?>(
-              future: petService.findPetByPetID(widget.task.pet!),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  final pet = snapshot.data;
 
-                  return Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: FastDropdown(
-                      name: 'pet',
-                      labelText: 'Pet',
-                      items: nameList,
-                      initialValue: pet!.name,
-                    ),
-                  );
-                }
-              },
+            List<String?> IDList =
+                petList?.map((pet) => pet.referenceId).toSet().toList() ?? [];
+            String? initialValue;
+            if (widget.task.pet != null) {
+              int index = IDList.indexOf(widget.task.pet);
+              String petUsername = petList![index].name;
+              initialValue = petUsername;
+            } else {
+              initialValue = "<No pet assigned>";
+            }
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: FastDropdown(
+                name: 'pet',
+                labelText: 'Pet',
+                items: nameList,
+                initialValue: initialValue,
+              ),
             );
           }
         },
@@ -107,17 +105,26 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
             final userList = snapshot.data;
             List<String?> nameList = userList
                     ?.where((user) => user.role.toLowerCase() == "volunteer")
-                    .map((user) => user.username)
+                    .map((user) => '${user.username} (${user.taskcount})')
                     .toSet()
                     .toList() ??
                 [];
             nameList.insert(0, "<No volunteer assigned>");
-
-            String? initialValue = widget.task.assignedto != null
-                ? nameList.contains(widget.task.assignedto!)
-                    ? widget.task.assignedto
-                    : null
-                : "<No volunteer assigned>";
+            List<String?> IDList = userList
+                    ?.where((user) => user.role.toLowerCase() == "volunteer")
+                    .map((user) => user.referenceId)
+                    .toSet()
+                    .toList() ??
+                [];
+            String? initialValue;
+            if (widget.task.assignedto != null) {
+              int index = IDList.indexOf(widget.task.assignedto);
+              int userTaskCount = userList![index].taskcount;
+              String userUsername = userList[index].username;
+              initialValue = '${userUsername} (${userTaskCount})';
+            } else {
+              initialValue = "<No volunteer assigned>";
+            }
 
             return Padding(
               padding: const EdgeInsets.all(16.0),
@@ -211,8 +218,8 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                       }
 
                       var updateduserID;
-                      User? updateduser =
-                          await userService.findUserByUsername(_form['user']);
+                      User? updateduser = await userService.findUserByUsername(
+                          _form['user'].toString().split(' ')[0]);
                       if (updateduser != null) {
                         updateduserID = updateduser.referenceId;
                       }
@@ -338,8 +345,8 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                         }
                       }
                       var updateduserID;
-                      User? updateduser =
-                          await userService.findUserByUsername(_form['user']);
+                      User? updateduser = await userService.findUserByUsername(
+                          _form['user'].toString().split(' ')[0]);
                       if (updateduser != null) {
                         updateduserID = updateduser.referenceId;
                       }
