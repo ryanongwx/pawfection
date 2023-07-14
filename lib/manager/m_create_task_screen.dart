@@ -123,8 +123,8 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
 
                       String? assignedPetId;
                       if (_form['pet'] != "<No pet assigned>") {
-                        User? assignedPet =
-                            await userService.findUserByUsername(_form['pet']);
+                        Pet? assignedPet =
+                            await petService.findPetByPetname(_form['pet']);
                         assignedPetId = assignedPet!.referenceId;
                       } else {
                         assignedPetId = null;
@@ -173,12 +173,14 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                         }
                       }
 
-                      // Add one to the taskcounter of the userassigned
-                      User? assigneduser =
-                          await userService.findUserByUUID(assignedUserId!);
-                      if (assigneduser != null) {
-                        assigneduser.taskcount += 1;
-                        userService.updateUser(assigneduser);
+                      if (assignedUserId != null) {
+                        // Add one to taskcount for assigned user
+                        User? assigneduser =
+                            await userService.findUserByUUID(assignedUserId!);
+                        if (assigneduser != null) {
+                          assigneduser.taskcount += 1;
+                          userService.updateUser(assigneduser);
+                        }
                       }
 
                       setState(() {
@@ -253,11 +255,27 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
 
                       String? assignedUserId;
                       if (_form['user'] != "<No volunteer assigned>") {
+                        debugPrint('ji');
                         User? assignedUser =
                             await userService.findUserByUsername(_form['user']);
                         assignedUserId = assignedUser!.referenceId;
                       } else {
                         assignedUserId = null;
+                      }
+
+                      String? assignedPetId;
+                      if (_form['pet'] != "<No pet assigned>") {
+                        Pet? assignedPet =
+                            await petService.findPetByPetname(_form['pet']);
+                        if (assignedPet == null) {
+                          debugPrint('GGGGGG');
+                        } else {
+                          debugPrint(assignedPet.referenceId);
+                        }
+                        assignedPetId = assignedPet!.referenceId;
+                        debugPrint(assignedPetId);
+                      } else {
+                        assignedPetId = null;
                       }
                       if (resources == []) {
                         taskService.addTask(Task(_form['name'],
@@ -273,7 +291,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                               Timestamp.fromDate(_form['deadlineend'])
                             ],
                             requests: [],
-                            pet: _form['pet'],
+                            pet: assignedPetId,
                             contactperson: user.referenceId,
                             contactpersonnumber: user.contactnumber));
                       } else {
@@ -290,7 +308,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                               Timestamp.fromDate(_form['deadlineend'])
                             ],
                             requests: [],
-                            pet: _form['pet'],
+                            pet: assignedPetId,
                             contactperson: user.referenceId,
                             contactpersonnumber: user.contactnumber);
                         String refId = await taskService.addTask(newtask);
@@ -309,12 +327,14 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                         }
                       }
 
-                      // Add one to taskcount for assigned user
-                      User? assigneduser =
-                          await userService.findUserByUUID(assignedUserId!);
-                      if (assigneduser != null) {
-                        assigneduser.taskcount += 1;
-                        userService.updateUser(assigneduser);
+                      if (assignedUserId != null) {
+                        // Add one to taskcount for assigned user
+                        User? assigneduser =
+                            await userService.findUserByUUID(assignedUserId!);
+                        if (assigneduser != null) {
+                          assigneduser.taskcount += 1;
+                          userService.updateUser(assigneduser);
+                        }
                       }
 
                       setState(() {
@@ -328,7 +348,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                     } catch (e) {
                       // If any other type of exception/error is thrown
                       setState(() {
-                        alertmessage = 'Please ensure all fields are filled in';
+                        alertmessage = e.toString();
                       });
                     } finally {
                       showDialog<String>(
@@ -415,7 +435,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
             final userList = snapshot.data;
             List<String?> nameList = userList
                     ?.where((user) => user.role.toLowerCase() == "volunteer")
-                    .map((user) => '${user.username} (${user.taskcount})')
+                    .map((user) => user.username)
                     .toSet()
                     .toList() ??
                 [];
