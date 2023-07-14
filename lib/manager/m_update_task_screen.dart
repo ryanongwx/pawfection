@@ -229,6 +229,14 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                           await petService.findPetByPetname(_form['pet']);
                       String updatedpetID = updatedpet!.referenceId!;
 
+                      // Subtract one from the taskcounter of the previous user assigned
+                      User? prevassigneduser = await userService
+                          .findUserByUUID(widget.task.assignedto!);
+                      if (prevassigneduser != null) {
+                        prevassigneduser.taskcount -= 1;
+                        userService.updateUser(prevassigneduser);
+                      }
+
                       Timestamp deadlinestart = Timestamp.fromDate(DateTime(
                           _form['deadlineend'].year,
                           _form['deadlineend'].month,
@@ -248,6 +256,15 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                       widget.task.pet = updatedpetID;
                       widget.task.assignedto = updateduserID;
                       taskService.updateTask(widget.task);
+
+                      // Add one to the taskcounter of the user assigned
+                      User? assigneduser =
+                          await userService.findUserByUUID(updateduserID);
+                      if (assigneduser != null) {
+                        assigneduser.taskcount += 1;
+                        userService.updateUser(assigneduser);
+                      }
+
                       setState(() {
                         alertmessage = 'Task has successfully been updated';
                       });
@@ -329,6 +346,15 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                       String updateduserID = updateduser!.referenceId;
                       Pet? updatedpet =
                           await petService.findPetByPetname(_form['pet']);
+
+                      // Subtract one from the taskcounter of the previous user assigned
+                      User? prevassigneduser = await userService
+                          .findUserByUUID(widget.task.assignedto!);
+                      if (prevassigneduser != null) {
+                        prevassigneduser.taskcount -= 1;
+                        userService.updateUser(prevassigneduser);
+                      }
+
                       String updatedpetID = updatedpet!.referenceId!;
                       widget.task.name = _form['name'];
                       widget.task.assignedto = updateduserID;
@@ -341,6 +367,15 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                       widget.task.pet = updatedpetID;
 
                       taskService.updateTask(widget.task);
+
+                      // Add one to the taskcounter of the user assigned
+                      User? assigneduser =
+                          await userService.findUserByUUID(updateduserID);
+                      if (assigneduser != null) {
+                        assigneduser.taskcount += 1;
+                        userService.updateUser(assigneduser);
+                      }
+
                       setState(() {
                         alertmessage = 'Task has successfully been updated';
                       });

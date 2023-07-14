@@ -11,6 +11,8 @@ class User {
   List<String?> experiences;
   String profilepicture;
   String contactnumber;
+  int taskcount;
+
   String bio;
 
   User(this.email,
@@ -22,7 +24,8 @@ class User {
       required this.experiences,
       required this.profilepicture,
       required this.contactnumber,
-      required this.bio});
+      required this.bio,
+      required this.taskcount});
 
   @override
   String toString() => 'User<$username>';

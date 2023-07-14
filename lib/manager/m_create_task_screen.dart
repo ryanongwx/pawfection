@@ -173,6 +173,14 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                         }
                       }
 
+                      // Add one to the taskcounter of the userassigned
+                      User? assigneduser =
+                          await userService.findUserByUUID(assignedUserId!);
+                      if (assigneduser != null) {
+                        assigneduser.taskcount += 1;
+                        userService.updateUser(assigneduser);
+                      }
+
                       setState(() {
                         alertmessage = 'Task has successfully been created';
                       });
@@ -301,6 +309,14 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                         }
                       }
 
+                      // Add one to taskcount for assigned user
+                      User? assigneduser =
+                          await userService.findUserByUUID(assignedUserId!);
+                      if (assigneduser != null) {
+                        assigneduser.taskcount += 1;
+                        userService.updateUser(assigneduser);
+                      }
+
                       setState(() {
                         alertmessage = 'Task has successfully been created';
                       });
@@ -399,18 +415,20 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
             final userList = snapshot.data;
             List<String?> nameList = userList
                     ?.where((user) => user.role.toLowerCase() == "volunteer")
-                    .map((user) => user.username)
+                    .map((user) => '${user.username} (${user.taskcount})')
                     .toSet()
                     .toList() ??
                 [];
             nameList.insert(0, "<No volunteer assigned>");
             return Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: FastDropdown(
-                    name: 'user',
-                    labelText: 'Volunteer',
-                    items: nameList,
-                    initialValue: nameList[0]));
+              padding: const EdgeInsets.all(16.0),
+              child: FastDropdown(
+                name: 'user',
+                labelText: 'Volunteer',
+                items: nameList,
+                initialValue: nameList[0],
+              ),
+            );
           }
         },
       );
