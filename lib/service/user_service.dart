@@ -18,7 +18,8 @@ class UserService {
         preferences: json['preferences'].cast<String?>() as List<String?>,
         experiences: json['experiences'].cast<String?>() as List<String?>,
         profilepicture: json['profilepicture'] as String,
-        contactnumber: json['contactnumber'] as String);
+        contactnumber: json['contactnumber'] as String,
+        taskcount: json['taskcount'] as int);
   }
 
   Map<String, dynamic> userToJson(User instance) => <String, dynamic>{
@@ -32,6 +33,7 @@ class UserService {
         'experiences': instance.experiences,
         'profilepicture': instance.profilepicture,
         'contactnumber': instance.contactnumber,
+        'taskcount': instance.taskcount
       };
 
   User fromSnapshot(DocumentSnapshot snapshot) {
