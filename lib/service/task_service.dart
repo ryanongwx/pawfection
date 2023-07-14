@@ -10,6 +10,7 @@ class TaskService {
   TaskRepository taskRepository = TaskRepository();
 
   Task taskFromJson(Map<String, dynamic> json) {
+    debugPrint('Deadline raw data: ${json['deadline']}');
     return Task(json['name'] as String,
         referenceId: json['referenceId'] as String,
         assignedto: json['assignedto'] as String?,
@@ -41,6 +42,27 @@ class TaskService {
         'pet': instance.pet,
       };
 
+  Task taskFromJsonCloudFunction(Map<String, dynamic> json) {
+    return Task(
+      json['name'] as String,
+      referenceId: json['referenceId'] as String,
+      assignedto: json['assignedto'] as String?,
+      createdby: json['createdby'] as String,
+      description: json['description'] as String,
+      status: json['status'] as String,
+      resources: (json['resources'] as List<dynamic>).cast<String>(),
+      contactperson: json['contactperson'] as String,
+      contactpersonnumber: json['contactpersonnumber'] as String,
+      feedback: json['feedback'] as String?,
+      deadline: (json['deadline'] as List).map((item) {
+        Map<String, dynamic> data = item;
+        return Timestamp(data['_seconds'], data['_nanoseconds']);
+      }).toList().cast<Timestamp>(),
+      requests: (json['requests'] as List<dynamic>).cast<String>(),
+      pet: json['pet'] as String?,
+    );
+  }
+
   Task fromSnapshot(DocumentSnapshot snapshot) {
     final newTask = taskFromJson(snapshot.data() as Map<String, dynamic>);
     newTask.referenceId = snapshot.reference.id;
@@ -71,7 +93,10 @@ class TaskService {
   }
 
   void updateTask(Task task) async {
-    taskRepository.updateTaskRepo(taskToJson(task), task.referenceId);
+    debugPrint('Updating task: $task');
+    final json = taskToJson(task);
+    debugPrint('Serialized JSON: $json');
+    taskRepository.updateTaskRepo(json, task.referenceId);
   }
 
   void deleteTask(Task task) {

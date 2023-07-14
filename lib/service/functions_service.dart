@@ -2,6 +2,7 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pawfection/service/task_service.dart';
 import '../models/task.dart';
+import 'dart:convert';
 
 TaskService taskService = TaskService();
 
@@ -9,7 +10,7 @@ class FunctionService {
   // In the future the autoAssignment may require some input to auto assign based on what
   Future<List<Task?>> autoAssign() async {
     HttpsCallable callable =
-        FirebaseFunctions.instance.httpsCallable('autoAssign');
+    FirebaseFunctions.instance.httpsCallable('autoAssign');
     final resp = await callable.call(<String, dynamic>{
       'text': 'A message sent from a client device',
     });
@@ -21,21 +22,14 @@ class FunctionService {
     List<dynamic> openTasks = response["availableTasks"];
     List<Task> tasks = [];
 
-    debugPrint("OpenTasks: $openTasks");
-
     for (var taskData in openTasks) {
-      Map<String, dynamic> taskDataMap =
-      Map<String, dynamic>.from(taskData as Map<Object?, Object?>);
-      Task task = taskService.taskFromJson(taskDataMap);
-      var assignedto = task.assignedto;
-      var name = task.name;
-      debugPrint("task: $assignedto");
-      debugPrint("task: $name");
+      Map<String, dynamic> taskDataMap = jsonDecode(jsonEncode(taskData));
+      Task task = taskService.taskFromJsonCloudFunction(taskDataMap);
       tasks.add(task);
     }
 
-    // Debug print the tasks
-    debugPrint("Tasks: $tasks");
+    // // Debug print the tasks
+    // debugPrint("Tasks: $tasks");
 
     return tasks;
   }
