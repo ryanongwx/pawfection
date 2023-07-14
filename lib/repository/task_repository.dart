@@ -18,10 +18,11 @@ class TaskRepository {
     await taskCollection.doc(referenceId).delete();
   }
 
-  Future<void> addTaskRepo(Map<String, dynamic> taskJson) async {
+  Future<String> addTaskRepo(Map<String, dynamic> taskJson) async {
     var newDocRef = taskCollection.doc();
     taskJson['referenceId'] = newDocRef.id;
     await newDocRef.set(taskJson);
+    return newDocRef.id;
   }
 
   Future<QuerySnapshot> fetchAllTasks() async {

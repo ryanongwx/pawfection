@@ -21,12 +21,21 @@ class FunctionService {
     List<dynamic> openTasks = response["availableTasks"];
     List<Task> tasks = [];
 
+    debugPrint("OpenTasks: $openTasks");
+
     for (var taskData in openTasks) {
       Map<String, dynamic> taskDataMap =
       Map<String, dynamic>.from(taskData as Map<Object?, Object?>);
       Task task = taskService.taskFromJson(taskDataMap);
+      var assignedto = task.assignedto;
+      var name = task.name;
+      debugPrint("task: $assignedto");
+      debugPrint("task: $name");
       tasks.add(task);
     }
+
+    // Debug print the tasks
+    debugPrint("Tasks: $tasks");
 
     return tasks;
   }

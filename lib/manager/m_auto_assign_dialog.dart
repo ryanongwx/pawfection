@@ -67,8 +67,9 @@ Future<void> displayAutoAssignDialog(BuildContext context) async {
                         itemCount: tasks.length,
                         itemBuilder: (context, index) {
                           final task = tasks[index];
+                          var assign = task!.assignedto;
                           if (task!.assignedto == null) {
-                            return Text("null");
+                            return const Text("null");
                           } else {
                             return Text(task.assignedto!);
                           }
