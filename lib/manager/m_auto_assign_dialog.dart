@@ -13,7 +13,7 @@ Future<void> displayAutoAssignDialog(BuildContext context) async {
           side: const BorderSide(width: 2),
           borderRadius: BorderRadius.circular(20),
         ),
-        child: FutureBuilder<List<Task?>>(
+        child: FutureBuilder<Map<String, dynamic>>(
           future: functionService.autoAssign(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -36,7 +36,13 @@ Future<void> displayAutoAssignDialog(BuildContext context) async {
               return Text('Error: ${snapshot.error}');
             } else {
               // The future completed successfully
-              final tasks = snapshot.data;
+              final tasks = snapshot.data!['tasks'];
+              final volunteers = snapshot.data!['volunteers'];
+              // Create a map of referenceId to volunteer object
+              final volunteersMap = {
+                for (var volunteer in volunteers)
+                  volunteer.referenceId: volunteer
+              };
               if (tasks!.isEmpty) {
                 return const Padding(
                   padding: EdgeInsets.all(20.0),
@@ -68,9 +74,11 @@ Future<void> displayAutoAssignDialog(BuildContext context) async {
                         itemBuilder: (context, index) {
                           final task = tasks[index];
                           if (task!.assignedto == null) {
-                            return const SizedBox.shrink(); // Return an empty SizedBox for tasks with assignedto == null
+                            return const SizedBox
+                                .shrink(); // Return an empty SizedBox for tasks with assignedto == null
                           } else {
-                            return Text('${task.name}: ${task.assignedto}');
+                            final volunteer = volunteersMap[task.assignedto];
+                            return Text('${task.name} is assigned to ${volunteer.username}');
                           }
                         },
                       ),
@@ -82,7 +90,8 @@ Future<void> displayAutoAssignDialog(BuildContext context) async {
                           if (task!.assignedto == null) {
                             return Text('${task.name} (null)');
                           } else {
-                            return const SizedBox.shrink(); // Return an empty SizedBox for tasks with assignedto != null
+                            return const SizedBox
+                                .shrink(); // Return an empty SizedBox for tasks with assignedto != null
                           }
                         },
                       ),
