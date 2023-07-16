@@ -24,9 +24,8 @@ class FunctionService {
     Map<String, dynamic> response = Map<String, dynamic>.from(resp.data);
 
     List<dynamic> tasksJson = response["tasks"];
-    List<dynamic> volunteerJson = response["volunteers"];
+    Map<String, dynamic> tasksVolunteersMapJson = Map<String, dynamic>.from(response["volunteers"]);
     List<Task> tasks = [];
-    List<User> volunteers = [];
 
     for (var taskData in tasksJson) {
       Map<String, dynamic> taskDataMap = jsonDecode(jsonEncode(taskData));
@@ -34,12 +33,12 @@ class FunctionService {
       tasks.add(task);
     }
 
-    for (var userData in volunteerJson) {
-      Map<String, dynamic> userDataMap = jsonDecode(jsonEncode(userData));
-      User user = userService.userFromJson(userDataMap);
-      volunteers.add(user);
-    }
+    // Convert the map values from List<dynamic> to List<String>
+    Map<String, List<String>> tasksVolunteersMap = tasksVolunteersMapJson.map((key, value) {
+      List<String> volunteersList = List<String>.from(value.map((item) => item.toString()));
+      return MapEntry(key, volunteersList);
+    });
 
-    return {'tasks': tasks, 'volunteers': volunteers};
+    return {'tasks': tasks, 'volunteers': tasksVolunteersMap };
   }
 }
