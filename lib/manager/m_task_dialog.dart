@@ -799,6 +799,15 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
 
                               if (confirmed ?? false) {
                                 taskService.deleteTask(task);
+
+                                if (task.status == 'Pending') {
+                                  User? user = await userService
+                                      .findUserByUUID(task.assignedto!);
+                                  if (user != null) {
+                                    user.taskcount -= 1;
+                                    userService.updateUser(user);
+                                  }
+                                }
                                 Navigator.of(context).pop();
                               }
                             },

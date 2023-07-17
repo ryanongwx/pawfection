@@ -240,18 +240,32 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                         userService.updateUser(prevassigneduser);
                       }
 
-                      Timestamp deadlinestart = Timestamp.fromDate(DateTime(
+                      DateTime deadlineenddt = DateTime(
                           _form['deadlineend'].year,
                           _form['deadlineend'].month,
                           _form['deadlineend'].day,
                           _form['deadlineendtime'].hour,
-                          _form['deadlineendtime'].minute));
-                      Timestamp deadlineend = Timestamp.fromDate(DateTime(
+                          _form['deadlineendtime'].minute);
+                      DateTime deadlinestartdt = DateTime(
                           _form['deadlinestart'].year,
                           _form['deadlinestart'].month,
                           _form['deadlinestart'].day,
                           _form['deadlinestarttime'].hour,
-                          _form['deadlinestarttime'].minute));
+                          _form['deadlinestarttime'].minute);
+
+                      Timestamp deadlinestart =
+                          Timestamp.fromDate(deadlinestartdt);
+                      Timestamp deadlineend = Timestamp.fromDate(deadlineenddt);
+
+                      if (deadlineenddt.isBefore(deadlinestartdt)) {
+                        throw Exception(
+                            'Deadline end cannot be before deadline start');
+                      }
+
+                      if (deadlineenddt.isBefore(DateTime.now())) {
+                        throw Exception(
+                            'Deadline end cannot be before current time');
+                      }
                       widget.task.name = _form['name'];
                       widget.task.description = _form['description'];
                       widget.task.resources = resources;
@@ -335,6 +349,17 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                   child: const Text('Update'),
                   onPressed: () async {
                     try {
+                      if (_form['deadlineend']
+                          .isBefore(_form['deadlinestart'])) {
+                        throw Exception(
+                            'Deadline end cannot be before deadline start');
+                      }
+
+                      if (_form['deadlineend'].isBefore(DateTime.now())) {
+                        throw Exception(
+                            'Deadline end cannot be before current time');
+                      }
+
                       for (var i = 0; i < resources.length; i++) {
                         var newrefId = widget.task.referenceId! + i.toString();
                         if (!resources[i]!.startsWith('http')) {
