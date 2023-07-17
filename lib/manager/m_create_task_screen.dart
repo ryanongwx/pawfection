@@ -99,18 +99,32 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                         throw Exception(
                             'Please log into a manager account to create task');
                       }
-                      Timestamp deadlinestart = Timestamp.fromDate(DateTime(
+                      DateTime deadlineenddt = DateTime(
                           _form['deadlineend'].year,
                           _form['deadlineend'].month,
                           _form['deadlineend'].day,
                           _form['deadlineendtime'].hour,
-                          _form['deadlineendtime'].minute));
-                      Timestamp deadlineend = Timestamp.fromDate(DateTime(
+                          _form['deadlineendtime'].minute);
+                      DateTime deadlinestartdt = DateTime(
                           _form['deadlinestart'].year,
                           _form['deadlinestart'].month,
                           _form['deadlinestart'].day,
                           _form['deadlinestarttime'].hour,
-                          _form['deadlinestarttime'].minute));
+                          _form['deadlinestarttime'].minute);
+
+                      Timestamp deadlinestart =
+                          Timestamp.fromDate(deadlinestartdt);
+                      Timestamp deadlineend = Timestamp.fromDate(deadlineenddt);
+
+                      if (deadlineenddt.isBefore(deadlinestartdt)) {
+                        throw Exception(
+                            'Deadline end cannot be before deadline start');
+                      }
+
+                      if (deadlineenddt.isBefore(DateTime.now())) {
+                        throw Exception(
+                            'Deadline end cannot be before current time');
+                      }
 
                       String? assignedUserId;
                       if (_form['user'] != "<No volunteer assigned>") {
@@ -252,6 +266,17 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                       if (user == null) {
                         throw Exception(
                             'Please log into a manager account to create task');
+                      }
+
+                      if (_form['deadlineend']
+                          .isBefore(_form['deadlinestart'])) {
+                        throw Exception(
+                            'Deadline end cannot be before deadline start');
+                      }
+
+                      if (_form['deadlineend'].isBefore(DateTime.now())) {
+                        throw Exception(
+                            'Deadline end cannot be before current time');
                       }
 
                       String? assignedUserId;
