@@ -99,23 +99,38 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                         throw Exception(
                             'Please log into a manager account to create task');
                       }
-                      Timestamp deadlinestart = Timestamp.fromDate(DateTime(
+                      DateTime deadlineenddt = DateTime(
                           _form['deadlineend'].year,
                           _form['deadlineend'].month,
                           _form['deadlineend'].day,
                           _form['deadlineendtime'].hour,
-                          _form['deadlineendtime'].minute));
-                      Timestamp deadlineend = Timestamp.fromDate(DateTime(
+                          _form['deadlineendtime'].minute);
+                      DateTime deadlinestartdt = DateTime(
                           _form['deadlinestart'].year,
                           _form['deadlinestart'].month,
                           _form['deadlinestart'].day,
                           _form['deadlinestarttime'].hour,
-                          _form['deadlinestarttime'].minute));
+                          _form['deadlinestarttime'].minute);
+
+                      Timestamp deadlinestart =
+                          Timestamp.fromDate(deadlinestartdt);
+                      Timestamp deadlineend = Timestamp.fromDate(deadlineenddt);
+
+                      if (deadlineenddt.isBefore(deadlinestartdt)) {
+                        throw Exception(
+                            'Deadline end cannot be before deadline start');
+                      }
+
+                      if (deadlineenddt.isBefore(DateTime.now())) {
+                        throw Exception(
+                            'Deadline end cannot be before current time');
+                      }
 
                       String? assignedUserId;
                       if (_form['user'] != "<No volunteer assigned>") {
                         User? assignedUser =
-                            await userService.findUserByUsername(_form['user']);
+                            await userService.findUserByUsername(
+                                _form['user'].toString().split(' ')[0]);
                         assignedUserId = assignedUser!.referenceId;
                       } else {
                         assignedUserId = null;
@@ -253,11 +268,22 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                             'Please log into a manager account to create task');
                       }
 
+                      if (_form['deadlineend']
+                          .isBefore(_form['deadlinestart'])) {
+                        throw Exception(
+                            'Deadline end cannot be before deadline start');
+                      }
+
+                      if (_form['deadlineend'].isBefore(DateTime.now())) {
+                        throw Exception(
+                            'Deadline end cannot be before current time');
+                      }
+
                       String? assignedUserId;
                       if (_form['user'] != "<No volunteer assigned>") {
-                        debugPrint('ji');
                         User? assignedUser =
-                            await userService.findUserByUsername(_form['user']);
+                            await userService.findUserByUsername(
+                                _form['user'].toString().split(' ')[0]);
                         assignedUserId = assignedUser!.referenceId;
                       } else {
                         assignedUserId = null;
@@ -268,7 +294,6 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                         Pet? assignedPet =
                             await petService.findPetByPetname(_form['pet']);
                         if (assignedPet == null) {
-                          debugPrint('GGGGGG');
                         } else {
                           debugPrint(assignedPet.referenceId);
                         }
@@ -435,11 +460,12 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
             final userList = snapshot.data;
             List<String?> nameList = userList
                     ?.where((user) => user.role.toLowerCase() == "volunteer")
-                    .map((user) => user.username)
+                    .map((user) => '${user.username} (${user.taskcount})')
                     .toSet()
                     .toList() ??
                 [];
             nameList.insert(0, "<No volunteer assigned>");
+
             return Padding(
               padding: const EdgeInsets.all(16.0),
               child: FastDropdown(

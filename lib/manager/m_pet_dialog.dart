@@ -168,7 +168,7 @@ Future<void> displayPetItemDialog(BuildContext context, String id) async {
                                 builder: (context) => AlertDialog(
                                   title: const Text("Confirm Delete"),
                                   content: const Text(
-                                      "Are you sure you want to delete this user?"),
+                                      "Are you sure you want to delete this pet?"),
                                   actions: <Widget>[
                                     TextButton(
                                       child: const Text("Cancel"),
