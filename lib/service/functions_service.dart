@@ -1,11 +1,8 @@
 import 'package:cloud_functions/cloud_functions.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:pawfection/service/task_service.dart';
 import 'package:pawfection/service/user_service.dart';
 import '../models/task.dart';
 import 'dart:convert';
-
-import '../models/user.dart';
 
 TaskService taskService = TaskService();
 UserService userService = UserService();
