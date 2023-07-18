@@ -190,6 +190,28 @@ class _TaskItemState extends State<TaskItem> {
     currentUser = _auth.currentUser!;
   }
 
+  Icon showCategoryIcon(String category) {
+    List<String> categories = [
+      'Feeding',
+      'Cleaning',
+      'Maintenance',
+      'Exercising',
+      'Training',
+      'Others'
+    ];
+
+    List<Icon> icons = [
+      Icon(Icons.restaurant),
+      Icon(Icons.cleaning_services),
+      Icon(Icons.miscellaneous_services),
+      Icon(Icons.sports_soccer),
+      Icon(Icons.school),
+      Icon(Icons.task)
+    ];
+
+    return icons[categories.indexOf(category)];
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.task == null) {
@@ -214,10 +236,7 @@ class _TaskItemState extends State<TaskItem> {
                 padding: const EdgeInsets.all(10),
                 child: Row(
                   children: [
-                    const Icon(
-                      Icons.account_circle,
-                      color: Colors.black,
-                    ),
+                    showCategoryIcon(widget.task.category),
                     const SizedBox(
                       width: 10,
                     ),
