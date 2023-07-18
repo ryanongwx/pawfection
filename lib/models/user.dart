@@ -27,6 +27,18 @@ class User {
       required this.bio,
       required this.taskcount});
 
+  // Overrides == of users
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is User &&
+        other.referenceId == referenceId;
+  }
+
+  @override
+  int get hashCode => referenceId.hashCode;
+
   @override
   String toString() => 'User<$username>';
 }
