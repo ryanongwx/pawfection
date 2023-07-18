@@ -94,6 +94,29 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                 ],
                               ),
                             ),
+                            task.feedback != null
+                                ? Padding(
+                                    padding: const EdgeInsets.only(top: 30),
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 48),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Text(
+                                            'Feedback',
+                                            style: TextStyle(
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(task.feedback!),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : Column(),
                             task.pet != null
                                 ? Padding(
                                     padding: const EdgeInsets.only(top: 30),
@@ -742,21 +765,24 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                 ),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  right: 30, left: 30, top: 20),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (context) => MUpdateTaskScreen(
-                                              task: task,
-                                            )),
-                                  );
-                                },
-                                child: const Text('Edit'),
-                              ),
-                            ),
+                            task.status == 'Completed'
+                                ? const Column()
+                                : Padding(
+                                    padding: const EdgeInsets.only(
+                                        right: 30, left: 30, top: 20),
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  MUpdateTaskScreen(
+                                                    task: task,
+                                                  )),
+                                        );
+                                      },
+                                      child: const Text('Edit'),
+                                    ),
+                                  ),
                             Padding(
                               padding: const EdgeInsets.only(
                                   right: 30, left: 30, top: 10, bottom: 30),
