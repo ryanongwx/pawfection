@@ -46,8 +46,19 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
   late var _form;
   late var alertmessage;
   List<File?> resources = [];
+  var others = '';
+  bool showTextField = false;
 
   final _auth = FirebaseAuth.FirebaseAuth.instance; // authInstance
+
+  List<String> categories = [
+    'Feeding',
+    'Cleaning',
+    'Maintenance',
+    'Exercising',
+    'Training',
+    'Others'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +96,6 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                   ),
                   children: _buildForm(context),
                   onChanged: (value) {
-                    // ignore: avoid_print
                     print('Form changed: ${value.toString()}');
                     _form = value;
                   },
@@ -149,6 +159,8 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                             createdby: user.referenceId,
                             assignedto: assignedUserId,
                             description: _form['description'],
+                            category: _form['category'],
+                            categoryothers: _form['cataegoryothers'],
                             status: _form['user'] == "<No volunteer assigned>"
                                 ? 'Open'
                                 : 'Pending',
@@ -163,6 +175,8 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                             createdby: user.referenceId,
                             assignedto: assignedUserId,
                             description: _form['description'],
+                            category: _form['category'],
+                            categoryothers: _form['cataegoryothers'],
                             status: _form['user'] == "<No volunteer assigned>"
                                 ? 'Open'
                                 : 'Pending',
@@ -307,6 +321,8 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                             createdby: user.referenceId,
                             assignedto: assignedUserId,
                             description: _form['description'],
+                            category: _form['category'],
+                            categoryothers: _form['cataegoryothers'],
                             status: _form['user'] == "<No volunteer assigned>"
                                 ? 'Open'
                                 : 'Pending',
@@ -324,6 +340,8 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                             createdby: user.referenceId,
                             assignedto: assignedUserId,
                             description: _form['description'],
+                            category: _form['category'],
+                            categoryothers: _form['cataegoryothers'],
                             status: _form['user'] == "<No volunteer assigned>"
                                 ? 'Open'
                                 : 'Pending',
@@ -498,6 +516,27 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
               Validators.required((value) => 'Field is required'),
             ]),
           ),
+          Row(
+            children: [
+              Expanded(
+                  child: FastDropdown(
+                      name: 'category',
+                      onChanged: (newvalue) {
+                        setState(() {
+                          showTextField = newvalue == 'Others';
+                        });
+                      },
+                      labelText: 'Category',
+                      items: categories)),
+              showTextField
+                  ? Expanded(
+                      child: const FastTextField(
+                      name: 'categoryothers',
+                      labelText: 'Category',
+                    ))
+                  : const Column()
+            ],
+          ),
           FastTextField(
             name: 'description',
             labelText: 'Description',
@@ -665,6 +704,27 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
             ]),
+          ),
+          Row(
+            children: [
+              Expanded(
+                  child: FastDropdown(
+                      name: 'category',
+                      onChanged: (newvalue) {
+                        setState(() {
+                          showTextField = newvalue == 'Others';
+                        });
+                      },
+                      labelText: 'Category',
+                      items: categories)),
+              showTextField
+                  ? Expanded(
+                      child: const FastTextField(
+                      name: 'categoryothers',
+                      labelText: 'Category',
+                    ))
+                  : const Column()
+            ],
           ),
           FastTextField(
             name: 'description',

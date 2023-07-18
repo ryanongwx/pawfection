@@ -50,23 +50,25 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
 
           return Scaffold(
               appBar: AppBar(
-                title: const Text('Tasks'),
+                title: Text('Tasks'),
+                centerTitle: true,
                 actions: <Widget>[
                   Padding(
-                      padding: const EdgeInsets.only(right: 20.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MCreateTaskScreen()),
-                          );
-                        },
-                        child: const Icon(
-                          Icons.add,
-                          size: 26.0,
-                        ),
-                      )),
+                    padding: const EdgeInsets.only(right: 20.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MCreateTaskScreen()),
+                        );
+                      },
+                      child: const Icon(
+                        Icons.add,
+                        size: 26.0,
+                      ),
+                    ),
+                  ),
                   IconButton(
                     icon: const Icon(Icons.logout),
                     onPressed: () async {
@@ -187,6 +189,28 @@ class TaskItem extends StatelessWidget {
     required this.task,
   }) : super(key: key);
 
+  Icon showCategoryIcon(String category) {
+    List<String> categories = [
+      'Feeding',
+      'Cleaning',
+      'Maintenance',
+      'Exercising',
+      'Training',
+      'Others'
+    ];
+
+    List<Icon> icons = [
+      Icon(Icons.restaurant),
+      Icon(Icons.cleaning_services),
+      Icon(Icons.miscellaneous_services),
+      Icon(Icons.sports_soccer),
+      Icon(Icons.school),
+      Icon(Icons.task)
+    ];
+
+    return icons[categories.indexOf(category)];
+  }
+
   @override
   Widget build(BuildContext context) {
     if (task == null) {
@@ -210,10 +234,7 @@ class TaskItem extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 child: Row(
                   children: [
-                    const Icon(
-                      Icons.account_circle,
-                      color: Colors.black,
-                    ),
+                    showCategoryIcon(task.category),
                     const SizedBox(
                       width: 10,
                     ),

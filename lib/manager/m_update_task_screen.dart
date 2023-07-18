@@ -46,12 +46,26 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
 
   late var _form;
   late var alertmessage;
+  var others = '';
+  bool showTextField = false;
+
+  List<String> categories = [
+    'Feeding',
+    'Cleaning',
+    'Maintenance',
+    'Exercising',
+    'Training',
+    'Others'
+  ];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     resources = widget.task.resources;
+    if (widget.task.categoryothers != null) {
+      showTextField = true;
+    }
   }
 
   Widget buildPetList() => FutureBuilder<List<Pet>>(
@@ -199,8 +213,6 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                     // ignore: avoid_print
                     print('Form changed: ${value.toString()}');
                     _form = value;
-
-                    if (_form['walking']) {}
                   },
                 ),
                 ElevatedButton(
@@ -216,13 +228,14 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                           resources[i] = imageURL;
                         }
                       }
-
                       var updateduserID;
                       User? updateduser = await userService.findUserByUsername(
                           _form['user'].toString().split(' ')[0]);
                       if (updateduser != null) {
                         updateduserID = updateduser.referenceId;
                       }
+
+                      debugPrint('1');
 
                       var updatedpetID;
                       Pet? updatedpet =
@@ -231,14 +244,19 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                         updatedpetID = updatedpet.referenceId!;
                       }
 
+                      debugPrint('2');
+
                       // Subtract one from the taskcounter of the previous user assigned
-                      User? prevassigneduser = await userService
-                          .findUserByUUID(widget.task.assignedto!);
-                      // If task was previously assigned to another user
-                      if (prevassigneduser != null) {
-                        prevassigneduser.taskcount -= 1;
-                        userService.updateUser(prevassigneduser);
+                      if (widget.task.assignedto != null) {
+                        User? prevassigneduser = await userService
+                            .findUserByUUID(widget.task.assignedto!);
+                        if (prevassigneduser != null) {
+                          prevassigneduser.taskcount -= 1;
+                          userService.updateUser(prevassigneduser);
+                        }
                       }
+
+                      debugPrint('3');
 
                       DateTime deadlineenddt = DateTime(
                           _form['deadlineend'].year,
@@ -270,18 +288,28 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                       widget.task.description = _form['description'];
                       widget.task.resources = resources;
                       widget.task.deadline = [deadlinestart, deadlineend];
+                      widget.task.category = _form['category'];
+                      if (_form['category'] != "Others") {
+                        widget.task.categoryothers = null;
+                      } else {
+                        widget.task.categoryothers = _form['categoryothers'];
+                      }
                       widget.task.pet = updatedpetID;
                       widget.task.assignedto = updateduserID;
                       taskService.updateTask(widget.task);
 
                       // Add one to the taskcounter of the user assigned
-                      User? assigneduser =
-                          await userService.findUserByUUID(updateduserID);
-                      if (assigneduser != null) {
-                        assigneduser.taskcount += 1;
-                        userService.updateUser(assigneduser);
+                      if (updateduserID != null) {
+                        User? assigneduser =
+                            await userService.findUserByUUID(updateduserID);
+                        debugPrint(assigneduser.toString());
+                        if (assigneduser != null) {
+                          assigneduser.taskcount += 1;
+                          userService.updateUser(assigneduser);
+                        }
                       }
 
+                      debugPrint('5');
                       setState(() {
                         alertmessage = 'Task has successfully been updated';
                       });
@@ -376,6 +404,8 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                         updateduserID = updateduser.referenceId;
                       }
 
+                      debugPrint('1');
+
                       var updatedpetID;
                       Pet? updatedpet =
                           await petService.findPetByPetname(_form['pet']);
@@ -383,17 +413,31 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                         updatedpetID = updatedpet.referenceId!;
                       }
 
+                      debugPrint('2');
+
                       // Subtract one from the taskcounter of the previous user assigned
-                      User? prevassigneduser = await userService
-                          .findUserByUUID(widget.task.assignedto!);
-                      if (prevassigneduser != null) {
-                        prevassigneduser.taskcount -= 1;
-                        userService.updateUser(prevassigneduser);
+                      if (widget.task.assignedto != null) {
+                        User? prevassigneduser = await userService
+                            .findUserByUUID(widget.task.assignedto!);
+                        if (prevassigneduser != null) {
+                          prevassigneduser.taskcount -= 1;
+                          userService.updateUser(prevassigneduser);
+                        }
                       }
+
+                      debugPrint('3');
 
                       widget.task.name = _form['name'];
                       widget.task.assignedto = updateduserID;
                       widget.task.description = _form['description'];
+                      widget.task.category = _form['category'];
+                      if (_form['category'] != "Others") {
+                        widget.task.categoryothers = null;
+                      } else {
+                        widget.task.categoryothers = _form['categoryothers'];
+                      }
+
+                      debugPrint(widget.task.category);
                       widget.task.resources = resources;
                       widget.task.deadline = [
                         Timestamp.fromDate(_form['deadlinestart']),
@@ -403,13 +447,20 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
 
                       taskService.updateTask(widget.task);
 
+                      debugPrint('4');
+
                       // Add one to the taskcounter of the user assigned
-                      User? assigneduser =
-                          await userService.findUserByUUID(updateduserID);
-                      if (assigneduser != null) {
-                        assigneduser.taskcount += 1;
-                        userService.updateUser(assigneduser);
+                      if (updateduserID != null) {
+                        User? assigneduser =
+                            await userService.findUserByUUID(updateduserID);
+                        debugPrint(assigneduser.toString());
+                        if (assigneduser != null) {
+                          assigneduser.taskcount += 1;
+                          userService.updateUser(assigneduser);
+                        }
                       }
+
+                      debugPrint('5');
 
                       setState(() {
                         alertmessage = 'Task has successfully been updated';
@@ -481,6 +532,32 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
             ]),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16),
+            child: Row(
+              children: [
+                Expanded(
+                    child: FastDropdown(
+                        initialValue: widget.task.category,
+                        name: 'category',
+                        onChanged: (newvalue) {
+                          setState(() {
+                            showTextField = newvalue == 'Others';
+                          });
+                        },
+                        labelText: 'Category',
+                        items: categories)),
+                showTextField
+                    ? Expanded(
+                        child: FastTextField(
+                        initialValue: widget.task.categoryothers ?? '',
+                        name: 'categoryothers',
+                        labelText: 'Category',
+                      ))
+                    : const Column()
+              ],
+            ),
           ),
           FastTextField(
             name: 'description',
@@ -647,6 +724,29 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
             validator: Validators.compose([
               Validators.required((value) => 'Field is required'),
             ]),
+          ),
+          Row(
+            children: [
+              Expanded(
+                  child: FastDropdown(
+                      initialValue: widget.task.category,
+                      name: 'category',
+                      onChanged: (newvalue) {
+                        setState(() {
+                          showTextField = newvalue == 'Others';
+                        });
+                      },
+                      labelText: 'Category',
+                      items: categories)),
+              showTextField
+                  ? Expanded(
+                      child: FastTextField(
+                      initialValue: widget.task.categoryothers ?? '',
+                      name: 'categoryothers',
+                      labelText: 'Category',
+                    ))
+                  : const Column()
+            ],
           ),
           FastTextField(
             name: 'description',
