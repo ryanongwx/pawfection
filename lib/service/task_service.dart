@@ -16,6 +16,8 @@ class TaskService {
         assignedto: json['assignedto'] as String?,
         createdby: json['createdby'] as String,
         description: json['description'] as String,
+        category: json['category'] as String,
+        categoryothers: json['categoryothers'] as String?,
         status: json['status'] as String,
         resources: json['resources'].cast<String?>() as List<String?>,
         contactperson: json['contactperson'] as String,
@@ -32,6 +34,8 @@ class TaskService {
         'referenceId': instance.referenceId,
         'assignedto': instance.assignedto,
         'description': instance.description,
+        'category': instance.category,
+        'categoryothers': instance.categoryothers,
         'status': instance.status,
         'resources': instance.resources,
         'requests': instance.requests,
@@ -42,6 +46,7 @@ class TaskService {
         'pet': instance.pet,
       };
 
+  // Difference is in the format of deadline
   Task taskFromJsonCloudFunction(Map<String, dynamic> json) {
     return Task(
       json['name'] as String,
@@ -49,6 +54,8 @@ class TaskService {
       assignedto: json['assignedto'] as String?,
       createdby: json['createdby'] as String,
       description: json['description'] as String,
+      category: json['category'] as String,
+      categoryothers: json['categoryothers'] as String?,
       status: json['status'] as String,
       resources: (json['resources'] as List<dynamic>).cast<String>(),
       contactperson: json['contactperson'] as String,

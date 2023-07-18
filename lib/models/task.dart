@@ -9,6 +9,8 @@ class Task {
   String createdby;
   String? assignedto;
   String description;
+  String category;
+  String? categoryothers;
   String status;
   List<String?> resources;
   String contactperson;
@@ -24,6 +26,8 @@ class Task {
     required this.createdby,
     this.assignedto,
     required this.description,
+    required this.category,
+    this.categoryothers,
     required this.status,
     required this.resources,
     required this.contactperson,
