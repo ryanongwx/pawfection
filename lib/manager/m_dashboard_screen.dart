@@ -54,7 +54,6 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
           return Scaffold(
               appBar: AppBar(
                 title: Text('Tasks'),
-                centerTitle: true,
                 actions: <Widget>[
                   IconButton(
                     icon: const Icon(Icons.person),
@@ -68,7 +67,6 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
                     },
                   ),
                   Padding(
-<<<<<<< HEAD
                       padding: const EdgeInsets.only(left: 20.0, right: 20.0),
                       child: GestureDetector(
                         onTap: () {
@@ -83,23 +81,6 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
                           size: 26.0,
                         ),
                       )),
-=======
-                    padding: const EdgeInsets.only(right: 20.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MCreateTaskScreen()),
-                        );
-                      },
-                      child: const Icon(
-                        Icons.add,
-                        size: 26.0,
-                      ),
-                    ),
-                  ),
->>>>>>> main
                   IconButton(
                     icon: const Icon(Icons.logout),
                     onPressed: () async {
