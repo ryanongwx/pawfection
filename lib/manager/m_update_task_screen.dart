@@ -284,6 +284,19 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                         throw Exception(
                             'Deadline end cannot be before current time');
                       }
+
+                      // Deal with empty name, category, description
+
+                      if (_form['name'].isEmpty) {
+                        throw Exception('Please fill in task name');
+                      }
+                      if (_form['category'] == null) {
+                        throw Exception('Please fill in task category');
+                      }
+                      if (_form['description'].isEmpty) {
+                        throw Exception('Please fill in task description');
+                      }
+
                       widget.task.name = _form['name'];
                       widget.task.description = _form['description'];
                       widget.task.resources = resources;
@@ -386,6 +399,18 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                       if (_form['deadlineend'].isBefore(DateTime.now())) {
                         throw Exception(
                             'Deadline end cannot be before current time');
+                      }
+
+                      // Deal with empty name, category, description
+
+                      if (_form['name'].isEmpty) {
+                        throw Exception('Please fill in task name');
+                      }
+                      if (_form['category'] == null) {
+                        throw Exception('Please fill in task category');
+                      }
+                      if (_form['description'].isEmpty) {
+                        throw Exception('Please fill in task description');
                       }
 
                       for (var i = 0; i < resources.length; i++) {
