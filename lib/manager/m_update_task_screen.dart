@@ -284,19 +284,6 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                         throw Exception(
                             'Deadline end cannot be before current time');
                       }
-
-                      // Deal with empty name, category, description
-
-                      if (_form['name'].isEmpty) {
-                        throw Exception('Please fill in task name');
-                      }
-                      if (_form['category'] == null) {
-                        throw Exception('Please fill in task category');
-                      }
-                      if (_form['description'].isEmpty) {
-                        throw Exception('Please fill in task description');
-                      }
-
                       widget.task.name = _form['name'];
                       widget.task.description = _form['description'];
                       widget.task.resources = resources;
@@ -328,7 +315,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                       });
                     } catch (e) {
                       setState(() {
-                        alertmessage = 'Please ensure all fields are filled in';
+                        alertmessage = e.toString();
                       });
                     } finally {
                       showDialog<String>(
@@ -399,18 +386,6 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                       if (_form['deadlineend'].isBefore(DateTime.now())) {
                         throw Exception(
                             'Deadline end cannot be before current time');
-                      }
-
-                      // Deal with empty name, category, description
-
-                      if (_form['name'].isEmpty) {
-                        throw Exception('Please fill in task name');
-                      }
-                      if (_form['category'] == null) {
-                        throw Exception('Please fill in task category');
-                      }
-                      if (_form['description'].isEmpty) {
-                        throw Exception('Please fill in task description');
                       }
 
                       for (var i = 0; i < resources.length; i++) {
@@ -710,7 +685,15 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
             lastDate: DateTime(2040),
           ),
           FastTimePicker(
-            initialValue: TimeOfDay.fromDateTime(DateTime.now()),
+            initialValue: TimeOfDay(
+                hour: DateTime.fromMicrosecondsSinceEpoch(widget.task.deadline
+                        .elementAt(0)!
+                        .microsecondsSinceEpoch)
+                    .hour,
+                minute: DateTime.fromMicrosecondsSinceEpoch(widget.task.deadline
+                        .elementAt(0)!
+                        .microsecondsSinceEpoch)
+                    .minute),
             name: 'deadlinestarttime',
             labelText: 'Deadline Start Time',
           ),
@@ -725,7 +708,15 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
           FastTimePicker(
             name: 'deadlineendtime',
             labelText: 'Deadline End Time',
-            initialValue: TimeOfDay.fromDateTime(DateTime.now()),
+            initialValue: TimeOfDay(
+                hour: DateTime.fromMicrosecondsSinceEpoch(widget.task.deadline
+                        .elementAt(1)!
+                        .microsecondsSinceEpoch)
+                    .hour,
+                minute: DateTime.fromMicrosecondsSinceEpoch(widget.task.deadline
+                        .elementAt(1)!
+                        .microsecondsSinceEpoch)
+                    .minute),
           ),
           buildPetList(),
           buildVolunteerList(),
