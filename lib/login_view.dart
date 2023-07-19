@@ -19,9 +19,9 @@ class _LoginViewState extends State<LoginView> {
 
   final FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
 
-  final userRepository = UserRepository();
+  final userRepository = UserRepository(true);
 
-  final userService = UserService();
+  final userService = UserService(true);
 
   var accesscode = '';
 

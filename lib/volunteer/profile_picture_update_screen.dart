@@ -32,10 +32,10 @@ class _ProfilePictureUpdateScreenState
   final ValueNotifier<File?> _croppedImageNotifier = ValueNotifier<File?>(null);
   final TextEditingController _textEditingController = TextEditingController();
 
-  final userRepository = UserRepository();
+  final userRepository = UserRepository(true);
   final petRepository = PetRepository();
   final storageRepository = StorageRepository();
-  final userService = UserService();
+  final userService = UserService(true);
 
   final FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
   late FirebaseAuth.User currentUser;

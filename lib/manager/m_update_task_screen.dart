@@ -36,10 +36,10 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
   final taskRepository = TaskRepository();
   final taskService = TaskService();
   final storageRepository = StorageRepository();
-  final userRepository = UserRepository();
+  final userRepository = UserRepository(true);
   final petRepository = PetRepository();
   final petService = PetService();
-  final userService = UserService();
+  final userService = UserService(true);
 
   bool _isLoading = false;
   List<String?> resources = [];
@@ -315,7 +315,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                       });
                     } catch (e) {
                       setState(() {
-                        alertmessage = 'Please ensure all fields are filled in';
+                        alertmessage = e.toString();
                       });
                     } finally {
                       showDialog<String>(
@@ -685,7 +685,15 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
             lastDate: DateTime(2040),
           ),
           FastTimePicker(
-            initialValue: TimeOfDay.fromDateTime(DateTime.now()),
+            initialValue: TimeOfDay(
+                hour: DateTime.fromMicrosecondsSinceEpoch(widget.task.deadline
+                        .elementAt(0)!
+                        .microsecondsSinceEpoch)
+                    .hour,
+                minute: DateTime.fromMicrosecondsSinceEpoch(widget.task.deadline
+                        .elementAt(0)!
+                        .microsecondsSinceEpoch)
+                    .minute),
             name: 'deadlinestarttime',
             labelText: 'Deadline Start Time',
           ),
@@ -700,7 +708,15 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
           FastTimePicker(
             name: 'deadlineendtime',
             labelText: 'Deadline End Time',
-            initialValue: TimeOfDay.fromDateTime(DateTime.now()),
+            initialValue: TimeOfDay(
+                hour: DateTime.fromMicrosecondsSinceEpoch(widget.task.deadline
+                        .elementAt(1)!
+                        .microsecondsSinceEpoch)
+                    .hour,
+                minute: DateTime.fromMicrosecondsSinceEpoch(widget.task.deadline
+                        .elementAt(1)!
+                        .microsecondsSinceEpoch)
+                    .minute),
           ),
           buildPetList(),
           buildVolunteerList(),

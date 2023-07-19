@@ -11,7 +11,7 @@ import 'package:pawfection/service/user_service.dart';
 
 Future<void> displayTaskItemDialog(BuildContext context, String id) async {
   final taskService = TaskService();
-  final userService = UserService();
+  final userService = UserService(true);
 
   return showDialog(
     context: context,

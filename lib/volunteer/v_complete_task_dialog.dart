@@ -10,7 +10,7 @@ import 'package:pawfection/voluteer_view.dart';
 
 Future<void> displayCompleteTaskDialog(BuildContext context, String id) async {
   final taskService = TaskService();
-  final userService = UserService();
+  final userService = UserService(true);
 
   final formKey = GlobalKey<FormState>();
   late var _form;

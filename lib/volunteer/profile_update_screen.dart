@@ -26,9 +26,9 @@ class VProfileUpdateScreen extends StatefulWidget {
 class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
   final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
-  final userRepository = UserRepository();
+  final userRepository = UserRepository(true);
   final storageRepository = StorageRepository();
-  final userService = UserService();
+  final userService = UserService(true);
   final FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
 
   late var _form;

@@ -6,7 +6,7 @@ import '../models/task.dart';
 
 Future<void> displayVolunteersDialog(BuildContext context, Task task) async {
   final taskService = TaskService();
-  final userService = UserService();
+  final userService = UserService(true);
 
   return showDialog(
     context: context,
@@ -29,13 +29,16 @@ Future<void> displayVolunteersDialog(BuildContext context, Task task) async {
                 // The future completed successfully
                 final userList = snapshot.data;
                 List<String?> filteredUserList = userList
-                  ?.where((user) => (user.role.toLowerCase() == "volunteer" &&
-                    // For now time is abstracted out and only date will be compared
-                    taskService.isAvailableWithinDeadline(user, task)))
-                    .map((user) => user.username)
-                    .toList() ?? [];
+                        ?.where((user) => (user.role.toLowerCase() ==
+                                "volunteer" &&
+                            // For now time is abstracted out and only date will be compared
+                            taskService.isAvailableWithinDeadline(user, task)))
+                        .map((user) => user.username)
+                        .toList() ??
+                    [];
                 filteredUserList.insert(0, "<No volunteer assigned>");
-                List<String> newNameList = filteredUserList.map((e) => e!).toList();
+                List<String> newNameList =
+                    filteredUserList.map((e) => e!).toList();
                 return Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: ListView.builder(

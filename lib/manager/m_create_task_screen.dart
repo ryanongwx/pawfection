@@ -36,11 +36,11 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
 
   final taskRepository = TaskRepository();
   final petRepository = PetRepository();
-  final userRepository = UserRepository();
+  final userRepository = UserRepository(true);
   final storageRepository = StorageRepository();
   final taskService = TaskService();
   final petService = PetService();
-  final userService = UserService();
+  final userService = UserService(true);
   bool _isLoading = false;
 
   late var _form;

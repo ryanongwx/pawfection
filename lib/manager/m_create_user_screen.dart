@@ -27,7 +27,7 @@ class MCreateUserScreen extends StatefulWidget {
 class _MCreateUserScreenState extends State<MCreateUserScreen> {
   final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
-  final userService = UserService();
+  final userService = UserService(true);
   late var _form;
   late var alertmessage;
 

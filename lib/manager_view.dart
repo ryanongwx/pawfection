@@ -23,7 +23,10 @@ class _ManagerViewState extends State<ManagerView> {
   final List<Widget> bottomBarPages = [
     const MPetScreen(),
     const MDashboardScreen(),
-    const MVolunteerListScreen(),
+    MVolunteerListScreen(
+      userRepository: true,
+      userService: true,
+    ),
   ];
 
   @override

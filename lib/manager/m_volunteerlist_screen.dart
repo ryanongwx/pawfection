@@ -9,14 +9,17 @@ import 'package:searchable_listview/searchable_listview.dart';
 import 'package:pawfection/manager/m_user_dialog.dart' as Dialog;
 
 class MVolunteerListScreen extends StatefulWidget {
-  const MVolunteerListScreen({super.key});
+  bool userRepository;
+  bool userService;
+  MVolunteerListScreen(
+      {super.key, required this.userRepository, required this.userService});
 
   @override
   State<MVolunteerListScreen> createState() => _MVolunteerListScreenState();
 }
 
-final userRepository = UserRepository();
-final userService = UserService();
+late UserRepository userRepository;
+late UserService userService;
 
 List<User> userList = [];
 
@@ -31,6 +34,19 @@ class _MVolunteerListScreenState extends State<MVolunteerListScreen> {
   // }
 
   // fetchUserList();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.userRepository) {
+      userRepository = UserRepository(true);
+      userService = UserService(true);
+    } else {
+      userRepository = UserRepository(false);
+      userService = UserService(false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
