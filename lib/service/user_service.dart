@@ -92,6 +92,11 @@ class UserService {
     return id;
   }
 
+  void addFakeUser(User user) async {
+    var userJson = userToJson(user);
+    userRepository.addUserRepo(userJson);
+  }
+
   void addUserWithId(User user) async {
     var userJson = userToJson(user);
     userRepository.addUserRepoWithRepoId(userJson);

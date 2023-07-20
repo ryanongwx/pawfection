@@ -4,6 +4,7 @@ import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:pawfection/service/user_service.dart';
+import 'dart:io';
 
 void main() {
   testWidgets('shows users', (WidgetTester tester) async {
@@ -11,7 +12,7 @@ void main() {
     UserRepository userRepository = UserRepository(false);
     UserService userService = UserService(false);
 
-    await userService.addUser(User("email",
+    userService.addFakeUser(User("email",
         referenceId: "referenceId",
         username: "username",
         role: "role",

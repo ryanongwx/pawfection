@@ -21,6 +21,10 @@ class UserRepository {
     return newDocRef.id;
   }
 
+  void addFakeUserRepo(Map<String, dynamic> userJson) async {
+    userCollection.add(userJson);
+  }
+
   void addUserRepoWithRepoId(Map<String, dynamic> userJson) async {
     userCollection.doc(userJson['referenceId']).set(userJson);
   }
