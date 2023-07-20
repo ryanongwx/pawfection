@@ -126,6 +126,12 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
                   child: const Text('Create'),
                   onPressed: () async {
                     try {
+                      // Deal with empty name
+
+                      if (_form['username'].isEmpty) {
+                        throw Exception('Please fill in username');
+                      }
+
                       User? findusername = await userService
                           .findUserByUsername(_form['username']);
                       if (findusername == null) {
@@ -155,7 +161,7 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
                       }
                     } catch (e) {
                       setState(() {
-                        alertmessage = 'Please ensure all fields are filled in';
+                        alertmessage = e.toString();
                       });
                     } finally {
                       showDialog<String>(
@@ -214,6 +220,11 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
                   child: const Text('Create'),
                   onPressed: () async {
                     try {
+                      // Check whether username has been filled
+                      if (_form['username'].isEmpty) {
+                        throw Exception('Please fill in username');
+                      }
+
                       User? findusername = await userService
                           .findUserByUsername(_form['username']);
                       if (findusername == null) {
@@ -246,7 +257,7 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
                     } catch (e) {
                       setState(() {
                         debugPrint(e.toString());
-                        alertmessage = 'Please ensure all fields are filled in';
+                        alertmessage = e.toString();
                       });
                     } finally {
                       showDialog<String>(

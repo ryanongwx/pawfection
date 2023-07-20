@@ -73,6 +73,9 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
                   child: const Text('Create'),
                   onPressed: () {
                     try {
+                      if (_form['name'].isEmpty) {
+                        throw Exception('Please fill in pet name');
+                      }
                       petService.addPet(Pet(_form['name'],
                           profilepicture: widget.imageURL,
                           breed: _form['breed'],
@@ -81,7 +84,7 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
                       alertmessage = 'Pet has successfully been created';
                     } catch (e) {
                       setState(() {
-                        alertmessage = 'Please ensure all fields are filled in';
+                        alertmessage = e.toString();
                       });
                     } finally {
                       showDialog<String>(
@@ -102,7 +105,8 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => const ManagerView(
+                                          builder: (context) =>
+                                              const ManagerView(
                                                 tab: 1,
                                               )),
                                     )
@@ -142,6 +146,9 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
                   child: const Text('Create'),
                   onPressed: () {
                     try {
+                      if (_form['name'].isEmpty) {
+                        throw Exception('Please fill in pet name');
+                      }
                       petService.addPet(Pet(_form['name'],
                           profilepicture: widget.imageURL,
                           breed: _form['breed'],
@@ -150,7 +157,7 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
                       alertmessage = 'Pet has successfully been created';
                     } catch (e) {
                       setState(() {
-                        alertmessage = 'Please ensure all fields are filled in';
+                        alertmessage = e.toString();
                       });
                     } finally {
                       showDialog<String>(
@@ -171,7 +178,8 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => const ManagerView(
+                                          builder: (context) =>
+                                              const ManagerView(
                                                 tab: 0,
                                               )),
                                     )
