@@ -136,6 +136,18 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                             'Deadline end cannot be before current time');
                       }
 
+                      // Deal with empty name, category, description
+
+                      if (_form['name'].isEmpty) {
+                        throw Exception('Please fill in task name');
+                      }
+                      if (_form['category'] == null) {
+                        throw Exception('Please fill in task category');
+                      }
+                      if (_form['description'].isEmpty) {
+                        throw Exception('Please fill in task description');
+                      }
+
                       String? assignedUserId;
                       if (_form['user'] != "<No volunteer assigned>") {
                         User? assignedUser =
@@ -291,6 +303,18 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                       if (_form['deadlineend'].isBefore(DateTime.now())) {
                         throw Exception(
                             'Deadline end cannot be before current time');
+                      }
+
+                      // Deal with empty name, category, description
+
+                      if (_form['name'].isEmpty) {
+                        throw Exception('Please fill in task name');
+                      }
+                      if (_form['category'] == null) {
+                        throw Exception('Please fill in task category');
+                      }
+                      if (_form['description'].isEmpty) {
+                        throw Exception('Please fill in task description');
                       }
 
                       String? assignedUserId;
