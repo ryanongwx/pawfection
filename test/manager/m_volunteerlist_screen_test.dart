@@ -7,9 +7,8 @@ import 'package:pawfection/service/user_service.dart';
 import 'dart:io';
 
 void main() {
-  testWidgets('shows users', (WidgetTester tester) async {
+  testWidgets('show Volunteers in appBar', (WidgetTester tester) async {
     // Populate the fake database.
-    UserRepository userRepository = UserRepository(false);
     UserService userService = UserService(false);
 
     userService.addFakeUser(User("email",
@@ -33,7 +32,44 @@ void main() {
         )));
     // Let the snapshots stream fire a snapshot.
 
+    await tester.idle();
+    // Re-render.
+    await tester.pump();
+
     // // Verify the output.
-    expect(find.text('username'), findsOneWidget);
+    expect(find.text('Volunteers'), findsOneWidget);
+  });
+
+  testWidgets('show Search volunteer bar', (WidgetTester tester) async {
+    // Populate the fake database.
+    UserService userService = UserService(false);
+
+    userService.addFakeUser(User("email",
+        referenceId: "referenceId",
+        username: "username",
+        role: "role",
+        availabledates: [],
+        preferences: ["preferences"],
+        experiences: ["experiences"],
+        profilepicture: "profilepicture",
+        contactnumber: "contactnumber",
+        bio: "bio",
+        taskcount: 0));
+
+    // Render the widget.
+    await tester.pumpWidget(MaterialApp(
+        title: 'Firestore Example',
+        home: MVolunteerListScreen(
+          userService: false,
+          userRepository: false,
+        )));
+    // Let the snapshots stream fire a snapshot.
+
+    await tester.idle();
+    // Re-render.
+    await tester.pump();
+
+    // // Verify the output.
+    expect(find.text('Volunteers'), findsOneWidget);
   });
 }

@@ -3,13 +3,17 @@ import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
+
 class UserRepository {
   late CollectionReference userCollection;
+  late FirebaseFirestore firebaseFirestore;
 
   UserRepository(bool real) {
     if (real) {
       userCollection = FirebaseFirestore.instance.collection('users');
     } else {
+      firebaseFirestore = FakeFirebaseFirestore();
       userCollection = FakeFirebaseFirestore().collection('users');
     }
   }
@@ -22,7 +26,13 @@ class UserRepository {
   }
 
   void addFakeUserRepo(Map<String, dynamic> userJson) async {
-    userCollection.add(userJson);
+    await userCollection.add(userJson);
+    var usersSnapshot = userCollection.get();
+    usersSnapshot.then((querySnapshot) {
+      for (final doc in querySnapshot.docs) {
+        print('Document ID: ${doc.id}, Data: ${doc.data()}');
+      }
+    });
   }
 
   void addUserRepoWithRepoId(Map<String, dynamic> userJson) async {
