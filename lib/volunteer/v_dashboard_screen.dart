@@ -238,36 +238,40 @@ class _TaskItemState extends State<TaskItem> {
                 child: Row(
                   children: [
                     showCategoryIcon(widget.task.category),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          widget.task.name,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              widget.task.name,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                    // To push icon to the right
-                    const Expanded(child: SizedBox()),
                     if (widget.task.pet != null) // Check if pet is not null
                       FutureBuilder<Pet?>(
-                        future: this.petService.findPetByPetID(widget.task.pet!),
-                        // Fetch the pet using petId
+                        future: petService.findPetByPetID(widget.task.pet!),
+                        // Fetch the pet using referenceId
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             final pet = snapshot.data!;
-                            return SizedBox(
-                              width: 24,
-                              height: 24,
-                              child: CircleAvatar(
-                                backgroundImage: NetworkImage(pet.profilepicture),
+                            return Align(
+                              alignment: Alignment.centerRight,
+                              child: SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircleAvatar(
+                                  backgroundImage:
+                                  NetworkImage(pet.profilepicture),
+                                ),
                               ),
                             );
                           } else if (snapshot.hasError) {
