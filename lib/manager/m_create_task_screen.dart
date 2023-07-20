@@ -540,26 +540,32 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
               Validators.required((value) => 'Field is required'),
             ]),
           ),
-          Row(
-            children: [
-              Expanded(
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              children: [
+                Expanded(
                   child: FastDropdown(
-                      name: 'category',
-                      onChanged: (newvalue) {
-                        setState(() {
-                          showTextField = newvalue == 'Others';
-                        });
-                      },
-                      labelText: 'Category',
-                      items: categories)),
-              showTextField
-                  ? Expanded(
-                      child: const FastTextField(
-                      name: 'categoryothers',
-                      labelText: 'Category',
-                    ))
-                  : const Column()
-            ],
+                    name: 'category',
+                    onChanged: (newValue) {
+                      setState(() {
+                        showTextField = newValue == 'Others';
+                      });
+                    },
+                    labelText: 'Category',
+                    items: categories,
+                  ),
+                ),
+                showTextField
+                    ? const Expanded(
+                  child: FastTextField(
+                    name: 'categoryothers',
+                    labelText: 'Category',
+                  ),
+                )
+                    : const SizedBox(),
+              ],
+            ),
           ),
           FastTextField(
             name: 'description',
@@ -742,8 +748,8 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                       labelText: 'Category',
                       items: categories)),
               showTextField
-                  ? Expanded(
-                      child: const FastTextField(
+                  ? const Expanded(
+                      child: FastTextField(
                       name: 'categoryothers',
                       labelText: 'Category',
                     ))
