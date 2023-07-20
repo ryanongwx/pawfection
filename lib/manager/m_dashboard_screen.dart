@@ -183,13 +183,16 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
 
 class TaskItem extends StatelessWidget {
   final Task task;
+  final PetRepository petRepository;
 
   const TaskItem({
     Key? key,
     required this.task,
+    required this.petRepository,
   }) : super(key: key);
 
   Icon showCategoryIcon(String category) {
+    // Category and icon lists
     List<String> categories = [
       'Feeding',
       'Cleaning',
@@ -217,62 +220,79 @@ class TaskItem extends StatelessWidget {
       return const Column();
     } else {
       return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(width: 2),
-            ),
-            child: InkWell(
-              onTap: () {
-                if (task.referenceId != null) {
-                  taskDialog.displayTaskItemDialog(context, task.referenceId!);
-                }
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Row(
-                  children: [
-                    showCategoryIcon(task.category),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          task.name,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(width: 2),
+          ),
+          child: InkWell(
+            onTap: () {
+              if (task.referenceId != null) {
+                taskDialog.displayTaskItemDialog(context, task.referenceId!);
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                children: [
+                  showCategoryIcon(task.category),
+                  const SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        task.name,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
                         ),
-                      ],
-                    ),
-                    // To push icon to the right
-                    const Expanded(child: SizedBox()),
-                    if (task.status == "Open")
-                      SizedBox(
-                        height: 24.0, // Change as needed
-                        width: 24.0, // Change as needed
-                        child: IconButton(
-                          padding: EdgeInsets.zero, // removes default padding
-                          alignment: Alignment.center, // centers the icon
-                          icon: const Icon(Icons.person_add),
-                          iconSize: 20.0, // Change as needed
-                          onPressed: () async {
-                            volunteerDialog.displayVolunteersDialog(
-                                context, task);
+                      ),
+                      if (task.pet != null) // Check if pet is not null
+                        FutureBuilder<Pet?>(
+                          future: findPetByPetID(task.pet!),
+                          // Fetch the pet using referenceId
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              final pet = snapshot.data!;
+                              return CircleAvatar(
+                                radius: 16,
+                                backgroundImage: NetworkImage(
+                                    pet.profilePicture),
+                              );
+                            } else if (snapshot.hasError) {
+                              return const Text('Error retrieving pet');
+                            } else {
+                              return const SizedBox();
+                            }
                           },
                         ),
-                      )
-                  ],
-                ),
+                    ],
+                  ),
+                  const Expanded(child: SizedBox()),
+                  if (task.status == "Open")
+                    SizedBox(
+                      height: 24.0,
+                      width: 24.0,
+                      child: IconButton(
+                        padding: EdgeInsets.zero,
+                        alignment: Alignment.center,
+                        icon: const Icon(Icons.person_add),
+                        iconSize: 20.0,
+                        onPressed: () async {
+                          volunteerDialog.displayVolunteersDialog(
+                              context, task);
+                        },
+                      ),
+                    )
+                ],
               ),
             ),
-          ));
+          ),
+        ),
+      );
     }
   }
 }
