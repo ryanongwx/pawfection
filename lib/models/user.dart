@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 
 class User {
   String referenceId;
@@ -26,6 +25,18 @@ class User {
       required this.contactnumber,
       required this.bio,
       required this.taskcount});
+
+  // Overrides == of users
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is User &&
+        other.referenceId == referenceId;
+  }
+
+  @override
+  int get hashCode => referenceId.hashCode;
 
   @override
   String toString() => 'User<$username>';

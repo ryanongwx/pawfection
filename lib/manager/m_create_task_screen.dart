@@ -617,12 +617,12 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                                               top: 10,
                                               right: 10,
                                               child: Container(
-                                                decoration: BoxDecoration(
+                                                decoration: const BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   color: Colors.red,
                                                 ),
                                                 child: IconButton(
-                                                  icon: Icon(Icons.close),
+                                                  icon: const Icon(Icons.close),
                                                   color: Colors.white,
                                                   iconSize:
                                                       18, // Adjust the size as desired
@@ -656,12 +656,12 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                                       top: 10,
                                       right: 20,
                                       child: Container(
-                                        decoration: BoxDecoration(
+                                        decoration: const BoxDecoration(
                                           shape: BoxShape.circle,
                                           color: Colors.red,
                                         ),
                                         child: IconButton(
-                                          icon: Icon(Icons.close),
+                                          icon: const Icon(Icons.close),
                                           color: Colors.white,
                                           iconSize:
                                               18, // Adjust the size as desired
@@ -805,12 +805,12 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                                               top: 10,
                                               right: 10,
                                               child: Container(
-                                                decoration: BoxDecoration(
+                                                decoration: const BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   color: Colors.red,
                                                 ),
                                                 child: IconButton(
-                                                  icon: Icon(Icons.close),
+                                                  icon: const Icon(Icons.close),
                                                   color: Colors.white,
                                                   iconSize:
                                                       18, // Adjust the size as desired
@@ -844,12 +844,12 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                                       top: 10,
                                       right: 20,
                                       child: Container(
-                                        decoration: BoxDecoration(
+                                        decoration: const BoxDecoration(
                                           shape: BoxShape.circle,
                                           color: Colors.red,
                                         ),
                                         child: IconButton(
-                                          icon: Icon(Icons.close),
+                                          icon: const Icon(Icons.close),
                                           color: Colors.white,
                                           iconSize:
                                               18, // Adjust the size as desired
