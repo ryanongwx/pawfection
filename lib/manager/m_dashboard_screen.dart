@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_segment/flutter_advanced_segment.dart';
+import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/models/task.dart';
 import 'package:pawfection/repository/task_repository.dart';
 import 'package:pawfection/service/functions_service.dart';
+import 'package:pawfection/service/pet_service.dart';
 import 'package:pawfection/service/task_service.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 import 'package:pawfection/manager/m_create_task_screen.dart';
@@ -25,6 +27,7 @@ final _selectedSegment_04 = ValueNotifier('Pending');
 final taskRepository = TaskRepository();
 final taskService = TaskService();
 final functionService = FunctionService();
+final petService = PetService();
 
 final _auth = FirebaseAuth.FirebaseAuth.instance; // authInstance
 
@@ -53,7 +56,7 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
 
           return Scaffold(
               appBar: AppBar(
-                title: Text('Tasks'),
+                title: const Text('Tasks'),
                 actions: <Widget>[
                   IconButton(
                     icon: const Icon(Icons.person),
@@ -153,7 +156,7 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
                                     .where((element) => element.status
                                         .contains(_selectedSegment_04.value))
                                     .toList(),
-                                builder: (Task task) => TaskItem(task: task),
+                                builder: (Task task) => TaskItem(task: task, petService: petService),
                                 filter: (value) => taskList
                                     .where((element) => element.name
                                         .toLowerCase()
@@ -181,13 +184,16 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
 
 class TaskItem extends StatelessWidget {
   final Task task;
+  final PetService petService;
 
   const TaskItem({
     Key? key,
     required this.task,
+    required this.petService,
   }) : super(key: key);
 
   Icon showCategoryIcon(String category) {
+    // Category and icon lists
     List<String> categories = [
       'Feeding',
       'Cleaning',
@@ -198,12 +204,12 @@ class TaskItem extends StatelessWidget {
     ];
 
     List<Icon> icons = [
-      Icon(Icons.restaurant),
-      Icon(Icons.cleaning_services),
-      Icon(Icons.miscellaneous_services),
-      Icon(Icons.sports_soccer),
-      Icon(Icons.school),
-      Icon(Icons.task)
+      const Icon(Icons.restaurant),
+      const Icon(Icons.cleaning_services),
+      const Icon(Icons.miscellaneous_services),
+      const Icon(Icons.sports_soccer),
+      const Icon(Icons.school),
+      const Icon(Icons.task)
     ];
 
     return icons[categories.indexOf(category)];
@@ -212,68 +218,100 @@ class TaskItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (task == null) {
-      return const Column();
+      return const SizedBox();
     } else {
       return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(width: 2),
-            ),
-            child: InkWell(
-              onTap: () {
-                if (task.referenceId != null) {
-                  taskDialog.displayTaskItemDialog(context, task.referenceId!);
-                }
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Row(
-                  children: [
-                    showCategoryIcon(task.category),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(width: 2),
+          ),
+          child: InkWell(
+            onTap: () {
+              if (task.referenceId != null) {
+                taskDialog.displayTaskItemDialog(context, task.referenceId!);
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                children: [
+                  showCategoryIcon(task.category),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Row(
                       children: [
-                        Text(
-                          task.name,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
+                        Flexible(
+                          child: Text(
+                            task.name,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
                           ),
                         ),
                       ],
                     ),
-                    // To push icon to the right
-                    const Expanded(child: SizedBox()),
-                    if (task.status == "Open")
-                      SizedBox(
-                        height: 24.0, // Change as needed
-                        width: 24.0, // Change as needed
-                        child: IconButton(
-                          padding: EdgeInsets.zero, // removes default padding
-                          alignment: Alignment.center, // centers the icon
-                          icon: const Icon(Icons.person_add),
-                          iconSize: 20.0, // Change as needed
-                          onPressed: () async {
-                            volunteerDialog.displayVolunteersDialog(
-                                context, task);
-                          },
-                        ),
-                      )
-                  ],
-                ),
+                  ),
+                  if (task.pet != null) // Check if pet is not null
+                    FutureBuilder<Pet?>(
+                      future: petService.findPetByPetID(task.pet!),
+                      // Fetch the pet using referenceId
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          final pet = snapshot.data!;
+                          return Align(
+                            alignment: Alignment.centerRight,
+                            child: SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircleAvatar(
+                                backgroundImage:
+                                NetworkImage(pet.profilepicture),
+                              ),
+                            ),
+                          );
+                        } else if (snapshot.hasError) {
+                          return const Text('Error retrieving pet');
+                        } else {
+                          return const SizedBox();
+                        }
+                      },
+                    ),
+                  const SizedBox(width: 6),  // This will add space between the pet profile picture and the IconButton
+                  if (task.status == "Open")
+                    SizedBox(
+                      height: 24.0, // Specify your desired height
+                      width: 24.0, // Specify your desired width
+                      child: IconButton(
+                        padding: EdgeInsets.zero, // Removes default padding
+                        alignment: Alignment.center, // Centers the icon
+                        icon: const Icon(Icons.person_add),
+                        iconSize: 20.0, // Specify your desired icon size
+                        onPressed: () async {
+                          volunteerDialog.displayVolunteersDialog(context, task);
+                        },
+                      ),
+                    ),
+                ],
               ),
             ),
-          ));
+          ),
+        ),
+      );
     }
   }
 }
+
+
+
+
+
+
 
 class EmptyView extends StatelessWidget {
   const EmptyView({Key? key}) : super(key: key);
