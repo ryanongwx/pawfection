@@ -315,7 +315,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                       });
                     } catch (e) {
                       setState(() {
-                        alertmessage = 'Please ensure all fields are filled in';
+                        alertmessage = e.toString();
                       });
                     } finally {
                       showDialog<String>(
@@ -685,7 +685,15 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
             lastDate: DateTime(2040),
           ),
           FastTimePicker(
-            initialValue: TimeOfDay.fromDateTime(DateTime.now()),
+            initialValue: TimeOfDay(
+                hour: DateTime.fromMicrosecondsSinceEpoch(widget.task.deadline
+                        .elementAt(0)!
+                        .microsecondsSinceEpoch)
+                    .hour,
+                minute: DateTime.fromMicrosecondsSinceEpoch(widget.task.deadline
+                        .elementAt(0)!
+                        .microsecondsSinceEpoch)
+                    .minute),
             name: 'deadlinestarttime',
             labelText: 'Deadline Start Time',
           ),
@@ -700,7 +708,15 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
           FastTimePicker(
             name: 'deadlineendtime',
             labelText: 'Deadline End Time',
-            initialValue: TimeOfDay.fromDateTime(DateTime.now()),
+            initialValue: TimeOfDay(
+                hour: DateTime.fromMicrosecondsSinceEpoch(widget.task.deadline
+                        .elementAt(1)!
+                        .microsecondsSinceEpoch)
+                    .hour,
+                minute: DateTime.fromMicrosecondsSinceEpoch(widget.task.deadline
+                        .elementAt(1)!
+                        .microsecondsSinceEpoch)
+                    .minute),
           ),
           buildPetList(),
           buildVolunteerList(),
