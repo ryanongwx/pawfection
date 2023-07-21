@@ -17,7 +17,7 @@ import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
 import 'package:pawfection/login_view.dart';
 
 class MDashboardScreen extends StatefulWidget {
-  FirebaseFirestore firebaseFirestore;
+  final FirebaseFirestore firebaseFirestore;
 
   MDashboardScreen({super.key, required this.firebaseFirestore});
 
@@ -228,96 +228,90 @@ class TaskItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (task == null) {
-      return const SizedBox();
-    } else {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(width: 2),
-          ),
-          child: InkWell(
-            onTap: () {
-              if (task.referenceId != null) {
-                taskDialog.displayTaskItemDialog(context, task.referenceId!);
-              }
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Row(
-                children: [
-                  showCategoryIcon(task.category),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            task.name,
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(width: 2),
+        ),
+        child: InkWell(
+          onTap: () {
+            if (task.referenceId != null) {
+              taskDialog.displayTaskItemDialog(context, task.referenceId!);
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              children: [
+                showCategoryIcon(task.category),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          task.name,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
                           ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  if (task.pet != null) // Check if pet is not null
-                    FutureBuilder<Pet?>(
-                      future: petService.findPetByPetID(task.pet!),
-                      // Fetch the pet using referenceId
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          final pet = snapshot.data!;
-                          return Align(
-                            alignment: Alignment.centerRight,
-                            child: SizedBox(
-                              width: 24,
-                              height: 24,
-                              child: CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage(pet.profilepicture),
-                              ),
+                ),
+                if (task.pet != null) // Check if pet is not null
+                  FutureBuilder<Pet?>(
+                    future: petService.findPetByPetID(task.pet!),
+                    // Fetch the pet using referenceId
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        final pet = snapshot.data!;
+                        return Align(
+                          alignment: Alignment.centerRight,
+                          child: SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircleAvatar(
+                              backgroundImage: NetworkImage(pet.profilepicture),
                             ),
-                          );
-                        } else if (snapshot.hasError) {
-                          return const Text('Error retrieving pet');
-                        } else {
-                          return const SizedBox();
-                        }
+                          ),
+                        );
+                      } else if (snapshot.hasError) {
+                        return const Text('Error retrieving pet');
+                      } else {
+                        return const SizedBox();
+                      }
+                    },
+                  ),
+                const SizedBox(
+                    width:
+                        6), // This will add space between the pet profile picture and the IconButton
+                if (task.status == "Open")
+                  SizedBox(
+                    height: 24.0, // Specify your desired height
+                    width: 24.0, // Specify your desired width
+                    child: IconButton(
+                      padding: EdgeInsets.zero, // Removes default padding
+                      alignment: Alignment.center, // Centers the icon
+                      icon: const Icon(Icons.person_add),
+                      iconSize: 20.0, // Specify your desired icon size
+                      onPressed: () async {
+                        volunteerDialog.displayVolunteersDialog(context, task);
                       },
                     ),
-                  const SizedBox(
-                      width:
-                          6), // This will add space between the pet profile picture and the IconButton
-                  if (task.status == "Open")
-                    SizedBox(
-                      height: 24.0, // Specify your desired height
-                      width: 24.0, // Specify your desired width
-                      child: IconButton(
-                        padding: EdgeInsets.zero, // Removes default padding
-                        alignment: Alignment.center, // Centers the icon
-                        icon: const Icon(Icons.person_add),
-                        iconSize: 20.0, // Specify your desired icon size
-                        onPressed: () async {
-                          volunteerDialog.displayVolunteersDialog(
-                              context, task);
-                        },
-                      ),
-                    ),
-                ],
-              ),
+                  ),
+              ],
             ),
           ),
         ),
-      );
-    }
+      ),
+    );
   }
 }
 

@@ -2,7 +2,6 @@ import 'dart:core';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:card_settings/card_settings.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pawfection/manager_view.dart';
@@ -16,22 +15,19 @@ import 'package:pawfection/repository/user_repository.dart';
 import 'package:pawfection/service/pet_service.dart';
 import 'package:pawfection/service/task_service.dart';
 import 'package:pawfection/service/user_service.dart';
-import 'package:pawfection/volunteer/profile_picture_update_screen.dart';
-import 'package:pawfection/volunteer/widgets/profile_widget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
 
 class MUpdateTaskScreen extends StatefulWidget {
   MUpdateTaskScreen({super.key, required this.task});
 
-  Task task;
+  final Task task;
 
   @override
   State<MUpdateTaskScreen> createState() => _MUpdateTaskScreenState();
 }
 
 class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
-  final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
   final taskRepository = TaskRepository(FirebaseFirestore.instance);
   final taskService = TaskService(FirebaseFirestore.instance);
@@ -41,7 +37,6 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
   final petService = PetService(FirebaseFirestore.instance);
   final userService = UserService(FirebaseFirestore.instance);
 
-  bool _isLoading = false;
   List<String?> resources = [];
 
   late var _form;
@@ -627,13 +622,6 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
-                                      final screenSize =
-                                          MediaQuery.of(context).size;
-                                      final dialogWidth =
-                                          screenSize.width * 0.7;
-                                      final dialogHeight =
-                                          screenSize.height * 0.7;
-
                                       return Dialog(
                                         child: Stack(
                                           children: [
@@ -680,7 +668,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                                       top: 10,
                                       right: 20,
                                       child: Container(
-                                        decoration: BoxDecoration(
+                                        decoration: const BoxDecoration(
                                           shape: BoxShape.circle,
                                           color: Colors.red,
                                         ),
@@ -832,13 +820,6 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
-                                      final screenSize =
-                                          MediaQuery.of(context).size;
-                                      final dialogWidth =
-                                          screenSize.width * 0.7;
-                                      final dialogHeight =
-                                          screenSize.height * 0.7;
-
                                       return Dialog(
                                         child: Stack(
                                           children: [
@@ -851,7 +832,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                                               top: 10,
                                               right: 10,
                                               child: Container(
-                                                decoration: BoxDecoration(
+                                                decoration: const BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   color: Colors.red,
                                                 ),
@@ -885,7 +866,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                                       top: 10,
                                       right: 20,
                                       child: Container(
-                                        decoration: BoxDecoration(
+                                        decoration: const BoxDecoration(
                                           shape: BoxShape.circle,
                                           color: Colors.red,
                                         ),
@@ -938,10 +919,6 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
   }
 
   Future<void> pickVideo(ImageSource source) async {
-    setState(() {
-      _isLoading = true; // Set loading state
-    });
-
     final ImagePicker picker = ImagePicker();
     final List<XFile> pickedFiles = await picker.pickMultiImage();
     if (pickedFiles.isNotEmpty) {
@@ -951,10 +928,6 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
         resources.addAll(filepaths.map((e) => e!.path).toList());
       });
     }
-
-    setState(() {
-      _isLoading = false; // Set loading state
-    });
   }
 
   File convertImageToFile(img.Image image) {

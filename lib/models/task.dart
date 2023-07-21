@@ -1,7 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
-import 'package:pawfection/models/pet.dart';
-import 'package:pawfection/models/user.dart';
 
 class Task {
   String? referenceId;

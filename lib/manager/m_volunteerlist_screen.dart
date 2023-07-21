@@ -5,12 +5,11 @@ import 'package:pawfection/manager/m_create_user_screen.dart';
 import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/user_repository.dart';
 import 'package:pawfection/service/user_service.dart';
-import 'package:pawfection/volunteer/widgets/profile_widget.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 import 'package:pawfection/manager/m_user_dialog.dart' as Dialog;
 
 class MVolunteerListScreen extends StatefulWidget {
-  FirebaseFirestore firebaseFirestore;
+  final FirebaseFirestore firebaseFirestore;
   MVolunteerListScreen({super.key, required this.firebaseFirestore});
 
   @override
@@ -133,7 +132,7 @@ class _MVolunteerListScreenState extends State<MVolunteerListScreen> {
 
 class UserItem extends StatelessWidget {
   final User user;
-  FirebaseFirestore firebaseFirestore;
+  final FirebaseFirestore firebaseFirestore;
 
   UserItem({
     Key? key,
@@ -153,7 +152,7 @@ class UserItem extends StatelessWidget {
           ),
           child: InkWell(
             onTap: () {
-              Dialog.displayUserItemDialog(context, user.referenceId!);
+              Dialog.displayUserItemDialog(context, user.referenceId);
             },
             child: Padding(
               padding: const EdgeInsets.all(10),
@@ -163,7 +162,7 @@ class UserItem extends StatelessWidget {
                     child: Material(
                       color: Colors.transparent,
                       child: (firebaseFirestore is FakeFirebaseFirestore)
-                          ? Column()
+                          ? const Column()
                           : Ink.image(
                               image: Image.network(user.profilepicture).image,
                               fit: BoxFit.cover,

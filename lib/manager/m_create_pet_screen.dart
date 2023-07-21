@@ -14,14 +14,13 @@ import 'package:pawfection/volunteer/widgets/profile_widget.dart';
 class MCreatePetScreen extends StatefulWidget {
   MCreatePetScreen({super.key, required this.imageURL});
 
-  String imageURL;
+  final String imageURL;
 
   @override
   State<MCreatePetScreen> createState() => _MCreatePetScreenState();
 }
 
 class _MCreatePetScreenState extends State<MCreatePetScreen> {
-  final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
   final petRepository = PetRepository(FirebaseFirestore.instance);
   final petService = PetService(FirebaseFirestore.instance);

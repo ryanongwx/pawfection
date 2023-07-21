@@ -24,14 +24,13 @@ class MCreateTaskScreen extends StatefulWidget {
     this.imagePath = 'assets/images/user_profile.png',
   });
 
-  String imagePath;
+  final String imagePath;
 
   @override
   State<MCreateTaskScreen> createState() => _MCreateTaskScreenState();
 }
 
 class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
-  final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
 
   final taskRepository = TaskRepository(FirebaseFirestore.instance);
@@ -41,7 +40,6 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
   final taskService = TaskService(FirebaseFirestore.instance);
   final petService = PetService(FirebaseFirestore.instance);
   final userService = UserService(FirebaseFirestore.instance);
-  bool _isLoading = false;
 
   late var _form;
   late var alertmessage;
@@ -217,7 +215,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                       if (assignedUserId != null) {
                         // Add one to taskcount for assigned user
                         User? assigneduser =
-                            await userService.findUserByUUID(assignedUserId!);
+                            await userService.findUserByUUID(assignedUserId);
                         if (assigneduser != null) {
                           assigneduser.taskcount += 1;
                           userService.updateUser(assigneduser);
@@ -397,7 +395,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                       if (assignedUserId != null) {
                         // Add one to taskcount for assigned user
                         User? assigneduser =
-                            await userService.findUserByUUID(assignedUserId!);
+                            await userService.findUserByUUID(assignedUserId);
                         if (assigneduser != null) {
                           assigneduser.taskcount += 1;
                           userService.updateUser(assigneduser);
@@ -558,11 +556,11 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                 ),
                 showTextField
                     ? const Expanded(
-                  child: FastTextField(
-                    name: 'categoryothers',
-                    labelText: 'Category',
-                  ),
-                )
+                        child: FastTextField(
+                          name: 'categoryothers',
+                          labelText: 'Category',
+                        ),
+                      )
                     : const SizedBox(),
               ],
             ),
@@ -603,13 +601,6 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
-                                      final screenSize =
-                                          MediaQuery.of(context).size;
-                                      final dialogWidth =
-                                          screenSize.width * 0.7;
-                                      final dialogHeight =
-                                          screenSize.height * 0.7;
-
                                       return Dialog(
                                         child: Stack(
                                           children: [
@@ -791,13 +782,6 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
-                                      final screenSize =
-                                          MediaQuery.of(context).size;
-                                      final dialogWidth =
-                                          screenSize.width * 0.7;
-                                      final dialogHeight =
-                                          screenSize.height * 0.7;
-
                                       return Dialog(
                                         child: Stack(
                                           children: [
@@ -916,10 +900,6 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
   }
 
   Future<void> pickVideo(ImageSource source) async {
-    setState(() {
-      _isLoading = true; // Set loading state
-    });
-
     final ImagePicker picker = ImagePicker();
     final List<XFile> pickedFiles = await picker.pickMultiImage();
     if (pickedFiles.isNotEmpty) {
@@ -929,9 +909,5 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
         resources.addAll(filepaths);
       });
     }
-
-    setState(() {
-      _isLoading = false; // Set loading state
-    });
   }
 }

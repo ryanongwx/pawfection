@@ -7,7 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/storage_repository.dart';
 import 'package:pawfection/repository/user_repository.dart';
-import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
 import 'package:pawfection/service/user_service.dart';
 import 'package:pawfection/voluteer_view.dart';
 
@@ -17,20 +16,18 @@ class VProfileUpdateScreen extends StatefulWidget {
       this.imagePath = 'assets/images/user_profile.png',
       required this.user});
 
-  String imagePath;
-  User user;
+  final String imagePath;
+  final User user;
 
   @override
   State<VProfileUpdateScreen> createState() => _VProfileUpdateScreenState();
 }
 
 class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
-  final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
   final userRepository = UserRepository(FirebaseFirestore.instance);
   final storageRepository = StorageRepository();
   final userService = UserService(FirebaseFirestore.instance);
-  final FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
 
   late var _form;
   late var alertmessage;

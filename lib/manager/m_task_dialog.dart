@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:pawfection/manager/m_pet_screen.dart';
 import 'package:pawfection/manager/m_update_task_screen.dart';
 import 'package:pawfection/manager_view.dart';
 import 'package:pawfection/models/task.dart';
@@ -267,17 +266,6 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                                       context: context,
                                                       builder: (BuildContext
                                                           context) {
-                                                        final screenSize =
-                                                            MediaQuery.of(
-                                                                    context)
-                                                                .size;
-                                                        final dialogWidth =
-                                                            screenSize.width *
-                                                                0.7;
-                                                        final dialogHeight =
-                                                            screenSize.height *
-                                                                0.7;
-
                                                         return Dialog(
                                                           child: Stack(
                                                             children: [
@@ -286,7 +274,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                                                     .cover,
                                                                 child: Image
                                                                     .network(
-                                                                  imageUrl!,
+                                                                  imageUrl,
                                                                 ),
                                                               ),
                                                               Positioned(
@@ -295,7 +283,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                                                 child:
                                                                     Container(
                                                                   decoration:
-                                                                      BoxDecoration(
+                                                                      const BoxDecoration(
                                                                     shape: BoxShape
                                                                         .circle,
                                                                     color: Colors
@@ -303,8 +291,9 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                                                   ),
                                                                   child:
                                                                       IconButton(
-                                                                    icon: Icon(Icons
-                                                                        .close),
+                                                                    icon: const Icon(
+                                                                        Icons
+                                                                            .close),
                                                                     color: Colors
                                                                         .white,
                                                                     onPressed:
@@ -467,145 +456,94 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                                     User? user = users[index];
                                                     debugPrint(users[index]
                                                         .toString());
-                                                    return (user == null
-                                                        ? const Text(
-                                                            'User not logged in')
-                                                        // Can add this logic if need to cancel the assigned person with the cross
-                                                        // : user.referenceId ==
-                                                        //         task.assignedto
-                                                        //     ? ListTile(
-                                                        //         onTap: () {
-                                                        //           UserDialog
-                                                        //               .displayUserItemDialog(
-                                                        //                   context,
-                                                        //                   task.createdby);
-                                                        //         },
-                                                        //         tileColor:
-                                                        //             Colors.grey[200],
-                                                        //         shape: RoundedRectangleBorder(
-                                                        //             side:
-                                                        //                 const BorderSide(
-                                                        //                     width: 2),
-                                                        //             borderRadius:
-                                                        //                 BorderRadius
-                                                        //                     .circular(
-                                                        //                         20)),
-                                                        //         leading: const Icon(
-                                                        //           Icons
-                                                        //               .account_circle,
-                                                        //           color: Colors.black,
-                                                        //         ),
-                                                        //         title: Text(
-                                                        //           user.username,
-                                                        //           style:
-                                                        //               const TextStyle(
-                                                        //             color:
-                                                        //                 Colors.black,
-                                                        //             fontWeight:
-                                                        //                 FontWeight
-                                                        //                     .bold,
-                                                        //           ),
-                                                        //         ),
-                                                        //         trailing: IconButton(
-                                                        //           icon: Icon(
-                                                        //               Icons.close),
-                                                        //           onPressed: () {
-                                                        //             task.assignedto =
-                                                        //                 '';
-                                                        //             task.status =
-                                                        //                 'Open';
-                                                        //             taskRepository
-                                                        //                 .updateTask(
-                                                        //                     task);
-                                                        //           },
-                                                        //         ),
-                                                        //       )
-                                                        : ListTile(
-                                                            onTap: () {
-                                                              UserDialog
-                                                                  .displayUserItemDialog(
-                                                                      context,
-                                                                      task.createdby);
-                                                            },
-                                                            tileColor: Colors
-                                                                .grey[200],
-                                                            shape: RoundedRectangleBorder(
-                                                                side:
-                                                                    const BorderSide(
-                                                                        width:
-                                                                            2),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            20)),
-                                                            leading: ClipOval(
-                                                              child: Material(
-                                                                color: Colors
-                                                                    .transparent,
-                                                                child:
-                                                                    Ink.image(
-                                                                  image: Image.network(
-                                                                          user.profilepicture)
-                                                                      .image,
-                                                                  fit: BoxFit
-                                                                      .cover,
-                                                                  width: 40,
-                                                                  height: 40,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            title: Text(
-                                                              user.username,
-                                                              style:
-                                                                  const TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            ),
-                                                            trailing:
-                                                                IconButton(
-                                                              icon: const Icon(
-                                                                  Icons.check),
-                                                              onPressed: () {
-                                                                showDialog<
-                                                                        String>(
-                                                                    context:
-                                                                        context,
-                                                                    builder: (BuildContext
-                                                                            context) =>
-                                                                        AlertDialog(
-                                                                          title:
-                                                                              const Text('Assign Task'),
-                                                                          content:
-                                                                              Text('Assign Task to ${user.username}?'),
-                                                                          actions: <Widget>[
-                                                                            TextButton(
-                                                                              onPressed: () => Navigator.pop(context, 'Cancel'),
-                                                                              child: const Text('Cancel'),
-                                                                            ),
-                                                                            TextButton(
-                                                                              onPressed: () {
-                                                                                Navigator.pop(context, 'OK');
-                                                                                task.assignedto = user.referenceId;
-                                                                                task.status = 'Pending';
-                                                                                taskService.updateTask(task);
-                                                                                Navigator.of(context).pushReplacement(
-                                                                                  MaterialPageRoute(
-                                                                                      builder: (context) => const ManagerView(
-                                                                                            tab: 1,
-                                                                                          )),
-                                                                                );
-                                                                              },
-                                                                              child: const Text('OK'),
-                                                                            ),
-                                                                          ],
-                                                                        ));
-                                                              },
-                                                            ),
-                                                          ));
+                                                    return ListTile(
+                                                      onTap: () {
+                                                        UserDialog
+                                                            .displayUserItemDialog(
+                                                                context,
+                                                                task.createdby);
+                                                      },
+                                                      tileColor:
+                                                          Colors.grey[200],
+                                                      shape: RoundedRectangleBorder(
+                                                          side:
+                                                              const BorderSide(
+                                                                  width: 2),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      20)),
+                                                      leading: ClipOval(
+                                                        child: Material(
+                                                          color: Colors
+                                                              .transparent,
+                                                          child: Ink.image(
+                                                            image: Image.network(
+                                                                    user.profilepicture)
+                                                                .image,
+                                                            fit: BoxFit.cover,
+                                                            width: 40,
+                                                            height: 40,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      title: Text(
+                                                        user.username,
+                                                        style: const TextStyle(
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                      trailing: IconButton(
+                                                        icon: const Icon(
+                                                            Icons.check),
+                                                        onPressed: () {
+                                                          showDialog<String>(
+                                                              context: context,
+                                                              builder: (BuildContext
+                                                                      context) =>
+                                                                  AlertDialog(
+                                                                    title: const Text(
+                                                                        'Assign Task'),
+                                                                    content: Text(
+                                                                        'Assign Task to ${user.username}?'),
+                                                                    actions: <Widget>[
+                                                                      TextButton(
+                                                                        onPressed: () => Navigator.pop(
+                                                                            context,
+                                                                            'Cancel'),
+                                                                        child: const Text(
+                                                                            'Cancel'),
+                                                                      ),
+                                                                      TextButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          Navigator.pop(
+                                                                              context,
+                                                                              'OK');
+                                                                          task.assignedto =
+                                                                              user.referenceId;
+                                                                          task.status =
+                                                                              'Pending';
+                                                                          taskService
+                                                                              .updateTask(task);
+                                                                          Navigator.of(context)
+                                                                              .pushReplacement(
+                                                                            MaterialPageRoute(
+                                                                                builder: (context) => const ManagerView(
+                                                                                      tab: 1,
+                                                                                    )),
+                                                                          );
+                                                                        },
+                                                                        child: const Text(
+                                                                            'OK'),
+                                                                      ),
+                                                                    ],
+                                                                  ));
+                                                        },
+                                                      ),
+                                                    );
                                                   },
                                                 );
                                               }
