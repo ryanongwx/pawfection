@@ -18,8 +18,8 @@ class UpdateAvailability extends StatefulWidget {
 class _UpdateAvailabilityState extends State<UpdateAvailability> {
   final GlobalKey<FormState> _dateKey = GlobalKey<FormState>();
   late List<DateTime?> _date;
-  final userRepository = UserRepository(true);
-  final userService = UserService(true);
+  final userRepository = UserRepository(FirebaseFirestore.instance);
+  final userService = UserService(FirebaseFirestore.instance);
 
   final FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
   late FirebaseAuth.User currentUser;

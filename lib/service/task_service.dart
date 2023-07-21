@@ -7,7 +7,11 @@ import 'package:pawfection/repository/task_repository.dart';
 
 class TaskService {
   // _userFromJson turns a map of values from Firestore into a User class.
-  TaskRepository taskRepository = TaskRepository();
+  late TaskRepository taskRepository;
+
+  TaskService(FirebaseFirestore firebaseFirestore) {
+    taskRepository = TaskRepository(firebaseFirestore);
+  }
 
   Task taskFromJson(Map<String, dynamic> json) {
     return Task(json['name'] as String,

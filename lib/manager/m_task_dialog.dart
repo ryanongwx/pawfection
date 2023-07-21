@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pawfection/manager/m_pet_screen.dart';
 import 'package:pawfection/manager/m_update_task_screen.dart';
@@ -10,8 +11,8 @@ import 'package:pawfection/service/task_service.dart';
 import 'package:pawfection/service/user_service.dart';
 
 Future<void> displayTaskItemDialog(BuildContext context, String id) async {
-  final taskService = TaskService();
-  final userService = UserService(true);
+  final taskService = TaskService(FirebaseFirestore.instance);
+  final userService = UserService(FirebaseFirestore.instance);
 
   return showDialog(
     context: context,

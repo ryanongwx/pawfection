@@ -12,7 +12,9 @@ import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
 import 'package:pawfection/login_view.dart';
 
 class MDashboardScreen extends StatefulWidget {
-  const MDashboardScreen({super.key});
+  FirebaseFirestore firebaseFirestore;
+
+  MDashboardScreen({super.key, required this.firebaseFirestore});
 
   @override
   State<MDashboardScreen> createState() => _MDashboardScreenState();
@@ -20,8 +22,8 @@ class MDashboardScreen extends StatefulWidget {
 
 final _selectedSegment_04 = ValueNotifier('Pending');
 
-final taskRepository = TaskRepository();
-final taskService = TaskService();
+late TaskRepository taskRepository;
+late TaskService taskService;
 
 final _auth = FirebaseAuth.FirebaseAuth.instance; // authInstance
 
@@ -31,6 +33,14 @@ class _MDashboardScreenState extends State<MDashboardScreen> {
   //   // TODO: implement initState
   //   fetchTaskList();
   // }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    taskRepository = TaskRepository(widget.firebaseFirestore);
+    taskService = TaskService(widget.firebaseFirestore);
+  }
 
   @override
   Widget build(BuildContext context) {

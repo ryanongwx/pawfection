@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:pawfection/manager_view.dart';
@@ -19,9 +20,9 @@ class _LoginViewState extends State<LoginView> {
 
   final FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
 
-  final userRepository = UserRepository(true);
+  final userRepository = UserRepository(FirebaseFirestore.instance);
 
-  final userService = UserService(true);
+  final userService = UserService(FirebaseFirestore.instance);
 
   var accesscode = '';
 

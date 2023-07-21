@@ -33,13 +33,13 @@ class MUpdateTaskScreen extends StatefulWidget {
 class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
   final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
-  final taskRepository = TaskRepository();
-  final taskService = TaskService();
+  final taskRepository = TaskRepository(FirebaseFirestore.instance);
+  final taskService = TaskService(FirebaseFirestore.instance);
   final storageRepository = StorageRepository();
-  final userRepository = UserRepository(true);
-  final petRepository = PetRepository();
-  final petService = PetService();
-  final userService = UserService(true);
+  final userRepository = UserRepository(FirebaseFirestore.instance);
+  final petRepository = PetRepository(FirebaseFirestore.instance);
+  final petService = PetService(FirebaseFirestore.instance);
+  final userService = UserService(FirebaseFirestore.instance);
 
   bool _isLoading = false;
   List<String?> resources = [];

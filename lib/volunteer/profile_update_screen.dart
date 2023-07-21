@@ -1,5 +1,6 @@
 import 'dart:core';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,9 +27,9 @@ class VProfileUpdateScreen extends StatefulWidget {
 class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
   final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
-  final userRepository = UserRepository(true);
+  final userRepository = UserRepository(FirebaseFirestore.instance);
   final storageRepository = StorageRepository();
-  final userService = UserService(true);
+  final userService = UserService(FirebaseFirestore.instance);
   final FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
 
   late var _form;

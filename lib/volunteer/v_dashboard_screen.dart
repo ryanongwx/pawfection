@@ -17,8 +17,8 @@ class VDashboardScreen extends StatefulWidget {
 
 final _selectedSegment_04 = ValueNotifier('Pending');
 
-final taskRepository = TaskRepository();
-final taskService = TaskService();
+final taskRepository = TaskRepository(FirebaseFirestore.instance);
+final taskService = TaskService(FirebaseFirestore.instance);
 
 // List<Task> taskList = [];
 

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:core';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
@@ -27,7 +28,7 @@ class MCreateUserScreen extends StatefulWidget {
 class _MCreateUserScreenState extends State<MCreateUserScreen> {
   final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
-  final userService = UserService(true);
+  final userService = UserService(FirebaseFirestore.instance);
   late var _form;
   late var alertmessage;
 

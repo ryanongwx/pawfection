@@ -34,13 +34,13 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
   final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
 
-  final taskRepository = TaskRepository();
-  final petRepository = PetRepository();
-  final userRepository = UserRepository(true);
+  final taskRepository = TaskRepository(FirebaseFirestore.instance);
+  final petRepository = PetRepository(FirebaseFirestore.instance);
+  final userRepository = UserRepository(FirebaseFirestore.instance);
   final storageRepository = StorageRepository();
-  final taskService = TaskService();
-  final petService = PetService();
-  final userService = UserService(true);
+  final taskService = TaskService(FirebaseFirestore.instance);
+  final petService = PetService(FirebaseFirestore.instance);
+  final userService = UserService(FirebaseFirestore.instance);
   bool _isLoading = false;
 
   late var _form;

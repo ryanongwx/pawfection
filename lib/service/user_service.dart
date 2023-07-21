@@ -6,12 +6,8 @@ import '../models/user.dart';
 class UserService {
   late UserRepository userRepository;
 
-  UserService(bool testing) {
-    if (testing) {
-      userRepository = UserRepository(true);
-    } else {
-      userRepository = UserRepository(false);
-    }
+  UserService(FirebaseFirestore firebaseFirestore) {
+    userRepository = UserRepository(firebaseFirestore);
   }
 
   // _userFromJson turns a map of values from Firestore into a User class.
@@ -90,11 +86,6 @@ class UserService {
     var userJson = userToJson(user);
     var id = await userRepository.addUserRepo(userJson);
     return id;
-  }
-
-  void addFakeUser(User user) async {
-    var userJson = userToJson(user);
-    userRepository.addFakeUserRepo(userJson);
   }
 
   void addUserWithId(User user) async {

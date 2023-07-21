@@ -7,15 +7,9 @@ import 'package:flutter/foundation.dart';
 
 class UserRepository {
   late CollectionReference userCollection;
-  late FirebaseFirestore firebaseFirestore;
 
-  UserRepository(bool real) {
-    if (real) {
-      userCollection = FirebaseFirestore.instance.collection('users');
-    } else {
-      firebaseFirestore = FakeFirebaseFirestore();
-      userCollection = FakeFirebaseFirestore().collection('users');
-    }
+  UserRepository(FirebaseFirestore firebaseFirestore) {
+    userCollection = firebaseFirestore.collection('users');
   }
 
   Future<String> addUserRepo(Map<String, dynamic> userJson) async {
@@ -23,16 +17,6 @@ class UserRepository {
     userJson['referenceId'] = newDocRef.id;
     await newDocRef.set(userJson);
     return newDocRef.id;
-  }
-
-  void addFakeUserRepo(Map<String, dynamic> userJson) async {
-    await userCollection.add(userJson);
-    var usersSnapshot = userCollection.get();
-    usersSnapshot.then((querySnapshot) {
-      for (final doc in querySnapshot.docs) {
-        print('Document ID: ${doc.id}, Data: ${doc.data()}');
-      }
-    });
   }
 
   void addUserRepoWithRepoId(Map<String, dynamic> userJson) async {

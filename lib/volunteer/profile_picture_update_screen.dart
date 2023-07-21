@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -32,10 +33,10 @@ class _ProfilePictureUpdateScreenState
   final ValueNotifier<File?> _croppedImageNotifier = ValueNotifier<File?>(null);
   final TextEditingController _textEditingController = TextEditingController();
 
-  final userRepository = UserRepository(true);
-  final petRepository = PetRepository();
+  final userRepository = UserRepository(FirebaseFirestore.instance);
+  final petRepository = PetRepository(FirebaseFirestore.instance);
   final storageRepository = StorageRepository();
-  final userService = UserService(true);
+  final userService = UserService(FirebaseFirestore.instance);
 
   final FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
   late FirebaseAuth.User currentUser;

@@ -1,5 +1,6 @@
 import 'dart:core';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,8 +23,8 @@ class MCreatePetScreen extends StatefulWidget {
 class _MCreatePetScreenState extends State<MCreatePetScreen> {
   final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
-  final petRepository = PetRepository();
-  final petService = PetService();
+  final petRepository = PetRepository(FirebaseFirestore.instance);
+  final petService = PetService(FirebaseFirestore.instance);
 
   late var _form;
   late var alertmessage;

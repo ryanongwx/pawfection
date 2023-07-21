@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
 import 'package:flutter/material.dart';
 import 'package:pawfection/models/user.dart';
@@ -18,8 +19,8 @@ class VProfileScreen extends StatefulWidget {
 }
 
 class _VProfileScreenState extends State<VProfileScreen> {
-  final userRepository = UserRepository(true);
-  final userService = UserService(true);
+  final userRepository = UserRepository(FirebaseFirestore.instance);
+  final userService = UserService(FirebaseFirestore.instance);
 
   final FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
   late FirebaseAuth.User currentUser;

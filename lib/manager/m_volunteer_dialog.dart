@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pawfection/models/user.dart';
 import 'package:pawfection/service/task_service.dart';
@@ -5,8 +6,8 @@ import 'package:pawfection/service/user_service.dart';
 import '../models/task.dart';
 
 Future<void> displayVolunteersDialog(BuildContext context, Task task) async {
-  final taskService = TaskService();
-  final userService = UserService(true);
+  final taskService = TaskService(FirebaseFirestore.instance);
+  final userService = UserService(FirebaseFirestore.instance);
 
   return showDialog(
     context: context,
