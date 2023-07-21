@@ -27,7 +27,14 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
   final petService = PetService(FirebaseFirestore.instance);
 
   late var _form;
-  late var alertmessage;
+  var alertmessage = '';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _form = petService.petToJson(widget.pet);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,16 +79,25 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
                 ),
                 ElevatedButton(
                   child: const Text('Update'),
-                  onPressed: () {
+                  onPressed: () async {
                     try {
-                      petService.updatePet(Pet(_form['name'],
-                          profilepicture: widget.imageURL == ''
-                              ? widget.pet.profilepicture
-                              : widget.imageURL,
-                          breed: _form['breed'],
-                          description: _form['description'],
-                          thingstonote: _form['thingstonote']));
-                      alertmessage == 'Pet has successfully been updated';
+                      Pet? pet = await petService
+                          .findPetByPetID(widget.pet.referenceId!);
+                      if (pet != null) {
+                        pet.name = _form['name'];
+                        pet.profilepicture = widget.imageURL == ''
+                            ? widget.pet.profilepicture
+                            : widget.imageURL;
+                        pet.breed = _form['breed'];
+                        pet.description = _form['description'];
+                        pet.thingstonote = _form['thingstonote'];
+
+                        petService.updatePet(pet);
+
+                        setState(() {
+                          alertmessage = 'Pet has successfully been updated';
+                        });
+                      }
                     } catch (e) {
                       setState(() {
                         alertmessage = 'Please ensure all fields are filled in';
@@ -140,19 +156,28 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
                 ),
                 CupertinoButton(
                   child: const Text('Create'),
-                  onPressed: () {
+                  onPressed: () async {
                     try {
-                      petService.updatePet(Pet(_form['name'],
-                          profilepicture: widget.imageURL == ''
-                              ? widget.pet.profilepicture
-                              : widget.imageURL,
-                          breed: _form['breed'],
-                          description: _form['description'],
-                          thingstonote: _form['thingstonote']));
-                      alertmessage == 'Pet has successfully been updated';
+                      Pet? pet = await petService
+                          .findPetByPetID(widget.pet.referenceId!);
+                      if (pet != null) {
+                        pet.name = _form['name'];
+                        pet.profilepicture = widget.imageURL == ''
+                            ? widget.pet.profilepicture
+                            : widget.imageURL;
+                        pet.breed = _form['breed'];
+                        pet.description = _form['description'];
+                        pet.thingstonote = _form['thingstonote'];
+
+                        petService.updatePet(pet);
+
+                        setState(() {
+                          alertmessage = 'Pet has successfully been updated';
+                        });
+                      }
                     } catch (e) {
                       setState(() {
-                        alertmessage = 'Please ensure all fields are filled in';
+                        alertmessage = e.toString();
                       });
                     } finally {
                       showDialog<String>(
@@ -260,7 +285,7 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ProfilePictureUpdateScreen(
                       routetext: 'pet',
-                      petid: '',
+                      petid: widget.pet.referenceId!,
                     )));
           },
         ),

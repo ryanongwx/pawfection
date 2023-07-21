@@ -19,12 +19,9 @@ import 'package:pawfection/service/user_service.dart';
 import 'package:image_picker/image_picker.dart';
 
 class MCreateTaskScreen extends StatefulWidget {
-  MCreateTaskScreen({
+  const MCreateTaskScreen({
     super.key,
-    this.imagePath = 'assets/images/user_profile.png',
   });
-
-  final String imagePath;
 
   @override
   State<MCreateTaskScreen> createState() => _MCreateTaskScreenState();
@@ -41,7 +38,7 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
   final petService = PetService(FirebaseFirestore.instance);
   final userService = UserService(FirebaseFirestore.instance);
 
-  late var _form;
+  var _form = {};
   late var alertmessage;
   List<File?> resources = [];
   var others = '';
@@ -102,6 +99,9 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                   child: const Text('Create'),
                   onPressed: () async {
                     try {
+                      if (_form.isEmpty) {
+                        throw Exception('Please fill in all form fields');
+                      }
                       final User? user = await userService.currentUser(_auth);
                       if (user == null) {
                         throw Exception(
@@ -286,6 +286,10 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                   child: const Text('Create'),
                   onPressed: () async {
                     try {
+                      if (_form.isEmpty) {
+                        throw Exception('Please fill in all form fields');
+                      }
+
                       final User? user = await userService.currentUser(_auth);
                       if (user == null) {
                         throw Exception(

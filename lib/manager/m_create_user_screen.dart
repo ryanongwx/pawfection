@@ -12,10 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:pawfection/service/user_service.dart';
 
 class MCreateUserScreen extends StatefulWidget {
-  MCreateUserScreen(
-      {super.key, this.imagePath = 'assets/images/user_profile.png'});
-
-  final String imagePath;
+  MCreateUserScreen({super.key});
 
   @override
   State<MCreateUserScreen> createState() => _MCreateUserScreenState();
@@ -24,7 +21,7 @@ class MCreateUserScreen extends StatefulWidget {
 class _MCreateUserScreenState extends State<MCreateUserScreen> {
   final formKey = GlobalKey<FormState>();
   final userService = UserService(FirebaseFirestore.instance);
-  late var _form;
+  var _form = {};
   late var alertmessage;
 
   var experiences = [];
@@ -120,6 +117,9 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
                   child: const Text('Create'),
                   onPressed: () async {
                     try {
+                      if (_form.isEmpty) {
+                        throw Exception('Please fill in all form fields');
+                      }
                       // Deal with empty name
 
                       if (_form['username'].isEmpty) {
@@ -214,6 +214,10 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
                   child: const Text('Create'),
                   onPressed: () async {
                     try {
+                      if (_form.isEmpty) {
+                        throw Exception('Please fill in all form fields');
+                      }
+
                       // Check whether username has been filled
                       if (_form['username'].isEmpty) {
                         throw Exception('Please fill in username');

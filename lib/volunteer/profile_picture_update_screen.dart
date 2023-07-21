@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:image_cropper/image_cropper.dart';
-import 'package:pawfection/manager/m_create_pet_screen.dart';
-import 'package:pawfection/manager/m_create_user_screen.dart';
+import 'package:pawfection/manager/m_dashboard_screen.dart';
+import 'package:pawfection/manager/m_update_pet_screen.dart';
+import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/pet_repository.dart';
 import 'package:pawfection/repository/storage_repository.dart';
@@ -193,13 +194,15 @@ class _ProfilePictureUpdateScreenState
                                                       imageURL;
 
                                                   userService.updateUser(user);
-                                                  Navigator.of(context)
-                                                      .pushReplacement(
+                                                  Navigator.pushAndRemoveUntil(
+                                                    context,
                                                     MaterialPageRoute(
                                                         builder: (context) =>
                                                             const VolunteerView(
                                                               tab: 1,
                                                             )),
+                                                    (Route<dynamic> route) =>
+                                                        false,
                                                   );
                                                 }
                                               : null,
@@ -220,19 +223,26 @@ class _ProfilePictureUpdateScreenState
                                 }
                               },
                             );
-                          } else if (widget.routetext == 'pet') {
+                          } else {
                             return ElevatedButton(
                               onPressed: filecheck
                                   ? () async {
                                       debugPrint(widget.routetext);
+                                      Pet? pet1 = await petService
+                                          .findPetByPetID(widget.petid);
+                                      debugPrint(pet1.toString());
                                       String imageURL = await storageRepository
                                           .uploadImageToStorage(
                                               file, widget.petid);
-                                      Navigator.of(context).pushReplacement(
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                MCreatePetScreen(
-                                                    imageURL: imageURL)),
+                                                MUpdatePetScreen(
+                                                  imageURL: imageURL,
+                                                  pet: pet1!,
+                                                )),
+                                        (Route<dynamic> route) => false,
                                       );
                                     }
                                   : null,
@@ -247,78 +257,6 @@ class _ProfilePictureUpdateScreenState
                                 padding: EdgeInsets.all(15.0),
                                 child: Text('Update Profile Picture'),
                               ),
-                            );
-                          } else {
-                            return FutureBuilder<User?>(
-                              future:
-                                  userService.findUserByUUID(currentUser.uid),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  // While waiting for the future to complete, show a loading indicator
-                                  return const CircularProgressIndicator();
-                                } else if (snapshot.hasError) {
-                                  // If an error occurs while fetching the user, display an error message
-                                  return Text('Error: ${snapshot.error}');
-                                } else {
-                                  // The future completed successfully
-                                  final user = snapshot.data;
-
-                                  return (user == null
-                                      ? const Text('User not logged in')
-                                      : ElevatedButton(
-                                          onPressed: filecheck
-                                              ? () async {
-                                                  debugPrint(widget.routetext);
-                                                  String imageURL =
-                                                      await storageRepository
-                                                          .uploadImageToStorage(
-                                                              file,
-                                                              user.referenceId);
-                                                  userService.addUser(User(
-                                                      user.email,
-                                                      username: user.email,
-                                                      bio: user.bio,
-                                                      referenceId:
-                                                          user.referenceId,
-                                                      role: user.role,
-                                                      availabledates:
-                                                          user.availabledates,
-                                                      preferences:
-                                                          user.preferences,
-                                                      experiences:
-                                                          user.experiences,
-                                                      profilepicture: imageURL,
-                                                      contactnumber:
-                                                          user.contactnumber,
-                                                      taskcount:
-                                                          user.taskcount));
-                                                  Navigator.of(context)
-                                                      .pushReplacement(
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            MCreateUserScreen(
-                                                                imagePath:
-                                                                    file.path)),
-                                                  );
-                                                }
-                                              : null,
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.blue,
-                                            foregroundColor: Colors.white,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(32.0),
-                                            ),
-                                          ),
-                                          child: const Padding(
-                                            padding: EdgeInsets.all(15.0),
-                                            child:
-                                                Text('Update Profile Picture'),
-                                          ),
-                                        ));
-                                }
-                              },
                             );
                           }
                         } else {

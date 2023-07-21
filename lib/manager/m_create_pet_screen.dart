@@ -25,7 +25,7 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
   final petRepository = PetRepository(FirebaseFirestore.instance);
   final petService = PetService(FirebaseFirestore.instance);
 
-  late var _form;
+  var _form = {};
   late var alertmessage;
 
   @override
@@ -73,6 +73,9 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
                   child: const Text('Create'),
                   onPressed: () {
                     try {
+                      if (_form.isEmpty) {
+                        throw Exception('Please fill in all form fields');
+                      }
                       if (_form['name'].isEmpty) {
                         throw Exception('Please fill in pet name');
                       }
@@ -146,6 +149,9 @@ class _MCreatePetScreenState extends State<MCreatePetScreen> {
                   child: const Text('Create'),
                   onPressed: () {
                     try {
+                      if (_form.isEmpty) {
+                        throw Exception('Please fill in all form fields');
+                      }
                       if (_form['name'].isEmpty) {
                         throw Exception('Please fill in pet name');
                       }

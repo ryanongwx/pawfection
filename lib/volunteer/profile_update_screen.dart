@@ -11,12 +11,8 @@ import 'package:pawfection/service/user_service.dart';
 import 'package:pawfection/voluteer_view.dart';
 
 class VProfileUpdateScreen extends StatefulWidget {
-  VProfileUpdateScreen(
-      {super.key,
-      this.imagePath = 'assets/images/user_profile.png',
-      required this.user});
+  VProfileUpdateScreen({super.key, required this.user});
 
-  final String imagePath;
   final User user;
 
   @override
@@ -31,6 +27,7 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
 
   late var _form;
   late var alertmessage;
+  late String currentuseruid;
 
   var preferences = [];
 
@@ -58,6 +55,7 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
   @override
   void initState() {
     super.initState();
+    _form = userService.userToJson(widget.user);
   }
 
   @override
@@ -107,28 +105,35 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
                   child: const Text('Update'),
                   onPressed: () async {
                     try {
-                      User? findusername = await userService
-                          .findUserByUsername(_form['username']);
-                      if (findusername == null ||
-                          findusername.username == widget.user.username) {
-                        userService.updateUser(User(_form['email'],
-                            referenceId: widget.user.referenceId,
-                            username: _form['username'],
-                            role: widget.user.role,
-                            bio: _form['bio'],
-                            availabledates: widget.user.availabledates,
-                            preferences: _form['preferences'],
-                            experiences: _form['experiences'],
-                            profilepicture: widget.user.profilepicture,
-                            contactnumber: _form['contactnumber'],
-                            taskcount: widget.user.taskcount));
+                      if (_form.isEmpty) {
+                        throw Exception('Please fill in all form fields');
+                      }
+
+                      if (_form.toString() ==
+                          userService.userToJson(widget.user).toString()) {
                         setState(() {
                           alertmessage = 'User has successfully been updated';
                         });
                       } else {
-                        setState(() {
-                          alertmessage = 'Username has been taken';
-                        });
+                        User? findusername = await userService
+                            .findUserByUsername(_form['username']);
+                        if (findusername == null ||
+                            findusername.username == widget.user.username) {
+                          widget.user.email = _form['email'];
+                          widget.user.bio = _form['bio'];
+                          widget.user.username = _form['username'];
+                          widget.user.preferences = _form['preferences'];
+                          widget.user.experiences = _form['experiences'];
+                          widget.user.contactnumber = _form['contactnumber'];
+                          userService.updateUser(widget.user);
+                          setState(() {
+                            alertmessage = 'User has successfully been updated';
+                          });
+                        } else {
+                          setState(() {
+                            alertmessage = 'Username has been taken';
+                          });
+                        }
                       }
                     } catch (e) {
                       setState(() {
@@ -195,55 +200,62 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
                   child: const Text('Update'),
                   onPressed: () async {
                     try {
-                      List<String> preferences = [];
-                      if (_form['p_walking']) {
-                        preferences.add('walking');
+                      if (_form.isEmpty) {
+                        throw Exception('Please fill in all form fields');
                       }
-                      if (_form['p_running']) {
-                        preferences.add('walking');
-                      }
-                      if (_form['p_feeding']) {
-                        preferences.add('walking');
-                      }
-                      if (_form['p_training']) {
-                        preferences.add('training');
-                      }
-
-                      List<String> experiences = [];
-                      if (_form['e_walking']) {
-                        experiences.add('walking');
-                      }
-                      if (_form['e_running']) {
-                        experiences.add('walking');
-                      }
-                      if (_form['e_feeding']) {
-                        experiences.add('walking');
-                      }
-                      if (_form['e_training']) {
-                        experiences.add('training');
-                      }
-                      User? findusername = await userService
-                          .findUserByUsername(_form['username']);
-                      if (findusername == null ||
-                          findusername.username == widget.user.username) {
-                        userService.updateUser(User(_form['email'],
-                            referenceId: widget.user.referenceId,
-                            username: _form['username'],
-                            role: widget.user.role,
-                            bio: _form['bio'],
-                            availabledates: widget.user.availabledates,
-                            preferences: preferences,
-                            experiences: experiences,
-                            profilepicture: widget.user.profilepicture,
-                            contactnumber: _form['contactnumber'],
-                            taskcount: widget.user.taskcount));
+                      if (_form.toString() ==
+                          userService.userToJson(widget.user).toString()) {
                         setState(() {
                           alertmessage = 'User has successfully been updated';
                         });
                       } else {
-                        setState(() {
-                          alertmessage = 'Username has been taken';
-                        });
+                        List<String> preferences = [];
+                        if (_form['p_walking']) {
+                          preferences.add('walking');
+                        }
+                        if (_form['p_running']) {
+                          preferences.add('walking');
+                        }
+                        if (_form['p_feeding']) {
+                          preferences.add('walking');
+                        }
+                        if (_form['p_training']) {
+                          preferences.add('training');
+                        }
+
+                        List<String> experiences = [];
+                        if (_form['e_walking']) {
+                          experiences.add('walking');
+                        }
+                        if (_form['e_running']) {
+                          experiences.add('walking');
+                        }
+                        if (_form['e_feeding']) {
+                          experiences.add('walking');
+                        }
+                        if (_form['e_training']) {
+                          experiences.add('training');
+                        }
+
+                        User? findusername = await userService
+                            .findUserByUsername(_form['username']);
+                        if (findusername == null ||
+                            findusername.username == widget.user.username) {
+                          widget.user.email = _form['email'];
+                          widget.user.username = _form['username'];
+                          widget.user.bio = _form['bio'];
+                          widget.user.preferences = preferences;
+                          widget.user.experiences = experiences;
+                          widget.user.contactnumber = _form['contactnumber'];
+                          userService.updateUser(widget.user);
+                          setState(() {
+                            alertmessage = 'User has successfully been updated';
+                          });
+                        } else {
+                          setState(() {
+                            alertmessage = 'Username has been taken';
+                          });
+                        }
                       }
                     } catch (e) {
                       setState(() {
