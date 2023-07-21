@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:pawfection/manager/m_create_pet_screen.dart';
 import 'package:pawfection/manager/m_dashboard_screen.dart';
 import 'package:pawfection/manager/m_update_pet_screen.dart';
 import 'package:pawfection/models/pet.dart';
@@ -223,7 +224,7 @@ class _ProfilePictureUpdateScreenState
                                 }
                               },
                             );
-                          } else {
+                          } else if (widget.petid != '') {
                             return ElevatedButton(
                               onPressed: filecheck
                                   ? () async {
@@ -241,6 +242,37 @@ class _ProfilePictureUpdateScreenState
                                                 MUpdatePetScreen(
                                                   imageURL: imageURL,
                                                   pet: pet1!,
+                                                )),
+                                        (Route<dynamic> route) => false,
+                                      );
+                                    }
+                                  : null,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blue,
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(32.0),
+                                ),
+                              ),
+                              child: const Padding(
+                                padding: EdgeInsets.all(15.0),
+                                child: Text('Update Profile Picture'),
+                              ),
+                            );
+                          } else {
+                            return ElevatedButton(
+                              onPressed: filecheck
+                                  ? () async {
+                                      debugPrint(widget.routetext);
+                                      String imageURL = await storageRepository
+                                          .uploadImageToStorage(
+                                              file, widget.petid);
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                MCreatePetScreen(
+                                                  imageURL: imageURL,
                                                 )),
                                         (Route<dynamic> route) => false,
                                       );
