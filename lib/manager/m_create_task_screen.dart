@@ -540,26 +540,32 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
               Validators.required((value) => 'Field is required'),
             ]),
           ),
-          Row(
-            children: [
-              Expanded(
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              children: [
+                Expanded(
                   child: FastDropdown(
-                      name: 'category',
-                      onChanged: (newvalue) {
-                        setState(() {
-                          showTextField = newvalue == 'Others';
-                        });
-                      },
-                      labelText: 'Category',
-                      items: categories)),
-              showTextField
-                  ? Expanded(
-                      child: const FastTextField(
-                      name: 'categoryothers',
-                      labelText: 'Category',
-                    ))
-                  : const Column()
-            ],
+                    name: 'category',
+                    onChanged: (newValue) {
+                      setState(() {
+                        showTextField = newValue == 'Others';
+                      });
+                    },
+                    labelText: 'Category',
+                    items: categories,
+                  ),
+                ),
+                showTextField
+                    ? const Expanded(
+                  child: FastTextField(
+                    name: 'categoryothers',
+                    labelText: 'Category',
+                  ),
+                )
+                    : const SizedBox(),
+              ],
+            ),
           ),
           FastTextField(
             name: 'description',
@@ -617,12 +623,12 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                                               top: 10,
                                               right: 10,
                                               child: Container(
-                                                decoration: BoxDecoration(
+                                                decoration: const BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   color: Colors.red,
                                                 ),
                                                 child: IconButton(
-                                                  icon: Icon(Icons.close),
+                                                  icon: const Icon(Icons.close),
                                                   color: Colors.white,
                                                   iconSize:
                                                       18, // Adjust the size as desired
@@ -656,12 +662,12 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                                       top: 10,
                                       right: 20,
                                       child: Container(
-                                        decoration: BoxDecoration(
+                                        decoration: const BoxDecoration(
                                           shape: BoxShape.circle,
                                           color: Colors.red,
                                         ),
                                         child: IconButton(
-                                          icon: Icon(Icons.close),
+                                          icon: const Icon(Icons.close),
                                           color: Colors.white,
                                           iconSize:
                                               18, // Adjust the size as desired
@@ -742,8 +748,8 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                       labelText: 'Category',
                       items: categories)),
               showTextField
-                  ? Expanded(
-                      child: const FastTextField(
+                  ? const Expanded(
+                      child: FastTextField(
                       name: 'categoryothers',
                       labelText: 'Category',
                     ))
@@ -805,12 +811,12 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                                               top: 10,
                                               right: 10,
                                               child: Container(
-                                                decoration: BoxDecoration(
+                                                decoration: const BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   color: Colors.red,
                                                 ),
                                                 child: IconButton(
-                                                  icon: Icon(Icons.close),
+                                                  icon: const Icon(Icons.close),
                                                   color: Colors.white,
                                                   iconSize:
                                                       18, // Adjust the size as desired
@@ -844,12 +850,12 @@ class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
                                       top: 10,
                                       right: 20,
                                       child: Container(
-                                        decoration: BoxDecoration(
+                                        decoration: const BoxDecoration(
                                           shape: BoxShape.circle,
                                           color: Colors.red,
                                         ),
                                         child: IconButton(
-                                          icon: Icon(Icons.close),
+                                          icon: const Icon(Icons.close),
                                           color: Colors.white,
                                           iconSize:
                                               18, // Adjust the size as desired

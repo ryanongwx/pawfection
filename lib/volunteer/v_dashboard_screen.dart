@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_segment/flutter_advanced_segment.dart';
+import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/models/task.dart';
 import 'package:pawfection/repository/task_repository.dart';
+import 'package:pawfection/service/pet_service.dart';
 import 'package:pawfection/service/task_service.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 import 'package:pawfection/volunteer/v_task_dialog.dart' as taskDialog;
@@ -20,13 +22,6 @@ final _selectedSegment_04 = ValueNotifier('Pending');
 final taskRepository = TaskRepository(FirebaseFirestore.instance);
 final taskService = TaskService(FirebaseFirestore.instance);
 
-// List<Task> taskList = [];
-
-// Future<void> fetchTaskList() async {
-//   Future<List<Task>> taskListFuture = repository.getTaskList();
-//   taskList = await taskListFuture;
-// }
-
 class _VDashboardScreenState extends State<VDashboardScreen> {
   // @override
   // void initState() {
@@ -36,6 +31,7 @@ class _VDashboardScreenState extends State<VDashboardScreen> {
 
   final FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
   late FirebaseAuth.User currentUser;
+  final PetService petService = PetService(FirebaseFirestore.instance);
 
   @override
   void initState() {
@@ -123,7 +119,8 @@ class _VDashboardScreenState extends State<VDashboardScreen> {
                                         element.status.contains(
                                             _selectedSegment_04.value))
                                     .toList(),
-                                builder: (Task task) => TaskItem(task: task),
+                                builder: (Task task) => TaskItem(
+                                    task: task, petService: petService),
                                 filter: (value) => taskList
                                     .where((element) => element.name
                                         .toLowerCase()
@@ -131,8 +128,7 @@ class _VDashboardScreenState extends State<VDashboardScreen> {
                                     .where((element) =>
                                         (element.assignedto == currentUser.uid ||
                                             element.assignedto == null) &&
-                                        element.status.contains(
-                                            _selectedSegment_04.value))
+                                        element.status.contains(_selectedSegment_04.value))
                                     .toList(),
                                 emptyWidget: const EmptyView(),
                                 inputDecoration: const InputDecoration(
@@ -168,20 +164,25 @@ class _VDashboardScreenState extends State<VDashboardScreen> {
 
 class TaskItem extends StatefulWidget {
   final Task task;
+  final PetService petService;
 
-  TaskItem({
+  const TaskItem({
     Key? key,
     required this.task,
+    required this.petService,
   }) : super(key: key);
 
   @override
-  State<TaskItem> createState() => _TaskItemState();
+  State<TaskItem> createState() => _TaskItemState(petService);
 }
 
 class _TaskItemState extends State<TaskItem> {
   final _auth = FirebaseAuth.FirebaseAuth.instance;
   // authInstance
   late FirebaseAuth.User currentUser;
+  late PetService petService = petService;
+
+  _TaskItemState(this.petService);
 
   @override
   void initState() {
@@ -201,12 +202,12 @@ class _TaskItemState extends State<TaskItem> {
     ];
 
     List<Icon> icons = [
-      Icon(Icons.restaurant),
-      Icon(Icons.cleaning_services),
-      Icon(Icons.miscellaneous_services),
-      Icon(Icons.sports_soccer),
-      Icon(Icons.school),
-      Icon(Icons.task)
+      const Icon(Icons.restaurant),
+      const Icon(Icons.cleaning_services),
+      const Icon(Icons.miscellaneous_services),
+      const Icon(Icons.sports_soccer),
+      const Icon(Icons.school),
+      const Icon(Icons.task)
     ];
 
     return icons[categories.indexOf(category)];
@@ -237,24 +238,52 @@ class _TaskItemState extends State<TaskItem> {
                 child: Row(
                   children: [
                     showCategoryIcon(widget.task.category),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          widget.task.name,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              widget.task.name,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                    // To push icon to the right
-                    const Expanded(child: SizedBox()),
+                    if (widget.task.pet != null) // Check if pet is not null
+                      FutureBuilder<Pet?>(
+                        future: petService.findPetByPetID(widget.task.pet!),
+                        // Fetch the pet using referenceId
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            final pet = snapshot.data!;
+                            return Align(
+                              alignment: Alignment.centerRight,
+                              child: SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircleAvatar(
+                                  backgroundImage:
+                                      NetworkImage(pet.profilepicture),
+                                ),
+                              ),
+                            );
+                          } else if (snapshot.hasError) {
+                            return const Text('Error retrieving pet');
+                          } else {
+                            return const SizedBox();
+                          }
+                        },
+                      ),
+                    const SizedBox(
+                        width:
+                            6), // This will add space between the pet profile picture and the IconButton
                     if (widget.task.status == "Open")
                       if (widget.task.requests.contains(currentUser.uid))
                         SizedBox(

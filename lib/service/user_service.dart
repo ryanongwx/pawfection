@@ -113,7 +113,7 @@ class UserService {
     return null;
   }
 
-  Future<List<User?>> findUserByUUIDs(List<String?> referenceIds) async {
+  Future<List<User>> findUserByUUIDs(List<String?> referenceIds) async {
     final querySnapshot = await userRepository.fetchAllUsers();
     final userList = snapshotToUserListModified(querySnapshot);
 
