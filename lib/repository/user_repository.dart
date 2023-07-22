@@ -1,11 +1,12 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 
 class UserRepository {
-  final CollectionReference userCollection =
-      FirebaseFirestore.instance.collection('users');
+  late CollectionReference userCollection;
+
+  UserRepository(FirebaseFirestore firebaseFirestore) {
+    userCollection = firebaseFirestore.collection('users');
+  }
 
   Future<String> addUserRepo(Map<String, dynamic> userJson) async {
     var newDocRef = userCollection.doc();

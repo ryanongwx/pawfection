@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,8 +17,8 @@ class ProfilePictureUpdateScreen extends StatefulWidget {
   ProfilePictureUpdateScreen(
       {super.key, required this.routetext, required this.petid});
 
-  String routetext;
-  String petid;
+  final String routetext;
+  final String petid;
 
   @override
   _ProfilePictureUpdateScreenState createState() =>
@@ -26,16 +27,12 @@ class ProfilePictureUpdateScreen extends StatefulWidget {
 
 class _ProfilePictureUpdateScreenState
     extends State<ProfilePictureUpdateScreen> {
-  bool _isLoading = false;
-  final bool _isSaved = false;
-
   final ValueNotifier<File?> _croppedImageNotifier = ValueNotifier<File?>(null);
-  final TextEditingController _textEditingController = TextEditingController();
 
-  final userRepository = UserRepository();
-  final petRepository = PetRepository();
+  final userRepository = UserRepository(FirebaseFirestore.instance);
+  final petRepository = PetRepository(FirebaseFirestore.instance);
   final storageRepository = StorageRepository();
-  final userService = UserService();
+  final userService = UserService(FirebaseFirestore.instance);
 
   final FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
   late FirebaseAuth.User currentUser;
@@ -78,10 +75,6 @@ class _ProfilePictureUpdateScreenState
   }
 
   Future<void> pickImage(ImageSource source) async {
-    setState(() {
-      _isLoading = true; // Set loading state
-    });
-
     final ImagePicker picker = ImagePicker();
     final XFile? pickedFile = await picker.pickImage(source: source);
 
@@ -89,15 +82,7 @@ class _ProfilePictureUpdateScreenState
       File originalImageFile = File(pickedFile.path);
       File? croppedImageFile = await _cropImage(originalImageFile);
       _croppedImageNotifier.value = croppedImageFile;
-
-      if (croppedImageFile != null) {
-        final processedImageFile = croppedImageFile.path;
-      }
     }
-
-    setState(() {
-      _isLoading = false; // Set loading state
-    });
   }
 
   @override

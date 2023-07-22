@@ -1,11 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pawfection/manager/m_update_pet_screen.dart';
 import 'package:pawfection/models/pet.dart';
-import 'package:pawfection/repository/pet_repository.dart';
 import 'package:pawfection/service/pet_service.dart';
 
 Future<void> displayPetItemDialog(BuildContext context, String id) async {
-  final petService = PetService();
+  final petService = PetService(FirebaseFirestore.instance);
 
   return showDialog(
     context: context,

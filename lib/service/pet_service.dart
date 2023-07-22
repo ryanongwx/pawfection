@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pawfection/repository/pet_repository.dart';
@@ -7,7 +5,11 @@ import 'package:pawfection/repository/pet_repository.dart';
 import '../models/pet.dart';
 
 class PetService {
-  PetRepository petRepository = PetRepository();
+  late PetRepository petRepository;
+
+  PetService(FirebaseFirestore firebaseFirestore) {
+    petRepository = PetRepository(firebaseFirestore);
+  }
 
   Pet petFromJson(Map<String, dynamic> json) => Pet(json['name'] as String,
       breed: json['breed'] as String?,

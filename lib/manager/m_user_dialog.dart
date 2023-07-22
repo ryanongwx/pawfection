@@ -1,11 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pawfection/models/user.dart';
-import 'package:pawfection/repository/user_repository.dart';
 import 'package:pawfection/service/user_service.dart';
 
 Future<void> displayUserItemDialog(BuildContext context, String id) async {
-  final userRepository = UserRepository();
-  final userService = UserService();
+  final userService = UserService(FirebaseFirestore.instance);
   return showDialog(
     context: context,
     builder: (context) {

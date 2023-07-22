@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pawfection/models/user.dart';
 import 'package:pawfection/service/task_service.dart';
@@ -5,8 +6,8 @@ import 'package:pawfection/service/user_service.dart';
 import '../models/task.dart';
 
 Future<void> displayVolunteersDialog(BuildContext context, Task task) async {
-  final taskService = TaskService();
-  final userService = UserService();
+  final taskService = TaskService(FirebaseFirestore.instance);
+  final userService = UserService(FirebaseFirestore.instance);
 
   return showDialog(
     context: context,
@@ -29,13 +30,16 @@ Future<void> displayVolunteersDialog(BuildContext context, Task task) async {
                 // The future completed successfully
                 final userList = snapshot.data;
                 List<String?> filteredUserList = userList
-                  ?.where((user) => (user.role.toLowerCase() == "volunteer" &&
-                    // For now time is abstracted out and only date will be compared
-                    taskService.isAvailableWithinDeadline(user, task)))
-                    .map((user) => user.username)
-                    .toList() ?? [];
+                        ?.where((user) => (user.role.toLowerCase() ==
+                                "volunteer" &&
+                            // For now time is abstracted out and only date will be compared
+                            taskService.isAvailableWithinDeadline(user, task)))
+                        .map((user) => user.username)
+                        .toList() ??
+                    [];
                 filteredUserList.insert(0, "<No volunteer assigned>");
-                List<String> newNameList = filteredUserList.map((e) => e!).toList();
+                List<String> newNameList =
+                    filteredUserList.map((e) => e!).toList();
                 return Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: ListView.builder(

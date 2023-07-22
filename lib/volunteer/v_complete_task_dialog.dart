@@ -1,16 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:pawfection/models/task.dart';
 import 'package:pawfection/models/user.dart';
-import 'package:pawfection/repository/task_repository.dart';
-import 'package:pawfection/repository/user_repository.dart';
 import 'package:pawfection/service/task_service.dart';
 import 'package:pawfection/service/user_service.dart';
 import 'package:pawfection/voluteer_view.dart';
 
 Future<void> displayCompleteTaskDialog(BuildContext context, String id) async {
-  final taskService = TaskService();
-  final userService = UserService();
+  final taskService = TaskService(FirebaseFirestore.instance);
+  final userService = UserService(FirebaseFirestore.instance);
 
   final formKey = GlobalKey<FormState>();
   late var _form;

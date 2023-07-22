@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/models/task.dart';
@@ -18,7 +19,7 @@ class AutoAssignDialog extends StatefulWidget {
 
 class _AutoAssignDialogState extends State<AutoAssignDialog> {
   final functionService = FunctionService();
-  final petService = PetService();
+  final petService = PetService(FirebaseFirestore.instance);
   List<Task> tasks = [];
 
   Map<String, User?> selectedUserVolunteers = {};
@@ -90,12 +91,14 @@ class _AutoAssignDialogState extends State<AutoAssignDialog> {
                               FutureBuilder<Pet?>(
                                 future: petService.findPetByPetID(task.pet!),
                                 builder: (context, snapshot) {
-                                  if (snapshot.connectionState == ConnectionState.waiting) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
                                     return const CircularProgressIndicator();
                                   } else if (snapshot.hasError) {
                                     debugPrint('Error: ${snapshot.error}');
                                     return const Icon(Icons.error);
-                                  } else if (snapshot.hasData && snapshot.data != null) {
+                                  } else if (snapshot.hasData &&
+                                      snapshot.data != null) {
                                     return Expanded(
                                       flex: 1,
                                       child: ClipOval(
@@ -126,16 +129,18 @@ class _AutoAssignDialogState extends State<AutoAssignDialog> {
                             Expanded(
                               flex: 5,
                               child: SizedBox(
-                                width: 100,  // specify your desired width
+                                width: 100, // specify your desired width
                                 child: DropdownButton<User?>(
                                   isExpanded: true,
-                                  value: selectedUserVolunteers[task.referenceId],
+                                  value:
+                                      selectedUserVolunteers[task.referenceId],
                                   icon: const Icon(Icons.arrow_downward),
                                   iconSize: 24,
                                   elevation: 16,
                                   onChanged: (User? newValue) {
                                     setState(() {
-                                      selectedUserVolunteers[task.referenceId!] = newValue;
+                                      selectedUserVolunteers[
+                                          task.referenceId!] = newValue;
                                     });
                                   },
                                   items: <DropdownMenuItem<User?>>[
@@ -143,7 +148,9 @@ class _AutoAssignDialogState extends State<AutoAssignDialog> {
                                       value: null,
                                       child: Text("<No volunteer assigned>"),
                                     ),
-                                    ...volunteerList.map<DropdownMenuItem<User?>>((User user) {
+                                    ...volunteerList
+                                        .map<DropdownMenuItem<User?>>(
+                                            (User user) {
                                       return DropdownMenuItem<User?>(
                                         value: user,
                                         child: Row(
@@ -175,7 +182,6 @@ class _AutoAssignDialogState extends State<AutoAssignDialog> {
                           ],
                         ),
                       );
-
                     }
                   },
                 );
@@ -188,12 +194,13 @@ class _AutoAssignDialogState extends State<AutoAssignDialog> {
         padding: const EdgeInsets.all(10.0),
         child: ElevatedButton(
           onPressed: () {
-            for(var entry in selectedUserVolunteers.entries) {
+            for (var entry in selectedUserVolunteers.entries) {
               String taskId = entry.key;
               User? selectedUser = entry.value;
 
               // Find the task with the given taskId
-              Task task = tasks.firstWhere((task) => task.referenceId == taskId);
+              Task task =
+                  tasks.firstWhere((task) => task.referenceId == taskId);
 
               if (selectedUser == null) {
                 task.assignedto = null;

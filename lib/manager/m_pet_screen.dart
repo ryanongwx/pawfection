@@ -1,30 +1,32 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pawfection/manager/m_create_pet_screen.dart';
 import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/repository/pet_repository.dart';
 import 'package:pawfection/service/pet_service.dart';
 import 'package:searchable_listview/searchable_listview.dart';
-import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/manager/m_pet_dialog.dart' as Dialog;
 
 class MPetScreen extends StatefulWidget {
-  const MPetScreen({super.key});
+  final FirebaseFirestore firebaseFirestore;
+  MPetScreen({super.key, required this.firebaseFirestore});
 
   @override
   State<MPetScreen> createState() => _MPetScreenState();
 }
 
-final petRepository = PetRepository();
-final petService = PetService();
+late PetRepository petRepository;
+late PetService petService;
 
 class _MPetScreenState extends State<MPetScreen> {
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   fetchPetList();
-  // }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    petRepository = PetRepository(widget.firebaseFirestore);
+    petService = PetService(widget.firebaseFirestore);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +81,10 @@ class _MPetScreenState extends State<MPetScreen> {
                         .where((element) =>
                             element.name.contains(value.toLowerCase()))
                         .toList(),
-                    builder: (Pet pet) => PetItem(pet: pet),
+                    builder: (Pet pet) => PetItem(
+                      pet: pet,
+                      firebaseFirestore: widget.firebaseFirestore,
+                    ),
                     emptyWidget: const EmptyView(),
                     inputDecoration: InputDecoration(
                       labelText: "Search Pet",
@@ -117,10 +122,12 @@ class _MPetScreenState extends State<MPetScreen> {
 
 class PetItem extends StatelessWidget {
   final Pet pet;
+  final FirebaseFirestore firebaseFirestore;
 
-  const PetItem({
+  PetItem({
     Key? key,
     required this.pet,
+    required this.firebaseFirestore,
   }) : super(key: key);
 
   @override
@@ -142,17 +149,19 @@ class PetItem extends StatelessWidget {
               padding: const EdgeInsets.all(10),
               child: Row(
                 children: [
-                  ClipOval(
-                    child: Material(
-                      color: Colors.transparent,
-                      child: Ink.image(
-                        image: Image.network(pet.profilepicture).image,
-                        fit: BoxFit.cover,
-                        width: 50,
-                        height: 50,
-                      ),
-                    ),
-                  ),
+                  (firebaseFirestore is FakeFirebaseFirestore)
+                      ? Column()
+                      : ClipOval(
+                          child: Material(
+                            color: Colors.transparent,
+                            child: Ink.image(
+                              image: Image.network(pet.profilepicture).image,
+                              fit: BoxFit.cover,
+                              width: 50,
+                              height: 50,
+                            ),
+                          ),
+                        ),
                   const SizedBox(
                     width: 10,
                   ),

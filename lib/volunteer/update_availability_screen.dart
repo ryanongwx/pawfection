@@ -9,17 +9,15 @@ import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
 class UpdateAvailability extends StatefulWidget {
   UpdateAvailability({Key? key, required this.user}) : super(key: key);
 
-  User user;
+  final User user;
 
   @override
   State<UpdateAvailability> createState() => _UpdateAvailabilityState();
 }
 
 class _UpdateAvailabilityState extends State<UpdateAvailability> {
-  final GlobalKey<FormState> _dateKey = GlobalKey<FormState>();
-  late List<DateTime?> _date;
-  final userRepository = UserRepository();
-  final userService = UserService();
+  final userRepository = UserRepository(FirebaseFirestore.instance);
+  final userService = UserService(FirebaseFirestore.instance);
 
   final FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
   late FirebaseAuth.User currentUser;

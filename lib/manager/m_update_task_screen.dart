@@ -2,7 +2,6 @@ import 'dart:core';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:card_settings/card_settings.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pawfection/manager_view.dart';
@@ -16,32 +15,28 @@ import 'package:pawfection/repository/user_repository.dart';
 import 'package:pawfection/service/pet_service.dart';
 import 'package:pawfection/service/task_service.dart';
 import 'package:pawfection/service/user_service.dart';
-import 'package:pawfection/volunteer/profile_picture_update_screen.dart';
-import 'package:pawfection/volunteer/widgets/profile_widget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
 
 class MUpdateTaskScreen extends StatefulWidget {
   MUpdateTaskScreen({super.key, required this.task});
 
-  Task task;
+  final Task task;
 
   @override
   State<MUpdateTaskScreen> createState() => _MUpdateTaskScreenState();
 }
 
 class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
-  final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
-  final taskRepository = TaskRepository();
-  final taskService = TaskService();
+  final taskRepository = TaskRepository(FirebaseFirestore.instance);
+  final taskService = TaskService(FirebaseFirestore.instance);
   final storageRepository = StorageRepository();
-  final userRepository = UserRepository();
-  final petRepository = PetRepository();
-  final petService = PetService();
-  final userService = UserService();
+  final userRepository = UserRepository(FirebaseFirestore.instance);
+  final petRepository = PetRepository(FirebaseFirestore.instance);
+  final petService = PetService(FirebaseFirestore.instance);
+  final userService = UserService(FirebaseFirestore.instance);
 
-  bool _isLoading = false;
   List<String?> resources = [];
 
   late var _form;
@@ -66,6 +61,8 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
     if (widget.task.categoryothers != null) {
       showTextField = true;
     }
+    _form = taskService.taskToJson(widget.task);
+    debugPrint(_form.toString());
   }
 
   Widget buildPetList() => FutureBuilder<List<Pet>>(
@@ -228,88 +225,105 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                           resources[i] = imageURL;
                         }
                       }
-                      var updateduserID;
-                      User? updateduser = await userService.findUserByUsername(
-                          _form['user'].toString().split(' ')[0]);
-                      if (updateduser != null) {
-                        updateduserID = updateduser.referenceId;
+                      // Check whether assigned to is changed
+                      if (_form['assignedto'] == null) {
+                        var updateduserID;
+                        User? updateduser =
+                            await userService.findUserByUsername(
+                                _form['user'].toString().split(' ')[0]);
+                        if (updateduser != null) {
+                          updateduserID = updateduser.referenceId;
+                        }
+
+                        // Add one to the taskcounter of the user assigned
+                        if (updateduserID != null) {
+                          User? assigneduser =
+                              await userService.findUserByUUID(updateduserID);
+                          debugPrint(assigneduser.toString());
+                          if (assigneduser != null) {
+                            assigneduser.taskcount += 1;
+                            userService.updateUser(assigneduser);
+                          }
+                        }
+                        widget.task.assignedto = updateduserID;
+
+                        // Subtract one from the taskcounter of the previous user assigned
+                        if (widget.task.assignedto != null) {
+                          User? prevassigneduser = await userService
+                              .findUserByUUID(widget.task.assignedto!);
+                          if (prevassigneduser != null) {
+                            prevassigneduser.taskcount -= 1;
+                            userService.updateUser(prevassigneduser);
+                          }
+                        }
                       }
 
                       debugPrint('1');
 
-                      var updatedpetID;
-                      Pet? updatedpet =
-                          await petService.findPetByPetname(_form['pet']);
-                      if (updatedpet != null) {
-                        updatedpetID = updatedpet.referenceId!;
+                      // Check whether assiugned pet has been changed
+                      Pet? checkpet =
+                          await petService.findPetByPetID(_form['pet']);
+                      if (checkpet == null) {
+                        var updatedpetID;
+                        Pet? updatedpet =
+                            await petService.findPetByPetname(_form['pet']);
+                        if (updatedpet != null) {
+                          updatedpetID = updatedpet.referenceId!;
+                        }
+                        widget.task.pet = updatedpetID;
                       }
 
                       debugPrint('2');
 
-                      // Subtract one from the taskcounter of the previous user assigned
-                      if (widget.task.assignedto != null) {
-                        User? prevassigneduser = await userService
-                            .findUserByUUID(widget.task.assignedto!);
-                        if (prevassigneduser != null) {
-                          prevassigneduser.taskcount -= 1;
-                          userService.updateUser(prevassigneduser);
+                      debugPrint('3');
+
+                      if (_form['deadline'] == null) {
+                        DateTime deadlineenddt = DateTime(
+                            _form['deadlineend'].year,
+                            _form['deadlineend'].month,
+                            _form['deadlineend'].day,
+                            _form['deadlineendtime'].hour,
+                            _form['deadlineendtime'].minute);
+                        DateTime deadlinestartdt = DateTime(
+                            _form['deadlinestart'].year,
+                            _form['deadlinestart'].month,
+                            _form['deadlinestart'].day,
+                            _form['deadlinestarttime'].hour,
+                            _form['deadlinestarttime'].minute);
+
+                        Timestamp deadlinestart =
+                            Timestamp.fromDate(deadlinestartdt);
+                        Timestamp deadlineend =
+                            Timestamp.fromDate(deadlineenddt);
+
+                        if (_form['deadline'] == null) {
+                          if (deadlineenddt.isBefore(deadlinestartdt)) {
+                            throw Exception(
+                                'Deadline end cannot be before deadline start');
+                          }
+
+                          if (deadlineenddt.isBefore(DateTime.now())) {
+                            throw Exception(
+                                'Deadline end cannot be before current time');
+                          }
+                          widget.task.deadline = [deadlinestart, deadlineend];
                         }
                       }
 
-                      debugPrint('3');
-
-                      DateTime deadlineenddt = DateTime(
-                          _form['deadlineend'].year,
-                          _form['deadlineend'].month,
-                          _form['deadlineend'].day,
-                          _form['deadlineendtime'].hour,
-                          _form['deadlineendtime'].minute);
-                      DateTime deadlinestartdt = DateTime(
-                          _form['deadlinestart'].year,
-                          _form['deadlinestart'].month,
-                          _form['deadlinestart'].day,
-                          _form['deadlinestarttime'].hour,
-                          _form['deadlinestarttime'].minute);
-
-                      Timestamp deadlinestart =
-                          Timestamp.fromDate(deadlinestartdt);
-                      Timestamp deadlineend = Timestamp.fromDate(deadlineenddt);
-
-                      if (deadlineenddt.isBefore(deadlinestartdt)) {
-                        throw Exception(
-                            'Deadline end cannot be before deadline start');
-                      }
-
-                      if (deadlineenddt.isBefore(DateTime.now())) {
-                        throw Exception(
-                            'Deadline end cannot be before current time');
-                      }
                       widget.task.name = _form['name'];
                       widget.task.description = _form['description'];
                       widget.task.resources = resources;
-                      widget.task.deadline = [deadlinestart, deadlineend];
+
                       widget.task.category = _form['category'];
                       if (_form['category'] != "Others") {
                         widget.task.categoryothers = null;
                       } else {
                         widget.task.categoryothers = _form['categoryothers'];
                       }
-                      widget.task.pet = updatedpetID;
-                      widget.task.assignedto = updateduserID;
+                      widget.task.status =
+                          (widget.task.assignedto == null) ? 'Open' : 'Pending';
                       taskService.updateTask(widget.task);
 
-                      // Add one to the taskcounter of the user assigned
-                      if (updateduserID != null) {
-                        User? assigneduser =
-                            await userService.findUserByUUID(updateduserID);
-                        debugPrint(assigneduser.toString());
-                        if (assigneduser != null) {
-                          assigneduser.taskcount += 1;
-                          userService.updateUser(assigneduser);
-                        }
-                      }
-
-                      debugPrint('5');
                       setState(() {
                         alertmessage = 'Task has successfully been updated';
                       });
@@ -377,16 +391,25 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                   child: const Text('Update'),
                   onPressed: () async {
                     try {
-                      if (_form['deadlineend']
-                          .isBefore(_form['deadlinestart'])) {
-                        throw Exception(
-                            'Deadline end cannot be before deadline start');
+                      // If deadline is changed
+                      if (_form['deadline'] == null) {
+                        if (_form['deadlineend']
+                            .isBefore(_form['deadlinestart'])) {
+                          throw Exception(
+                              'Deadline end cannot be before deadline start');
+                        }
+
+                        if (_form['deadlineend'].isBefore(DateTime.now())) {
+                          throw Exception(
+                              'Deadline end cannot be before current time');
+                        }
+                        widget.task.deadline = [
+                          Timestamp.fromDate(_form['deadlinestart']),
+                          Timestamp.fromDate(_form['deadlineend'])
+                        ];
                       }
 
-                      if (_form['deadlineend'].isBefore(DateTime.now())) {
-                        throw Exception(
-                            'Deadline end cannot be before current time');
-                      }
+                      debugPrint('1');
 
                       for (var i = 0; i < resources.length; i++) {
                         var newrefId = widget.task.referenceId! + i.toString();
@@ -397,38 +420,59 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                           resources[i] = imageURL;
                         }
                       }
-                      var updateduserID;
-                      User? updateduser = await userService.findUserByUsername(
-                          _form['user'].toString().split(' ')[0]);
-                      if (updateduser != null) {
-                        updateduserID = updateduser.referenceId;
-                      }
 
-                      debugPrint('1');
+                      if (_form['assignedto'] == null) {
+                        var updateduserID;
+                        User? updateduser =
+                            await userService.findUserByUsername(
+                                _form['user'].toString().split(' ')[0]);
+                        if (updateduser != null) {
+                          updateduserID = updateduser.referenceId;
+                        }
 
-                      var updatedpetID;
-                      Pet? updatedpet =
-                          await petService.findPetByPetname(_form['pet']);
-                      if (updatedpet != null) {
-                        updatedpetID = updatedpet.referenceId!;
+                        // Add one to the taskcounter of the user assigned
+                        if (updateduserID != null) {
+                          User? assigneduser =
+                              await userService.findUserByUUID(updateduserID);
+                          debugPrint(assigneduser.toString());
+                          if (assigneduser != null) {
+                            assigneduser.taskcount += 1;
+                            userService.updateUser(assigneduser);
+                          }
+                        }
+                        widget.task.assignedto = updateduserID;
+
+                        // Subtract one from the taskcounter of the previous user assigned
+                        if (widget.task.assignedto != null) {
+                          User? prevassigneduser = await userService
+                              .findUserByUUID(widget.task.assignedto!);
+                          if (prevassigneduser != null) {
+                            prevassigneduser.taskcount -= 1;
+                            userService.updateUser(prevassigneduser);
+                          }
+                        }
                       }
 
                       debugPrint('2');
 
-                      // Subtract one from the taskcounter of the previous user assigned
-                      if (widget.task.assignedto != null) {
-                        User? prevassigneduser = await userService
-                            .findUserByUUID(widget.task.assignedto!);
-                        if (prevassigneduser != null) {
-                          prevassigneduser.taskcount -= 1;
-                          userService.updateUser(prevassigneduser);
+                      // Check whether assiugned pet has been changed
+                      Pet? checkpet =
+                          await petService.findPetByPetID(_form['pet']);
+                      if (checkpet == null) {
+                        var updatedpetID;
+                        Pet? updatedpet =
+                            await petService.findPetByPetname(_form['pet']);
+                        if (updatedpet != null) {
+                          updatedpetID = updatedpet.referenceId!;
                         }
+                        widget.task.pet = updatedpetID;
                       }
 
                       debugPrint('3');
 
+                      debugPrint('4');
                       widget.task.name = _form['name'];
-                      widget.task.assignedto = updateduserID;
+
                       widget.task.description = _form['description'];
                       widget.task.category = _form['category'];
                       if (_form['category'] != "Others") {
@@ -439,28 +483,10 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
 
                       debugPrint(widget.task.category);
                       widget.task.resources = resources;
-                      widget.task.deadline = [
-                        Timestamp.fromDate(_form['deadlinestart']),
-                        Timestamp.fromDate(_form['deadlineend'])
-                      ];
-                      widget.task.pet = updatedpetID;
 
+                      widget.task.status =
+                          (widget.task.assignedto == null) ? 'Open' : 'Pending';
                       taskService.updateTask(widget.task);
-
-                      debugPrint('4');
-
-                      // Add one to the taskcounter of the user assigned
-                      if (updateduserID != null) {
-                        User? assigneduser =
-                            await userService.findUserByUUID(updateduserID);
-                        debugPrint(assigneduser.toString());
-                        if (assigneduser != null) {
-                          assigneduser.taskcount += 1;
-                          userService.updateUser(assigneduser);
-                        }
-                      }
-
-                      debugPrint('5');
 
                       setState(() {
                         alertmessage = 'Task has successfully been updated';
@@ -596,13 +622,6 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
-                                      final screenSize =
-                                          MediaQuery.of(context).size;
-                                      final dialogWidth =
-                                          screenSize.width * 0.7;
-                                      final dialogHeight =
-                                          screenSize.height * 0.7;
-
                                       return Dialog(
                                         child: Stack(
                                           children: [
@@ -649,7 +668,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                                       top: 10,
                                       right: 20,
                                       child: Container(
-                                        decoration: BoxDecoration(
+                                        decoration: const BoxDecoration(
                                           shape: BoxShape.circle,
                                           color: Colors.red,
                                         ),
@@ -801,13 +820,6 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
-                                      final screenSize =
-                                          MediaQuery.of(context).size;
-                                      final dialogWidth =
-                                          screenSize.width * 0.7;
-                                      final dialogHeight =
-                                          screenSize.height * 0.7;
-
                                       return Dialog(
                                         child: Stack(
                                           children: [
@@ -820,7 +832,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                                               top: 10,
                                               right: 10,
                                               child: Container(
-                                                decoration: BoxDecoration(
+                                                decoration: const BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   color: Colors.red,
                                                 ),
@@ -854,7 +866,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                                       top: 10,
                                       right: 20,
                                       child: Container(
-                                        decoration: BoxDecoration(
+                                        decoration: const BoxDecoration(
                                           shape: BoxShape.circle,
                                           color: Colors.red,
                                         ),
@@ -907,10 +919,6 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
   }
 
   Future<void> pickVideo(ImageSource source) async {
-    setState(() {
-      _isLoading = true; // Set loading state
-    });
-
     final ImagePicker picker = ImagePicker();
     final List<XFile> pickedFiles = await picker.pickMultiImage();
     if (pickedFiles.isNotEmpty) {
@@ -920,10 +928,6 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
         resources.addAll(filepaths.map((e) => e!.path).toList());
       });
     }
-
-    setState(() {
-      _isLoading = false; // Set loading state
-    });
   }
 
   File convertImageToFile(img.Image image) {

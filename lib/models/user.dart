@@ -31,8 +31,7 @@ class User {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is User &&
-        other.referenceId == referenceId;
+    return other is User && other.referenceId == referenceId;
   }
 
   @override

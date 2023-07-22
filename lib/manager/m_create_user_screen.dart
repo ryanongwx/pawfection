@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:core';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
@@ -8,33 +9,26 @@ import 'package:flutter/cupertino.dart';
 import 'package:pawfection/manager_view.dart';
 import 'package:pawfection/models/user.dart';
 import 'package:http/http.dart' as http;
-
-import 'package:pawfection/repository/user_repository.dart';
 import 'package:pawfection/service/user_service.dart';
-import 'package:pawfection/volunteer/profile_picture_update_screen.dart';
-import 'package:pawfection/volunteer/widgets/profile_widget.dart';
 
 class MCreateUserScreen extends StatefulWidget {
   MCreateUserScreen(
       {super.key, this.imagePath = 'assets/images/user_profile.png'});
 
-  String imagePath;
+  final String imagePath;
 
   @override
   State<MCreateUserScreen> createState() => _MCreateUserScreenState();
 }
 
 class _MCreateUserScreenState extends State<MCreateUserScreen> {
-  final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
-  final userService = UserService();
+  final userService = UserService(FirebaseFirestore.instance);
   late var _form;
   late var alertmessage;
 
-  var _experiences = [];
+  var experiences = [];
   var preferences = [];
-
-  int _selectedFruit = 0;
 
   void _showDialog(Widget child) {
     showCupertinoModalPopup<void>(
@@ -64,7 +58,7 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
     const user_id = '2KNsSyfb3iimQC2k1';
 
     final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
-    final response = await http.post(url,
+    await http.post(url,
         headers: {
           'origin': 'http://localhost',
           'Content-Type': 'application/json',

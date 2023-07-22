@@ -19,8 +19,8 @@ class VDashboardScreen extends StatefulWidget {
 
 final _selectedSegment_04 = ValueNotifier('Pending');
 
-final taskRepository = TaskRepository();
-final taskService = TaskService();
+final taskRepository = TaskRepository(FirebaseFirestore.instance);
+final taskService = TaskService(FirebaseFirestore.instance);
 
 class _VDashboardScreenState extends State<VDashboardScreen> {
   // @override
@@ -31,7 +31,7 @@ class _VDashboardScreenState extends State<VDashboardScreen> {
 
   final FirebaseAuth.FirebaseAuth _auth = FirebaseAuth.FirebaseAuth.instance;
   late FirebaseAuth.User currentUser;
-  final PetService petService = PetService();
+  final PetService petService = PetService(FirebaseFirestore.instance);
 
   @override
   void initState() {
@@ -119,7 +119,8 @@ class _VDashboardScreenState extends State<VDashboardScreen> {
                                         element.status.contains(
                                             _selectedSegment_04.value))
                                     .toList(),
-                                builder: (Task task) => TaskItem(task: task, petService: petService),
+                                builder: (Task task) => TaskItem(
+                                    task: task, petService: petService),
                                 filter: (value) => taskList
                                     .where((element) => element.name
                                         .toLowerCase()
@@ -127,8 +128,7 @@ class _VDashboardScreenState extends State<VDashboardScreen> {
                                     .where((element) =>
                                         (element.assignedto == currentUser.uid ||
                                             element.assignedto == null) &&
-                                        element.status.contains(
-                                            _selectedSegment_04.value))
+                                        element.status.contains(_selectedSegment_04.value))
                                     .toList(),
                                 emptyWidget: const EmptyView(),
                                 inputDecoration: const InputDecoration(
@@ -215,113 +215,111 @@ class _TaskItemState extends State<TaskItem> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.task == null) {
-      return const Column();
-    } else {
-      return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(width: 2),
-            ),
-            child: InkWell(
-              onTap: () {
-                if (widget.task.referenceId != null) {
-                  taskDialog.displayTaskItemDialog(
-                      context, widget.task.referenceId!);
-                }
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Row(
-                  children: [
-                    showCategoryIcon(widget.task.category),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Flexible(
-                            child: Text(
-                              widget.task.name,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(width: 2),
+          ),
+          child: InkWell(
+            onTap: () {
+              if (widget.task.referenceId != null) {
+                taskDialog.displayTaskItemDialog(
+                    context, widget.task.referenceId!);
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                children: [
+                  showCategoryIcon(widget.task.category),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            widget.task.name,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
                             ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    if (widget.task.pet != null) // Check if pet is not null
-                      FutureBuilder<Pet?>(
-                        future: petService.findPetByPetID(widget.task.pet!),
-                        // Fetch the pet using referenceId
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            final pet = snapshot.data!;
-                            return Align(
-                              alignment: Alignment.centerRight,
-                              child: SizedBox(
-                                width: 24,
-                                height: 24,
-                                child: CircleAvatar(
-                                  backgroundImage:
-                                  NetworkImage(pet.profilepicture),
-                                ),
+                  ),
+                  if (widget.task.pet != null) // Check if pet is not null
+                    FutureBuilder<Pet?>(
+                      future: petService.findPetByPetID(widget.task.pet!),
+                      // Fetch the pet using referenceId
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          final pet = snapshot.data!;
+                          return Align(
+                            alignment: Alignment.centerRight,
+                            child: SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage(pet.profilepicture),
                               ),
-                            );
-                          } else if (snapshot.hasError) {
-                            return const Text('Error retrieving pet');
-                          } else {
-                            return const SizedBox();
-                          }
-                        },
-                      ),
-                    const SizedBox(width: 6),  // This will add space between the pet profile picture and the IconButton
-                    if (widget.task.status == "Open")
-                      if (widget.task.requests.contains(currentUser.uid))
-                        SizedBox(
-                          height: 24.0, // Change as needed
-                          width: 24.0, // Change as needed
-                          child: IconButton(
-                            padding: EdgeInsets.zero, // removes default padding
-                            alignment: Alignment.center, // centers the icon
-                            icon: const Icon(Icons.person_remove),
-                            iconSize: 20.0, // Change as needed
-                            onPressed: () {
-                              widget.task.requests.remove(currentUser.uid);
+                            ),
+                          );
+                        } else if (snapshot.hasError) {
+                          return const Text('Error retrieving pet');
+                        } else {
+                          return const SizedBox();
+                        }
+                      },
+                    ),
+                  const SizedBox(
+                      width:
+                          6), // This will add space between the pet profile picture and the IconButton
+                  if (widget.task.status == "Open")
+                    if (widget.task.requests.contains(currentUser.uid))
+                      SizedBox(
+                        height: 24.0, // Change as needed
+                        width: 24.0, // Change as needed
+                        child: IconButton(
+                          padding: EdgeInsets.zero, // removes default padding
+                          alignment: Alignment.center, // centers the icon
+                          icon: const Icon(Icons.person_remove),
+                          iconSize: 20.0, // Change as needed
+                          onPressed: () {
+                            widget.task.requests.remove(currentUser.uid);
+                            taskService.updateTask(widget.task);
+                          },
+                        ),
+                      )
+                    else
+                      SizedBox(
+                        height: 24.0, // Change as needed
+                        width: 24.0, // Change as needed
+                        child: IconButton(
+                          padding: EdgeInsets.zero, // removes default padding
+                          alignment: Alignment.center, // centers the icon
+                          icon: const Icon(Icons.person_add),
+                          iconSize: 20.0, // Change as needed
+                          onPressed: () {
+                            if (!widget.task.requests
+                                .contains(currentUser.uid)) {
+                              widget.task.requests.add(currentUser.uid);
                               taskService.updateTask(widget.task);
-                            },
-                          ),
-                        )
-                      else
-                        SizedBox(
-                          height: 24.0, // Change as needed
-                          width: 24.0, // Change as needed
-                          child: IconButton(
-                            padding: EdgeInsets.zero, // removes default padding
-                            alignment: Alignment.center, // centers the icon
-                            icon: const Icon(Icons.person_add),
-                            iconSize: 20.0, // Change as needed
-                            onPressed: () {
-                              if (!widget.task.requests
-                                  .contains(currentUser.uid)) {
-                                widget.task.requests.add(currentUser.uid);
-                                taskService.updateTask(widget.task);
-                              }
-                            },
-                          ),
-                        )
-                  ],
-                ),
+                            }
+                          },
+                        ),
+                      )
+                ],
               ),
             ),
-          ));
-    }
+          ),
+        ));
   }
 }
 

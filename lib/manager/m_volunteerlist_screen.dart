@@ -1,22 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pawfection/manager/m_create_user_screen.dart';
 import 'package:pawfection/models/user.dart';
 import 'package:pawfection/repository/user_repository.dart';
 import 'package:pawfection/service/user_service.dart';
-import 'package:pawfection/volunteer/widgets/profile_widget.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 import 'package:pawfection/manager/m_user_dialog.dart' as Dialog;
 
 class MVolunteerListScreen extends StatefulWidget {
-  const MVolunteerListScreen({super.key});
+  final FirebaseFirestore firebaseFirestore;
+  MVolunteerListScreen({super.key, required this.firebaseFirestore});
 
   @override
   State<MVolunteerListScreen> createState() => _MVolunteerListScreenState();
 }
 
-final userRepository = UserRepository();
-final userService = UserService();
+late UserRepository userRepository;
+late UserService userService;
 
 List<User> userList = [];
 
@@ -31,6 +32,14 @@ class _MVolunteerListScreenState extends State<MVolunteerListScreen> {
   // }
 
   // fetchUserList();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    userRepository = UserRepository(widget.firebaseFirestore);
+    userService = UserService(widget.firebaseFirestore);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +91,10 @@ class _MVolunteerListScreenState extends State<MVolunteerListScreen> {
                         .where((element) =>
                             element.username.contains(value.toLowerCase()))
                         .toList(),
-                    builder: (User user) => UserItem(user: user),
+                    builder: (User user) => UserItem(
+                      user: user,
+                      firebaseFirestore: widget.firebaseFirestore,
+                    ),
                     emptyWidget: const EmptyView(),
                     inputDecoration: InputDecoration(
                       labelText: "Search Volunteer",
@@ -120,10 +132,12 @@ class _MVolunteerListScreenState extends State<MVolunteerListScreen> {
 
 class UserItem extends StatelessWidget {
   final User user;
+  final FirebaseFirestore firebaseFirestore;
 
-  const UserItem({
+  UserItem({
     Key? key,
     required this.user,
+    required this.firebaseFirestore,
   }) : super(key: key);
 
   @override
@@ -138,7 +152,7 @@ class UserItem extends StatelessWidget {
           ),
           child: InkWell(
             onTap: () {
-              Dialog.displayUserItemDialog(context, user.referenceId!);
+              Dialog.displayUserItemDialog(context, user.referenceId);
             },
             child: Padding(
               padding: const EdgeInsets.all(10),
@@ -147,12 +161,14 @@ class UserItem extends StatelessWidget {
                   ClipOval(
                     child: Material(
                       color: Colors.transparent,
-                      child: Ink.image(
-                        image: Image.network(user.profilepicture).image,
-                        fit: BoxFit.cover,
-                        width: 50,
-                        height: 50,
-                      ),
+                      child: (firebaseFirestore is FakeFirebaseFirestore)
+                          ? const Column()
+                          : Ink.image(
+                              image: Image.network(user.profilepicture).image,
+                              fit: BoxFit.cover,
+                              width: 50,
+                              height: 50,
+                            ),
                     ),
                   ),
                   const SizedBox(

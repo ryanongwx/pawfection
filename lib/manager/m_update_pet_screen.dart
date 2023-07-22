@@ -1,5 +1,6 @@
 import 'dart:core';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,30 +14,20 @@ import 'package:pawfection/volunteer/widgets/profile_widget.dart';
 class MUpdatePetScreen extends StatefulWidget {
   MUpdatePetScreen({super.key, required this.imageURL, required this.pet});
 
-  String imageURL;
-  Pet pet;
+  final String imageURL;
+  final Pet pet;
 
   @override
   State<MUpdatePetScreen> createState() => _MUpdatePetScreenState();
 }
 
 class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
-  final GlobalKey<FormState> _profileKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
-  final petRepository = PetRepository();
-  final petService = PetService();
+  final petRepository = PetRepository(FirebaseFirestore.instance);
+  final petService = PetService(FirebaseFirestore.instance);
 
   late var _form;
   late var alertmessage;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    if (widget.imageURL == '') {
-      widget.imageURL = widget.pet.profilepicture;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +75,9 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
                   onPressed: () {
                     try {
                       petService.updatePet(Pet(_form['name'],
-                          profilepicture: widget.imageURL,
+                          profilepicture: widget.imageURL == ''
+                              ? widget.pet.profilepicture
+                              : widget.imageURL,
                           breed: _form['breed'],
                           description: _form['description'],
                           thingstonote: _form['thingstonote']));
@@ -150,7 +143,9 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
                   onPressed: () {
                     try {
                       petService.updatePet(Pet(_form['name'],
-                          profilepicture: widget.imageURL,
+                          profilepicture: widget.imageURL == ''
+                              ? widget.pet.profilepicture
+                              : widget.imageURL,
                           breed: _form['breed'],
                           description: _form['description'],
                           thingstonote: _form['thingstonote']));
@@ -203,7 +198,9 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
       Padding(
         padding: const EdgeInsets.only(top: 20),
         child: ProfileWidget(
-          image: Image.network(widget.imageURL),
+          image: Image.network(
+            widget.imageURL == '' ? widget.pet.profilepicture : widget.imageURL,
+          ),
           onClicked: () {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ProfilePictureUpdateScreen(
@@ -256,7 +253,9 @@ class _MUpdatePetScreenState extends State<MUpdatePetScreen> {
       SizedBox(
         height: 200,
         child: ProfileWidget(
-          image: Image.network(widget.imageURL),
+          image: Image.network(
+            widget.imageURL == '' ? widget.pet.profilepicture : widget.imageURL,
+          ),
           onClicked: () {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ProfilePictureUpdateScreen(

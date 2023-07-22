@@ -4,7 +4,11 @@ import 'package:pawfection/repository/user_repository.dart';
 import '../models/user.dart';
 
 class UserService {
-  UserRepository userRepository = UserRepository();
+  late UserRepository userRepository;
+
+  UserService(FirebaseFirestore firebaseFirestore) {
+    userRepository = UserRepository(firebaseFirestore);
+  }
 
   // _userFromJson turns a map of values from Firestore into a User class.
   User userFromJson(Map<String, dynamic> json) {

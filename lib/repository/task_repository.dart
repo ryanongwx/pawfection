@@ -2,8 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 
 class TaskRepository {
-  final CollectionReference taskCollection =
-      FirebaseFirestore.instance.collection('tasks');
+  late CollectionReference taskCollection;
+
+  TaskRepository(FirebaseFirestore firebaseFirestore) {
+    taskCollection = firebaseFirestore.collection('tasks');
+  }
 
   Stream<QuerySnapshot> get tasks {
     return taskCollection.snapshots();

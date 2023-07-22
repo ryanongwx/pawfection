@@ -1,9 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pawfection/manager/m_pet_screen.dart';
-import 'package:pawfection/manager/m_update_task_screen.dart';
-import 'package:pawfection/manager_view.dart';
 import 'package:pawfection/models/task.dart';
-import 'package:pawfection/models/user.dart';
 import 'package:pawfection/manager/m_user_dialog.dart' as UserDialog;
 import 'package:pawfection/manager/m_pet_dialog.dart' as PetDialog;
 import 'package:pawfection/service/task_service.dart';
@@ -11,8 +9,8 @@ import 'package:pawfection/service/user_service.dart';
 import 'package:pawfection/volunteer/v_complete_task_dialog.dart';
 
 Future<void> displayTaskItemDialog(BuildContext context, String id) async {
-  final taskService = TaskService();
-  final userService = UserService();
+  final taskService = TaskService(FirebaseFirestore.instance);
+  final userService = UserService(FirebaseFirestore.instance);
 
   return showDialog(
     context: context,
@@ -265,17 +263,6 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                                       context: context,
                                                       builder: (BuildContext
                                                           context) {
-                                                        final screenSize =
-                                                            MediaQuery.of(
-                                                                    context)
-                                                                .size;
-                                                        final dialogWidth =
-                                                            screenSize.width *
-                                                                0.7;
-                                                        final dialogHeight =
-                                                            screenSize.height *
-                                                                0.7;
-
                                                         return Dialog(
                                                           child: Stack(
                                                             children: [
@@ -284,7 +271,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                                                     .cover,
                                                                 child: Image
                                                                     .network(
-                                                                  imageUrl!,
+                                                                  imageUrl,
                                                                 ),
                                                               ),
                                                               Positioned(
@@ -293,7 +280,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                                                 child:
                                                                     Container(
                                                                   decoration:
-                                                                      BoxDecoration(
+                                                                      const BoxDecoration(
                                                                     shape: BoxShape
                                                                         .circle,
                                                                     color: Colors
@@ -301,8 +288,9 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                                                   ),
                                                                   child:
                                                                       IconButton(
-                                                                    icon: Icon(Icons
-                                                                        .close),
+                                                                    icon: const Icon(
+                                                                        Icons
+                                                                            .close),
                                                                     color: Colors
                                                                         .white,
                                                                     onPressed:
