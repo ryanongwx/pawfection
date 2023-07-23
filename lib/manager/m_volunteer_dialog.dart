@@ -47,9 +47,11 @@ Future<void> displayVolunteersDialog(BuildContext context, Task task) async {
                     itemBuilder: (BuildContext context, int index) {
                       return ListTile(
                         title: Text(newNameList[index]),
-                        onTap: () {
-                          task.assignedto = newNameList[index];
+                        onTap: () async {
                           if (newNameList[index] != "<No volunteer assigned>") {
+                            User? userSelected = await userService
+                                .findUserByUsername(newNameList[index]);
+                            task.assignedto = userSelected!.referenceId;
                             task.status = "Pending";
                           }
                           taskService.updateTask(task);
