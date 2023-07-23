@@ -299,7 +299,7 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
         header: const Padding(
           padding: EdgeInsets.all(12.0),
           child: Text(
-            'Volunteer Details',
+            'User Details',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
           ),
         ),
@@ -396,7 +396,7 @@ class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
         adaptive: true,
         insetGrouped: true,
         padding: const EdgeInsets.symmetric(vertical: 12.0),
-        header: const Text('Volunteer Details'),
+        header: const Text('User Details'),
         children: [
           FastTextField(
             name: 'username',

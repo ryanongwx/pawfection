@@ -80,7 +80,7 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
     if (Platform.isAndroid) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Create Volunteer'),
+          title: const Text('Create User'),
           elevation: 4.0,
         ),
         body: SafeArea(
@@ -174,7 +174,7 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => ManagerView(
+                                          builder: (context) => const ManagerView(
                                                 tab: 2,
                                               )),
                                     )
@@ -195,7 +195,7 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
       );
     } else if (Platform.isIOS) {
       return CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(middle: Text('Create User')),
+        navigationBar: const CupertinoNavigationBar(middle: Text('Create User')),
         child: SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -266,7 +266,7 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
                                         ClipboardData(text: accesscode))
                                     .then((_) {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
+                                      const SnackBar(
                                           content: Text(
                                               "Access code copied to clipboard")));
                                 });
@@ -281,7 +281,7 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
                                   {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => ManagerView(
+                                          builder: (context) => const ManagerView(
                                                 tab: 2,
                                               )),
                                     )
@@ -301,7 +301,7 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
         ),
       );
     }
-    return Column();
+    return const Column();
   }
 
   List<Widget> _buildForm(BuildContext context) {
@@ -311,7 +311,7 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
         header: const Padding(
           padding: EdgeInsets.all(12.0),
           child: Text(
-            'Volunteer Details',
+            'User Details',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
           ),
         ),
@@ -398,7 +398,7 @@ class _MCreateUserScreenState extends State<MCreateUserScreen> {
         adaptive: true,
         insetGrouped: true,
         padding: const EdgeInsets.symmetric(vertical: 12.0),
-        header: const Text('Volunteer Details'),
+        header: const Text('User Details'),
         children: [
           FastTextField(
             name: 'username',
