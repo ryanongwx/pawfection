@@ -2,6 +2,8 @@ import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pawfection/manager/m_volunteerlist_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:pawfection/models/user.dart';
+import 'package:searchable_listview/searchable_listview.dart';
 
 void main() {
   testWidgets(
@@ -23,6 +25,25 @@ void main() {
     expect(find.text('Volunteers'), findsOneWidget);
   });
 
+  testWidgets(
+      'Given the MVolunteerListScreen, then there will be a app bar with the Icons',
+      (WidgetTester tester) async {
+    // Render the widget.
+    await tester.pumpWidget(MaterialApp(
+        title: 'Mock Pet Screen',
+        home: MVolunteerListScreen(
+          firebaseFirestore: FakeFirebaseFirestore(),
+        )));
+    // Let the snapshots stream fire a snapshot.
+
+    await tester.idle();
+    // Re-render.
+    await tester.pump();
+
+    // // Verify the output.
+    expect(find.byType(Icon), findsNWidgets(3));
+  });
+
   testWidgets('Given the MVolunteerListScreen, then there will be a search bar',
       (WidgetTester tester) async {
     // Populate the fake database.
@@ -40,7 +61,28 @@ void main() {
     await tester.pump();
 
     // // Verify the output.
-    expect(find.text('Volunteers'), findsOneWidget);
+    expect(find.byType(SearchableList<User>), findsOneWidget);
+  });
+
+  testWidgets(
+      'Given the MVolunteerListScreen, then there will be search bar text',
+      (WidgetTester tester) async {
+    // Populate the fake database.
+
+    // Render the widget.
+    await tester.pumpWidget(MaterialApp(
+        title: 'Mock Pet Screen',
+        home: MVolunteerListScreen(
+          firebaseFirestore: FakeFirebaseFirestore(),
+        )));
+    // Let the snapshots stream fire a snapshot.
+
+    await tester.idle();
+    // Re-render.
+    await tester.pump();
+
+    // // Verify the output.
+    expect(find.text('Search Volunteer'), findsOneWidget);
   });
 
   testWidgets(
