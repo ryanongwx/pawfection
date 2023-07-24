@@ -27,27 +27,31 @@ IOS (Debug and Release)
 
 # User Guide for Milestone 2
 
+**Milestone 3**
+
 User Guide (Manager Workflow):
 
 1. Log in with manager account
-Username: ryan@gmail.com
-Password: ryanongwx
+   Username: ryan@gmail.com
+   Password: ryanongwx
 2. Create pets
 3. Edit and delete pets
 4. Create tasks with and without assigning of volunteers
 5. Edit and delete tasks
 6. Manual assignment of volunteers
-7. Creating of volunteer account (Remember to record the access code and remember the email used)
+7. Auto assignment of volunteers
+8. Creating of volunteer account (Remember the email used, access code will be sent to that email)
 
 User Guide (Volunteer Workflow):
 
-1. Sign up for volunteer account using access code given by manager and with email that was registered
-2. If unable to sign up, use this volunteer account
-Username: admin@pawfection.com
-Password: pawfection
-3. Edit profile and indicate availability
-4. Request tasks
-5. Complete tasks and provide feedback
+1. Check for access code email to the email provided
+2. Sign up for volunteer account using access code given by manager and with email that was registered
+3. If unable to sign up, use this volunteer account
+   Username: admin@pawfection.com
+   Password: pawfection
+4. Edit profile and indicate availability
+5. Request tasks
+6. Complete tasks and provide feedback
 
 If cloning to local device does not work, you may use this link to test the app. However, please note that the code is rendered online which will result in some delays in ap interaction. Link: https://appetize.io/app/ytoxssglwc3m4ckvfzbmmpyg5e?device=iphone14pro&osVersion=16.2&scale=75
 
