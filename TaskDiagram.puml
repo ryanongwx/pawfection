@@ -1,0 +1,122 @@
+@startuml
+class "CreateTaskView" {
+  +GlobalKey<FormState> formKey
+  +TaskRepository taskRepository
+  +PetRepository petRepository
+  +UserRepository userRepository
+  +StorageRepository storageRepository
+  +TaskService taskService
+  +PetService petService
+  +UserService userService
+  -dynamic _form
+  +dynamic alertmessage
+  +List<File?> resources
+  +String others
+  +bool showTextField
+  -FirebaseAuth _auth
+  +List<String> categories
+  +Widget build()
+  +Widget buildPetList()
+  +Widget buildVolunteerList()
+  -List<Widget> _buildForm()
+  -List<Widget> _buildCupertinoForm()
+  -void _handleResourcesAdded()
+  +dynamic pickVideo()
+}
+
+"CreateTaskView" o-- "StorageRepository"
+"CreateTaskView" o-- "TaskService"
+"CreateTaskView" o-- "PetService"
+"CreateTaskView" o-- "UserService"
+"CreateTaskView" o-- "FirebaseAuth"
+
+class "UpdateTaskView" {
+  +GlobalKey<FormState> formKey
+  +TaskRepository taskRepository
+  +TaskService taskService
+  +StorageRepository storageRepository
+  +UserRepository userRepository
+  +PetRepository petRepository
+  +PetService petService
+  +UserService userService
+  +List<String?> resources
+  -dynamic _form
+  +dynamic alertmessage
+  +String others
+  +bool showTextField
+  +List<String> categories
+  +void initState()
+  +Widget buildPetList()
+  +Widget buildVolunteerList()
+  -void _showDialog()
+  +Widget build()
+  -List<Widget> _buildForm()
+  -List<Widget> _buildCupertinoForm()
+  +dynamic pickVideo()
+  +File convertImageToFile()
+}
+
+"UpdateTaskView" o-- "StorageRepository"
+"UpdateTaskView" o-- "TaskService"
+"UpdateTaskView" o-- "PetService"
+"UpdateTaskView" o-- "UserService"
+"UpdateTaskView" o-- "FirebaseAuth"
+
+class "FirebaseAuth" {
+  Abstracted
+}
+
+class "StorageRepository" {
+  -FirebaseStorage _storage
+  +dynamic uploadImageToStorage()
+}
+
+class "UserService" {
+  +UserRepository userRepository
+  +User userFromJson()
+  +Map<String, dynamic> userToJson()
+  +User fromSnapshot()
+  +List<User> snapshotToUserList()
+  +List<User> snapshotToUserListModified()
+  +void updateUser()
+  +void updateUserUid()
+  +void deleteUser()
+  +dynamic addUser()
+  +void addUserWithId()
+  +dynamic getUserList()
+  +dynamic findUserByUUID()
+  +dynamic findUserByUUIDs()
+  +dynamic findUserByUsername()
+  +dynamic currentUser()
+}
+
+class "TaskService" {
+  +TaskRepository taskRepository
+  +Task taskFromJson()
+  +Map<String, dynamic> taskToJson()
+  +Task taskFromJsonCloudFunction()
+  +Task fromSnapshot()
+  +List<Task> snapshotToTaskList()
+  +List<Task> snapshotToTaskListModified()
+  +void updateTask()
+  +void deleteTask()
+  +dynamic addTask()
+  +dynamic findTaskByTaskID()
+  +bool isAvailableWithinDeadline()
+}
+
+class "PetService" {
+  +PetRepository petRepository
+  +Pet petFromJson()
+  +Map<String, dynamic> petToJson()
+  +Pet fromSnapshot()
+  +List<Pet> snapshotToPetList()
+  +List<Pet> snapshotToPetListModified()
+  +void updatePet()
+  +void deletePet()
+  +dynamic addPet()
+  +dynamic findPetByPetID()
+  +dynamic getPetList()
+  +dynamic findPetByPetname()
+}
+@enduml

@@ -29,11 +29,8 @@ class MUpdateTaskScreen extends StatefulWidget {
 
 class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
   final formKey = GlobalKey<FormState>();
-  final taskRepository = TaskRepository(FirebaseFirestore.instance);
   final taskService = TaskService(FirebaseFirestore.instance);
   final storageRepository = StorageRepository();
-  final userRepository = UserRepository(FirebaseFirestore.instance);
-  final petRepository = PetRepository(FirebaseFirestore.instance);
   final petService = PetService(FirebaseFirestore.instance);
   final userService = UserService(FirebaseFirestore.instance);
 
