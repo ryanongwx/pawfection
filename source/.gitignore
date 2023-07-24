@@ -33,6 +33,8 @@ migrate_working_dir/
 /build/
 /functions/
 
+firebase_options.dart
+
 
 # Symbolication related
 app.*.symbols
