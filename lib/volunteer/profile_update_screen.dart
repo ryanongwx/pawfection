@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pawfection/models/user.dart';
-import 'package:pawfection/repository/storage_repository.dart';
-import 'package:pawfection/repository/user_repository.dart';
 import 'package:pawfection/service/user_service.dart';
 import 'package:pawfection/voluteer_view.dart';
 
@@ -25,8 +23,6 @@ class VProfileUpdateScreen extends StatefulWidget {
 
 class _VProfileUpdateScreenState extends State<VProfileUpdateScreen> {
   final formKey = GlobalKey<FormState>();
-  final userRepository = UserRepository(FirebaseFirestore.instance);
-  final storageRepository = StorageRepository();
   final userService = UserService(FirebaseFirestore.instance);
 
   late var _form;

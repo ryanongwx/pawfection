@@ -6,7 +6,6 @@ import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pawfection/manager_view.dart';
 import 'package:pawfection/models/pet.dart';
-import 'package:pawfection/repository/pet_repository.dart';
 import 'package:pawfection/service/pet_service.dart';
 import 'package:pawfection/volunteer/profile_picture_update_screen.dart';
 import 'package:pawfection/volunteer/widgets/profile_widget.dart';
@@ -22,7 +21,6 @@ class MCreatePetScreen extends StatefulWidget {
 
 class _MCreatePetScreenState extends State<MCreatePetScreen> {
   final formKey = GlobalKey<FormState>();
-  final petRepository = PetRepository(FirebaseFirestore.instance);
   final petService = PetService(FirebaseFirestore.instance);
 
   late var _form;

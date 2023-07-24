@@ -4,6 +4,8 @@ import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/models/task.dart';
 import 'package:pawfection/service/functions_service.dart';
 import 'package:pawfection/service/pet_service.dart';
+import 'package:pawfection/service/task_service.dart';
+import 'package:pawfection/service/user_service.dart';
 
 import '../models/user.dart';
 
@@ -19,6 +21,8 @@ class AutoAssignDialog extends StatefulWidget {
 
 class _AutoAssignDialogState extends State<AutoAssignDialog> {
   final functionService = FunctionService();
+  final userService = UserService(FirebaseFirestore.instance);
+  final taskService = TaskService(FirebaseFirestore.instance);
   final petService = PetService(FirebaseFirestore.instance);
   List<Task> tasks = [];
 
