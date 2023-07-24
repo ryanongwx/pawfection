@@ -33,9 +33,6 @@ class MCreateTaskScreen extends StatefulWidget {
 class _MCreateTaskScreenState extends State<MCreateTaskScreen> {
   final formKey = GlobalKey<FormState>();
 
-  final taskRepository = TaskRepository(FirebaseFirestore.instance);
-  final petRepository = PetRepository(FirebaseFirestore.instance);
-  final userRepository = UserRepository(FirebaseFirestore.instance);
   final storageRepository = StorageRepository();
   final taskService = TaskService(FirebaseFirestore.instance);
   final petService = PetService(FirebaseFirestore.instance);
