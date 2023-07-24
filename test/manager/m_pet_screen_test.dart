@@ -25,6 +25,25 @@ void main() {
     expect(find.text('Pets'), findsOneWidget);
   });
 
+  testWidgets(
+      'Given the MPetScreen, then there will be a app bar with the Icons',
+      (WidgetTester tester) async {
+    // Render the widget.
+    await tester.pumpWidget(MaterialApp(
+        title: 'Mock Pet Screen',
+        home: MPetScreen(
+          firebaseFirestore: FakeFirebaseFirestore(),
+        )));
+    // Let the snapshots stream fire a snapshot.
+
+    await tester.idle();
+    // Re-render.
+    await tester.pump();
+
+    // // Verify the output.
+    expect(find.byType(Icon), findsNWidgets(3));
+  });
+
   testWidgets('Given the MPetScreen, then there will be a search bar',
       (WidgetTester tester) async {
     // Populate the fake database.
@@ -43,6 +62,26 @@ void main() {
 
     // // Verify the output.
     expect(find.byType(SearchableList<Pet>), findsOneWidget);
+  });
+
+  testWidgets('Given the MPetScreen, then there will be search bar text',
+      (WidgetTester tester) async {
+    // Populate the fake database.
+
+    // Render the widget.
+    await tester.pumpWidget(MaterialApp(
+        title: 'Mock Pet Screen',
+        home: MPetScreen(
+          firebaseFirestore: FakeFirebaseFirestore(),
+        )));
+    // Let the snapshots stream fire a snapshot.
+
+    await tester.idle();
+    // Re-render.
+    await tester.pump();
+
+    // // Verify the output.
+    expect(find.text('Search Pet'), findsOneWidget);
   });
 
   testWidgets(
