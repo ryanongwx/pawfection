@@ -8,10 +8,7 @@ import 'package:pawfection/manager_view.dart';
 import 'package:pawfection/models/pet.dart';
 import 'package:pawfection/models/task.dart';
 import 'package:pawfection/models/user.dart';
-import 'package:pawfection/repository/pet_repository.dart';
 import 'package:pawfection/repository/storage_repository.dart';
-import 'package:pawfection/repository/task_repository.dart';
-import 'package:pawfection/repository/user_repository.dart';
 import 'package:pawfection/service/pet_service.dart';
 import 'package:pawfection/service/task_service.dart';
 import 'package:pawfection/service/user_service.dart';
@@ -497,7 +494,7 @@ class _MUpdateTaskScreenState extends State<MUpdateTaskScreen> {
                       showDialog<String>(
                         context: context,
                         builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Create Task'),
+                          title: const Text('Update Task'),
                           content: Text(alertmessage),
                           actions: <Widget>[
                             TextButton(

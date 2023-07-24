@@ -1,4 +1,5 @@
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
+import 'package:flutter_advanced_segment/flutter_advanced_segment.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pawfection/manager/m_dashboard_screen.dart';
 import 'package:pawfection/models/task.dart';
@@ -26,6 +27,25 @@ void main() {
     expect(find.text('Tasks'), findsOneWidget);
   });
 
+  testWidgets(
+      'Given the MDashboardScreen, then there will be a app bar with the Icons',
+      (WidgetTester tester) async {
+    // Render the widget.
+    await tester.pumpWidget(MaterialApp(
+        title: 'Mock Pet Screen',
+        home: MDashboardScreen(
+          firebaseFirestore: FakeFirebaseFirestore(),
+        )));
+    // Let the snapshots stream fire a snapshot.
+
+    await tester.idle();
+    // Re-render.
+    await tester.pump();
+
+    // // Verify the output.
+    expect(find.byType(Icon), findsNWidgets(5));
+  });
+
   testWidgets('Given the MDashboardScreen, then there will be a search bar',
       (WidgetTester tester) async {
     // Populate the fake database.
@@ -44,6 +64,27 @@ void main() {
 
     // // Verify the output.
     expect(find.byType(SearchableList<Task>), findsOneWidget);
+  });
+
+  testWidgets(
+      'Given the MDashboardScreen, then there will be a status filter bar',
+      (WidgetTester tester) async {
+    // Populate the fake database.
+
+    // Render the widget.
+    await tester.pumpWidget(MaterialApp(
+        title: 'Firestore Example',
+        home: MDashboardScreen(
+          firebaseFirestore: FakeFirebaseFirestore(),
+        )));
+    // Let the snapshots stream fire a snapshot.
+
+    await tester.idle();
+    // Re-render.
+    await tester.pump();
+
+    // // Verify the output.
+    expect(find.byType(AdvancedSegment<String, String>), findsOneWidget);
   });
 
   testWidgets(

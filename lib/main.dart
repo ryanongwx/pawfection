@@ -9,8 +9,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
-
   runApp(const MaterialApp(
     title: 'Pawfection',
     home: MyApp(),
