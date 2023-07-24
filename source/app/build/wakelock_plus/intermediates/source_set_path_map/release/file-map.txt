@@ -1,0 +1,13 @@
+dev.fluttercommunity.plus.wakelock.wakelock_plus-jetified-window-1.0.0-beta04-0 /Users/junneng/.gradle/caches/transforms-3/003a22a5515e1f77f89701a46efbc2ec/transformed/jetified-window-1.0.0-beta04/res
+dev.fluttercommunity.plus.wakelock.wakelock_plus-jetified-window-java-1.0.0-beta04-1 /Users/junneng/.gradle/caches/transforms-3/3c0e35d493ccd3f2bb8b07f96b013b9c/transformed/jetified-window-java-1.0.0-beta04/res
+dev.fluttercommunity.plus.wakelock.wakelock_plus-jetified-annotation-experimental-1.1.0-2 /Users/junneng/.gradle/caches/transforms-3/717758e51a3aff0b90b2556f8994e808/transformed/jetified-annotation-experimental-1.1.0/res
+dev.fluttercommunity.plus.wakelock.wakelock_plus-core-1.6.0-3 /Users/junneng/.gradle/caches/transforms-3/cf72013d765e0f69e97cd3b9cbb09800/transformed/core-1.6.0/res
+dev.fluttercommunity.plus.wakelock.wakelock_plus-main-4 /Users/junneng/.pub-cache/hosted/pub.dev/wakelock_plus-1.0.0+3/android/src/main/res
+dev.fluttercommunity.plus.wakelock.wakelock_plus-release-5 /Users/junneng/.pub-cache/hosted/pub.dev/wakelock_plus-1.0.0+3/android/src/release/res
+dev.fluttercommunity.plus.wakelock.wakelock_plus-packaged_res-6 /Users/junneng/pawfection/build/package_info_plus/intermediates/packaged_res/release
+dev.fluttercommunity.plus.wakelock.wakelock_plus-pngs-7 /Users/junneng/pawfection/build/wakelock_plus/generated/res/pngs/release
+dev.fluttercommunity.plus.wakelock.wakelock_plus-resValues-8 /Users/junneng/pawfection/build/wakelock_plus/generated/res/resValues/release
+dev.fluttercommunity.plus.wakelock.wakelock_plus-rs-9 /Users/junneng/pawfection/build/wakelock_plus/generated/res/rs/release
+dev.fluttercommunity.plus.wakelock.wakelock_plus-mergeReleaseResources-10 /Users/junneng/pawfection/build/wakelock_plus/intermediates/incremental/release/mergeReleaseResources/merged.dir
+dev.fluttercommunity.plus.wakelock.wakelock_plus-mergeReleaseResources-11 /Users/junneng/pawfection/build/wakelock_plus/intermediates/incremental/release/mergeReleaseResources/stripped.dir
+dev.fluttercommunity.plus.wakelock.wakelock_plus-merged_res-12 /Users/junneng/pawfection/build/wakelock_plus/intermediates/merged_res/release

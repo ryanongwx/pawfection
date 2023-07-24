@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-merged_res-18:/animator/fragment_close_enter.xml",
+        "source": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-fragment-1.3.4-1:/animator/fragment_close_enter.xml"
+    },
+    {
+        "merged": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-merged_res-18:/animator/fragment_fade_enter.xml",
+        "source": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-fragment-1.3.4-1:/animator/fragment_fade_enter.xml"
+    },
+    {
+        "merged": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-merged_res-18:/animator/fragment_fade_exit.xml",
+        "source": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-fragment-1.3.4-1:/animator/fragment_fade_exit.xml"
+    },
+    {
+        "merged": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-merged_res-18:/animator/fragment_open_enter.xml",
+        "source": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-fragment-1.3.4-1:/animator/fragment_open_enter.xml"
+    },
+    {
+        "merged": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-merged_res-18:/animator/fragment_close_exit.xml",
+        "source": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-fragment-1.3.4-1:/animator/fragment_close_exit.xml"
+    },
+    {
+        "merged": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-merged_res-18:/animator/fragment_open_exit.xml",
+        "source": "vn.hunghd.flutter.plugins.imagecropper.image_cropper-fragment-1.3.4-1:/animator/fragment_open_exit.xml"
+    }
+]

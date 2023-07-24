@@ -1,0 +1,16 @@
+io.flutter.plugins.firebase.functions.cloud_functions-jetified-window-1.0.0-beta04-0 /Users/junneng/.gradle/caches/transforms-3/003a22a5515e1f77f89701a46efbc2ec/transformed/jetified-window-1.0.0-beta04/res
+io.flutter.plugins.firebase.functions.cloud_functions-jetified-firebase-common-20.3.2-1 /Users/junneng/.gradle/caches/transforms-3/284fd5eeca4a29a0814ba444369e2acf/transformed/jetified-firebase-common-20.3.2/res
+io.flutter.plugins.firebase.functions.cloud_functions-jetified-window-java-1.0.0-beta04-2 /Users/junneng/.gradle/caches/transforms-3/3c0e35d493ccd3f2bb8b07f96b013b9c/transformed/jetified-window-java-1.0.0-beta04/res
+io.flutter.plugins.firebase.functions.cloud_functions-jetified-play-services-basement-18.1.0-3 /Users/junneng/.gradle/caches/transforms-3/5eaba1f028ac62aaabee71faac8d9308/transformed/jetified-play-services-basement-18.1.0/res
+io.flutter.plugins.firebase.functions.cloud_functions-jetified-annotation-experimental-1.1.0-4 /Users/junneng/.gradle/caches/transforms-3/717758e51a3aff0b90b2556f8994e808/transformed/jetified-annotation-experimental-1.1.0/res
+io.flutter.plugins.firebase.functions.cloud_functions-core-1.6.0-5 /Users/junneng/.gradle/caches/transforms-3/cf72013d765e0f69e97cd3b9cbb09800/transformed/core-1.6.0/res
+io.flutter.plugins.firebase.functions.cloud_functions-jetified-play-services-base-18.1.0-6 /Users/junneng/.gradle/caches/transforms-3/f4c0500116144bc04cff0b0b27625b15/transformed/jetified-play-services-base-18.1.0/res
+io.flutter.plugins.firebase.functions.cloud_functions-main-7 /Users/junneng/.pub-cache/hosted/pub.dev/cloud_functions-4.3.3/android/src/main/res
+io.flutter.plugins.firebase.functions.cloud_functions-release-8 /Users/junneng/.pub-cache/hosted/pub.dev/cloud_functions-4.3.3/android/src/release/res
+io.flutter.plugins.firebase.functions.cloud_functions-pngs-9 /Users/junneng/pawfection/build/cloud_functions/generated/res/pngs/release
+io.flutter.plugins.firebase.functions.cloud_functions-resValues-10 /Users/junneng/pawfection/build/cloud_functions/generated/res/resValues/release
+io.flutter.plugins.firebase.functions.cloud_functions-rs-11 /Users/junneng/pawfection/build/cloud_functions/generated/res/rs/release
+io.flutter.plugins.firebase.functions.cloud_functions-mergeReleaseResources-12 /Users/junneng/pawfection/build/cloud_functions/intermediates/incremental/release/mergeReleaseResources/merged.dir
+io.flutter.plugins.firebase.functions.cloud_functions-mergeReleaseResources-13 /Users/junneng/pawfection/build/cloud_functions/intermediates/incremental/release/mergeReleaseResources/stripped.dir
+io.flutter.plugins.firebase.functions.cloud_functions-merged_res-14 /Users/junneng/pawfection/build/cloud_functions/intermediates/merged_res/release
+io.flutter.plugins.firebase.functions.cloud_functions-packaged_res-15 /Users/junneng/pawfection/build/firebase_core/intermediates/packaged_res/release

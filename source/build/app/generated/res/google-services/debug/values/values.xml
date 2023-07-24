@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">521732512335-0fbjb8iec9lr3mvka5iq4t9f12s6e358.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">521732512335</string>
+    <string name="google_api_key" translatable="false">AIzaSyBGumxUe17MfInqYDcUhYioFpd8aNeI73U</string>
+    <string name="google_app_id" translatable="false">1:521732512335:android:780eb0f59741e153d4683a</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyBGumxUe17MfInqYDcUhYioFpd8aNeI73U</string>
+    <string name="google_storage_bucket" translatable="false">pawfection-c14ed.appspot.com</string>
+    <string name="project_id" translatable="false">pawfection-c14ed</string>
+</resources>

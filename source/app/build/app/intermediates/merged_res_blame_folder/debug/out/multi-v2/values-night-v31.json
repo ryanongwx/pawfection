@@ -1,0 +1,28 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.top3.pawfection.app-mergeDebugResources-31:/values-night-v31/values-night-v31.xml",
+            "map": [
+                {
+                    "source": "/Users/junneng/pawfection/android/app/src/main/res/values-night-v31/styles.xml",
+                    "from": {
+                        "startLines": "3,17",
+                        "startColumns": "4,4",
+                        "startOffsets": "173,1047",
+                        "endLines": "10,19",
+                        "endColumns": "12,12",
+                        "endOffsets": "696,1211"
+                    },
+                    "to": {
+                        "startLines": "2,10",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,583",
+                        "endLines": "9,12",
+                        "endColumns": "12,12",
+                        "endOffsets": "578,747"
+                    }
+                }
+            ]
+        }
+    ]
+}
