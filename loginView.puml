@@ -1,29 +1,110 @@
 @startuml
-class "LoginView" {
+class "ProfileView" {
+  +UserService userService
   -FirebaseAuth _auth
-  +UserRepository userRepository
-  +Duration loginTime
-  -dynamic _authUser()
-  -dynamic _signupUser()
-  -dynamic _recoverPassword()
+  +User currentUser
+  +void initState()
+  +Widget build()
 }
 
-"LoginView" o-- "FirebaseAuth"
-"LoginView" o-- "UserRepository"
+"ProfileView" o-- "UserService"
+"ProfileView" o-- "FirebaseAuthUser"
+"ProfileView" o-- "User"
+
+class "UpdateAvailabilityView" {
+  +UserService userService
+  -FirebaseAuth _auth
+  +User currentUser
+  +User? user
+  +void initState()
+  +Widget build()
+}
+
+"UpdateAvailabilityView" o-- "UserService"
+"UpdateAvailabilityView" o-- "FirebaseAuth"
+"UpdateAvailabilityView" o-- "FirebaseAuthUser"
+"UpdateAvailabilityView" o-- "User"
+
+class "ProfileUpdateView" {
+  +GlobalKey<FormState> formKey
+  +UserService userService
+  -dynamic _form
+  +dynamic alertmessage
+  +List<dynamic> preferences
+  -void _showDialog()
+  +void initState()
+  +Widget build()
+  -List<Widget> _buildForm()
+  -List<Widget> _buildCupertinoForm()
+}
+
+"ProfileUpdateView" o-- "UserService"
+
+class "ProfilePictureUpdateView" {
+  -ValueNotifier<File?> _croppedImageNotifier
+  +StorageRepository storageRepository
+  +UserService userService
+  -FirebaseAuth _auth
+  +User currentUser
+  -dynamic _cropImage()
+  +dynamic pickImage()
+  +void initState()
+  +void dispose()
+  +Widget build()
+}
+
+"ProfilePictureUpdateView" o-- "StorageRepository"
+"ProfilePictureUpdateView" o-- "UserService"
+"ProfilePictureUpdateView" o-- "FirebaseAuth"
+"ProfilePictureUpdateView" o-- "FirebaseAuthUser"
 
 class "FirebaseAuth" {
   Abstracted
 }
 
-class "UserRepository" {
-  +CollectionReference<Object?> usercollection
-  +UserService userService
-  +Stream<QuerySnapshot<Object?>> users
-  +dynamic findUserByUUID()
-  +void addUser()
+class "FirebaseAuthUser" {
+  Abstracted
+}
+
+class "User" {
+  +String referenceId
+  +String username
+  +String email
+  +String role
+  +List<Timestamp?> availabledates
+  +List<String?> preferences
+  +List<String?> experiences
+  +String profilepicture
+  +String contactnumber
+  +int taskcount
+  +String bio
+  +int hashCode
+  +bool ==()
+  +String toString()
+}
+
+class "UserService" {
+  +UserRepository userRepository
+  +User userFromJson()
+  +Map<String, dynamic> userToJson()
+  +User fromSnapshot()
+  +List<User> snapshotToUserList()
+  +List<User> snapshotToUserListModified()
   +void updateUser()
+  +void updateUserUid()
   +void deleteUser()
+  +dynamic addUser()
+  +void addUserWithId()
   +dynamic getUserList()
+  +dynamic findUserByUUID()
+  +dynamic findUserByUUIDs()
+  +dynamic findUserByUsername()
   +dynamic currentUser()
 }
+
+class "StorageRepository" {
+  -FirebaseStorage _storage
+  +dynamic uploadImageToStorage()
+}
+
 @enduml

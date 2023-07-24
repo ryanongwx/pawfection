@@ -1,14 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 import 'package:pawfection/service/task_service.dart';
-import 'package:pawfection/service/user_service.dart';
 import '../models/task.dart';
 import 'dart:convert';
 
-TaskService taskService = TaskService(FirebaseFirestore.instance);
-UserService userService = UserService(FirebaseFirestore.instance);
-
 class FunctionService {
+  TaskService taskService = TaskService(FirebaseFirestore.instance);
+
   // In the future the autoAssignment may require some input to auto assign based on what
   Future<Map<String, dynamic>> autoAssign() async {
     final response = await http.get(Uri.parse(
