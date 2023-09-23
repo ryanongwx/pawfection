@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:pawfection/manager/m_pet_screen.dart';
 import 'package:pawfection/models/task.dart';
 import 'package:pawfection/manager/m_user_dialog.dart' as UserDialog;
 import 'package:pawfection/manager/m_pet_dialog.dart' as PetDialog;
+import 'package:pawfection/service/pet_service.dart';
 import 'package:pawfection/service/task_service.dart';
 import 'package:pawfection/service/user_service.dart';
 import 'package:pawfection/volunteer/v_complete_task_dialog.dart';
@@ -11,6 +11,7 @@ import 'package:pawfection/volunteer/v_complete_task_dialog.dart';
 Future<void> displayTaskItemDialog(BuildContext context, String id) async {
   final taskService = TaskService(FirebaseFirestore.instance);
   final userService = UserService(FirebaseFirestore.instance);
+  final petService = PetService(FirebaseFirestore.instance);
 
   return showDialog(
     context: context,
@@ -90,6 +91,31 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
+                                  StreamBuilder<Duration?>(
+                                    initialData:
+                                        taskService.timeRemaining(task),
+                                    stream: Stream.periodic(
+                                        Duration(seconds: 1), (i) {
+                                      return taskService.timeRemaining(task);
+                                    }),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot<Duration?> snapshot) {
+                                      if (snapshot.hasData) {
+                                        final remainingTime = snapshot.data!;
+                                        final String detailedTimeLeft =
+                                            "${remainingTime.inDays}d:${remainingTime.inHours % 24}h:${remainingTime.inMinutes % 60}m:${remainingTime.inSeconds % 60}s left";
+                                        return Text(
+                                          detailedTimeLeft,
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        );
+                                      } else {
+                                        return Text('');
+                                      }
+                                    },
+                                  ),
                                 ],
                               ),
                             ),
@@ -148,7 +174,6 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                               } else {
                                                 // The future completed successfully
                                                 final pet = snapshot.data;
-
                                                 return (pet == null
                                                     ? const Text(
                                                         'No Pet Assigned')
