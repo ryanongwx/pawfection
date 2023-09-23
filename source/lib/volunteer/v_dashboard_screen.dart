@@ -278,9 +278,15 @@ class _TaskItemState extends State<TaskItem> {
                         }
                       },
                     ),
-                  const SizedBox(
-                      width:
-                          6), // This will add space between the pet profile picture and the IconButton
+                  const SizedBox(width: 6),
+                  if (taskService.timeRemaining(widget.task) != null)
+                    Text(
+                      '${taskService.timeRemaining(widget.task)!.inDays} days left',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ), // This will add space between the pet profile picture and the IconButton
                   if (widget.task.status == "Open")
                     if (widget.task.requests.contains(currentUser.uid))
                       SizedBox(
