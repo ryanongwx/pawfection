@@ -9,6 +9,7 @@ import 'package:pawfection/manager/m_pet_dialog.dart' as PetDialog;
 import 'package:pawfection/service/pet_service.dart';
 import 'package:pawfection/service/task_service.dart';
 import 'package:pawfection/service/user_service.dart';
+import 'package:pawfection/volunteer/widgets/timer_widget.dart';
 
 Future<void> displayTaskItemDialog(BuildContext context, String id) async {
   final taskService = TaskService(FirebaseFirestore.instance);
@@ -35,6 +36,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
             } else {
               // The future completed successfully
               final task = snapshot.data;
+              Duration? remainingTime = taskService.timeRemaining(task);
 
               return (task == null)
                   ? const Text('Error task details')
@@ -93,31 +95,8 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  StreamBuilder<Duration?>(
-                                    initialData:
-                                        taskService.timeRemaining(task),
-                                    stream: Stream.periodic(
-                                        Duration(seconds: 1), (i) {
-                                      return taskService.timeRemaining(task);
-                                    }),
-                                    builder: (BuildContext context,
-                                        AsyncSnapshot<Duration?> snapshot) {
-                                      if (snapshot.hasData) {
-                                        final remainingTime = snapshot.data!;
-                                        final String detailedTimeLeft =
-                                            "${remainingTime.inDays}d:${remainingTime.inHours % 24}h:${remainingTime.inMinutes % 60}m:${remainingTime.inSeconds % 60}s left";
-                                        return Text(
-                                          detailedTimeLeft,
-                                          style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        );
-                                      } else {
-                                        return Text('');
-                                      }
-                                    },
-                                  ),
+                                  if (remainingTime != null)
+                                    TimerWidget(duration: remainingTime)
                                 ],
                               ),
                             ),

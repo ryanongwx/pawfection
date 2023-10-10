@@ -154,8 +154,10 @@ class TaskService {
     });
   }
 
-  Duration? timeRemaining(Task task) {
-    if (task.status == 'Completed') {
+  Duration? timeRemaining(Task? task) {
+    if (task == null) {
+      return null; // Return null if task is null
+    } else if (task.status == 'Completed') {
       return null; // Return null if task is completed
     }
 
