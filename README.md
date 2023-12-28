@@ -1,6 +1,5 @@
 # User Guide
 
----
 Click [here](https://spotless-fear-a74.notion.site/README-f843c470d7dd435fa34c06f05d795d84?pvs=4) for the full readme of our project.
 
 Click [here](https://appetize.io/app/kvelvxcfe2ymjkmjtdmdjzk3wi) to test out the app!
@@ -9,10 +8,12 @@ The following credentials are for testing purposes only.
 Admin Account: <br>
 Username: ryan@gmail.com <br>
 Password: ryanongwx
----
+
+Volunteer Account: <br>
+Username: admin@pawfection.com <br>
+Password: pawfection
 
 ## User Guide (Manager Workflow):
-
 
 1. Log in with manager account
 Username: ryan@gmail.com
@@ -24,8 +25,6 @@ Password: ryanongwx
 6. Manual assignment of volunteers (Person icon on each task item on “Open” tab)
 7. Auto assignment of volunteers (Top right person icon)
 8. Creating of volunteer account (Remember the email used, access code will be sent to that email)
-
----
 
 ## User Guide (Volunteer Workflow):
 
