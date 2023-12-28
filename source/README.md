@@ -4,16 +4,12 @@ Pawfection is an all-in-one task management application aimed to address the poo
 
 # Setup
 
-Android (Debug)
+Android (Debug and Release)
 - Clone the github repo at https://github.com/ryanongwx/pawfection
 - Open Terminal in project directory
 - Run flutter pub get
 - Open device emulator in Android studio
 - Run flutter run
-
-Android (Release)
-- Download the android apk located at build/app/outputs/flutter-apk/app-release.apk
-- Install and run it on android device
 
 IOS (Debug and Release)
 - Clone the github repo at https://github.com/ryanongwx/pawfection
@@ -23,7 +19,6 @@ IOS (Debug and Release)
 - Run pod install
 - Open xcode simulator
 - Run flutter run
-
 
 # User Guide for Milestone 2
 
