@@ -1,16 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:pawfection/manager/m_pet_screen.dart';
 import 'package:pawfection/models/task.dart';
 import 'package:pawfection/manager/m_user_dialog.dart' as UserDialog;
 import 'package:pawfection/manager/m_pet_dialog.dart' as PetDialog;
+import 'package:pawfection/service/pet_service.dart';
 import 'package:pawfection/service/task_service.dart';
 import 'package:pawfection/service/user_service.dart';
 import 'package:pawfection/volunteer/v_complete_task_dialog.dart';
+import 'package:pawfection/volunteer/widgets/timer_widget.dart';
 
 Future<void> displayTaskItemDialog(BuildContext context, String id) async {
   final taskService = TaskService(FirebaseFirestore.instance);
   final userService = UserService(FirebaseFirestore.instance);
+  final petService = PetService(FirebaseFirestore.instance);
 
   return showDialog(
     context: context,
@@ -32,6 +34,7 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
             } else {
               // The future completed successfully
               final task = snapshot.data;
+              Duration? remainingTime = taskService.timeRemaining(task);
 
               return (task == null)
                   ? const Text('Error task details')
@@ -90,6 +93,8 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
+                                  if (remainingTime != null)
+                                    TimerWidget(duration: remainingTime)
                                 ],
                               ),
                             ),
@@ -148,7 +153,6 @@ Future<void> displayTaskItemDialog(BuildContext context, String id) async {
                                               } else {
                                                 // The future completed successfully
                                                 final pet = snapshot.data;
-
                                                 return (pet == null
                                                     ? const Text(
                                                         'No Pet Assigned')

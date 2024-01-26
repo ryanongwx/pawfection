@@ -292,6 +292,14 @@ class TaskItem extends StatelessWidget {
                 const SizedBox(
                     width:
                         6), // This will add space between the pet profile picture and the IconButton
+                if (taskService.timeRemaining(task) != null)
+                  Text(
+                    '${taskService.timeRemaining(task)!.inDays} days left',
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 if (task.status == "Open")
                   SizedBox(
                     height: 24.0, // Specify your desired height

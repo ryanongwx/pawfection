@@ -65,10 +65,13 @@ class TaskService {
       contactperson: json['contactperson'] as String,
       contactpersonnumber: json['contactpersonnumber'] as String,
       feedback: json['feedback'] as String?,
-      deadline: (json['deadline'] as List).map((item) {
-        Map<String, dynamic> data = item;
-        return Timestamp(data['_seconds'], data['_nanoseconds']);
-      }).toList().cast<Timestamp>(),
+      deadline: (json['deadline'] as List)
+          .map((item) {
+            Map<String, dynamic> data = item;
+            return Timestamp(data['_seconds'], data['_nanoseconds']);
+          })
+          .toList()
+          .cast<Timestamp>(),
       requests: (json['requests'] as List<dynamic>).cast<String>(),
       pet: json['pet'] as String?,
     );
@@ -149,5 +152,23 @@ class TaskService {
       return (availableDateOnly.difference(startDeadlineOnly).inDays >= 0) &&
           (endDeadlineOnly.difference(availableDateOnly).inDays >= 0);
     });
+  }
+
+  Duration? timeRemaining(Task? task) {
+    if (task == null) {
+      return null; // Return null if task is null
+    } else if (task.status == 'Completed') {
+      return null; // Return null if task is completed
+    }
+
+    Timestamp? taskDeadlineEndTimestamp = task.deadline[1];
+    DateTime taskDeadlineEnd = taskDeadlineEndTimestamp!.toDate();
+    DateTime now = DateTime.now();
+
+    if (taskDeadlineEnd.isBefore(now)) {
+      return null; // Return null if deadline has passed
+    } else {
+      return taskDeadlineEnd.difference(now);
+    }
   }
 }
