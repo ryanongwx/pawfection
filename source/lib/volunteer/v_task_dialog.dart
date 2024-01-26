@@ -4,6 +4,7 @@ import 'package:pawfection/manager/m_pet_screen.dart';
 import 'package:pawfection/models/task.dart';
 import 'package:pawfection/manager/m_user_dialog.dart' as UserDialog;
 import 'package:pawfection/manager/m_pet_dialog.dart' as PetDialog;
+import 'package:pawfection/service/pet_service.dart';
 import 'package:pawfection/service/task_service.dart';
 import 'package:pawfection/service/user_service.dart';
 import 'package:pawfection/volunteer/v_complete_task_dialog.dart';
@@ -11,6 +12,7 @@ import 'package:pawfection/volunteer/v_complete_task_dialog.dart';
 Future<void> displayTaskItemDialog(BuildContext context, String id) async {
   final taskService = TaskService(FirebaseFirestore.instance);
   final userService = UserService(FirebaseFirestore.instance);
+  final petService = PetService(FirebaseFirestore.instance);
 
   return showDialog(
     context: context,
